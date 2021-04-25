@@ -1,0 +1,57 @@
+---
+title: Get your open access event data from statsbomb
+author: "Indranil Ghosh"
+date: '2021-04-25'
+slug: getting-statsbomb-data
+categories: ["Python", "open access data"]
+tags: ["statsbomb api", "open access data"]
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2021-04-25T22:13:46+05:30'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+This is the first of all the blog posts that are to be published further. In this tutorial we will learn how to download open access event data from [**statsbomb**](https://github.com/statsbomb/open-data#:~:text=StatsBomb%20Open%20Data%20Welcome%20to%20the%20StatsBomb%20Open,encourage%20new%20research%20and%20analysis%20at%20all%20levels.) using the Python package [`statsbombpy`](https://github.com/statsbomb/statsbombpy). Use `pip` to install `statsbombpy` by using the following command:
+
+```{python eval=FALSE}
+pip install statsbombpy
+```
+
+The open data from **Statsbomb** can be accessed without any need of authetication from the user but it is always advised to go through the *Terms & Conditions* section stated at their documentation page. 
+
+Now we will go step by step to understand how to extract the relevant data. Before that, we need to import the `statsbombpy` package.
+
+```{python}
+from statsbombpy import sb
+```
+
+We then import the `numpy` and the `pandas` packages that help us manipulate our datasets and perform analyses like data cleaning and data extraction.
+
+```{python}
+import numpy as np
+import pandas as pd
+```
+
+To get access to the *Competitions* dataset type the following:
+
+```{python}
+comp = sb.competitions()
+```
+
+The dataset `comp` can now be printed by typing the following:
+
+```{python}
+print(comp.to_markdown())
+```
+
+We can extract the column names of `comp` to understand the dataset better and draw out relevant information from the same. Type the following:
+
+```{python}
+comp.columns
+```
