@@ -2,7 +2,7 @@
 title: Get your open access event data from statsbomb
 author: "Indranil Ghosh"
 date: '2021-04-25'
-slug: getting-statsbomb-data
+slug: getting-statsbomb-event-data
 categories: ["Python", "open access data"]
 tags: ["statsbomb api", "open access data"]
 subtitle: ''
@@ -53,5 +53,33 @@ print(comp.to_markdown())
 We can extract the column names of `comp` to understand the dataset better and draw out relevant information from the same. Type the following:
 
 ```{python}
-comp.columns
+print(comp.columns)
 ```
+
+Let us make sense of a particular row from the `comp` dataset. For example, if we look into row number `18` we notice some relevant information: the `competition_id` is `11`, the `season_id` is 42, the `country_name` is `Spain`, the `competition_name` is `La Liga`, the `season_name` is `2019/2020`, and so on. Suppose we are satisfied with the aboive information, and we want to analyze a game from 2019/20's La Liga season. Obviously row number `18` from `comp` provides us with that. We keep note of the `competition_id` and `season_id` at that row, which are `11` and `42` respectively. Now we extract out the matches dataset by typing the following:
+
+```{python}
+mat = sb.matches(competition_id=11, season_id=42)
+print(mat.to_markdown())
+```
+
+Once we have the matches dataset `mat`, we can look into it's column names to clearly discern any pertinent information.
+
+```{python}
+mat.columns
+```
+
+Evidently, the `mat` dataset gives us the match ids, the match dates, the kick off times, the home and away teams, the scores in a particular match, the name of the referee who officiated the match and so on. Here `match_id` is the unique id that will help us draw out event data for a particular match from 2019/20's La Liga season. Let us get the event data from a match. Well, let me announce something beforehand. I am a hardcore [**Real Madrid**](https://www.realmadrid.com/en) fan and an avid follower of European football. Focusing on the `mat` dataset, it seems, row number `20` with the `match_id = 303470` catches most of my attention. It was a **Real Madrid vs. Barcelona** match that took place at the **Estadio Santiago Bernabéu** stadium pre-pandemic and it ended up 2-0 in Real Madrid's favor 👀 👀 👀 👀. A great feat to be honest! Let us obtain the event data for this match.
+
+```{python}
+events = sb.events(match_id=303470)
+eh = events.head() # shows the first few rows
+print(eh.to_markdown())
+```
+We see that we were able to get access to all the events from the **Real Madrid vs. Barcelona** match. There are `88` columns in `events`. You can jot down the column names to get a clearer overview of what kinds of events to expect from the match.
+
+```{python}
+print(events.columns)
+```
+
+This completes our post on how to get access to open event data for a particular football match. We need to filter out only those events on which we want to perform advanced mathematical analyses and build conclusions. These concepts will start making more sense once we dive deeper into analyses in our future posts. In the next immediate post we will simply learn how to visualize a football pitch using the sophisticated package `mplsoccer`.
