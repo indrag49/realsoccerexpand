@@ -117,4 +117,4 @@ print(events_pass_p1.to_markdown())
 
 So, till now, we have been successful in extracting out the pass event data for `'Toni Kroos'` from the match. That is a brilliant achievement to be honest. You deserve a pat on your back!
 
-Getting back, we observe that `'Toni Kroos'` has been involved in `72` passes. We will later work out his pass success rate. But look at the number. Isn't he a brilliant midfielder that the German national team and the Real Madrid team have in their disposal? What a playmaker he is! 
+Getting back, we observe that `'Toni Kroos'` has been involved in `73` passes. We will later work out his pass success rate. But look at the number. Isn't he a brilliant midfielder that the German national team and the Real Madrid team have in their disposal? What a playmaker he is! 
