@@ -37,7 +37,7 @@ Let us try to draw the simplest football pitch that satisfies our visualization 
 
 ```{python}
 pitch = Pitch(pitch_color='grass', line_color='white', stripe=True, constrained_layout=True,
-        tight_layout= False, goal_type = 'box', axis = True, tick=True)
+        tight_layout= False, goal_type = 'box', label = True,  axis = True, tick=True)
 fig, ax = pitch.draw()
 plt.show()
 ```
