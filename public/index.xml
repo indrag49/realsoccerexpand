@@ -1,0 +1,1040 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Introductory Football Data Analysis</title>
+    <link>https://realsoccerexpand.netlify.app/</link>
+      <atom:link href="https://realsoccerexpand.netlify.app/index.xml" rel="self" type="application/rss+xml" />
+    <description>Introductory Football Data Analysis</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© {2021} Indranil Ghosh</copyright><lastBuildDate>Sat, 01 Jun 2030 13:00:00 +0000</lastBuildDate>
+    <image>
+      <url>https://realsoccerexpand.netlify.app/media/icon_hua2ec155b4296a9c9791d015323e16eb5_11927_512x512_fill_lanczos_center_2.png</url>
+      <title>Introductory Football Data Analysis</title>
+      <link>https://realsoccerexpand.netlify.app/</link>
+    </image>
+    
+    <item>
+      <title>Python basics</title>
+      <link>https://realsoccerexpand.netlify.app/courses/example/python/</link>
+      <pubDate>Fri, 01 Jan 2021 00:00:00 +0000</pubDate>
+      <guid>https://realsoccerexpand.netlify.app/courses/example/python/</guid>
+      <description>&lt;p&gt;Build a foundation in Python.&lt;/p&gt;
+&lt;p&gt;
+  &lt;i class=&#34;fas fa-clock  pr-1 fa-fw&#34;&gt;&lt;/i&gt; 1-2 hours per week, for 8 weeks&lt;/p&gt;
+&lt;h2 id=&#34;learn&#34;&gt;Learn&lt;/h2&gt;
+
+&lt;div style=&#34;position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;&#34;&gt;
+  &lt;iframe src=&#34;https://www.youtube.com/embed/rfscVS0vtbw&#34; style=&#34;position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;&#34; allowfullscreen title=&#34;YouTube Video&#34;&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&#34;quiz&#34;&gt;Quiz&lt;/h2&gt;
+&lt;details class=&#34;spoiler &#34;  id=&#34;spoiler-2&#34;&gt;
+  &lt;summary&gt;What is the difference between lists and tuples?&lt;/summary&gt;
+  &lt;p&gt;&lt;p&gt;Lists&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Lists are mutable - they can be changed&lt;/li&gt;
+&lt;li&gt;Slower than tuples&lt;/li&gt;
+&lt;li&gt;Syntax: &lt;code&gt;a_list = [1, 2.0, &#39;Hello world&#39;]&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Tuples&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Tuples are immutable - they can&amp;rsquo;t be changed&lt;/li&gt;
+&lt;li&gt;Tuples are faster than lists&lt;/li&gt;
+&lt;li&gt;Syntax: &lt;code&gt;a_tuple = (1, 2.0, &#39;Hello world&#39;)&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/p&gt;
+&lt;/details&gt;
+&lt;details class=&#34;spoiler &#34;  id=&#34;spoiler-3&#34;&gt;
+  &lt;summary&gt;Is Python case-sensitive?&lt;/summary&gt;
+  &lt;p&gt;Yes&lt;/p&gt;
+&lt;/details&gt;</description>
+    </item>
+    
+    <item>
+      <title>Visualization</title>
+      <link>https://realsoccerexpand.netlify.app/courses/example/visualization/</link>
+      <pubDate>Fri, 01 Jan 2021 00:00:00 +0000</pubDate>
+      <guid>https://realsoccerexpand.netlify.app/courses/example/visualization/</guid>
+      <description>&lt;p&gt;Learn how to visualize data with Plotly.&lt;/p&gt;
+&lt;p&gt;
+  &lt;i class=&#34;fas fa-clock  pr-1 fa-fw&#34;&gt;&lt;/i&gt; 1-2 hours per week, for 8 weeks&lt;/p&gt;
+&lt;h2 id=&#34;learn&#34;&gt;Learn&lt;/h2&gt;
+
+&lt;div style=&#34;position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;&#34;&gt;
+  &lt;iframe src=&#34;https://www.youtube.com/embed/hSPmj7mK6ng&#34; style=&#34;position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;&#34; allowfullscreen title=&#34;YouTube Video&#34;&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&#34;quiz&#34;&gt;Quiz&lt;/h2&gt;
+&lt;details class=&#34;spoiler &#34;  id=&#34;spoiler-2&#34;&gt;
+  &lt;summary&gt;When is a heatmap useful?&lt;/summary&gt;
+  &lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit.&lt;/p&gt;
+&lt;/details&gt;
+&lt;details class=&#34;spoiler &#34;  id=&#34;spoiler-3&#34;&gt;
+  &lt;summary&gt;Write Plotly code to render a bar chart&lt;/summary&gt;
+  &lt;p&gt;&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import plotly.express as px
+data_canada = px.data.gapminder().query(&amp;quot;country == &#39;Canada&#39;&amp;quot;)
+fig = px.bar(data_canada, x=&#39;year&#39;, y=&#39;pop&#39;)
+fig.show()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/p&gt;
+&lt;/details&gt;</description>
+    </item>
+    
+    <item>
+      <title>Statistics</title>
+      <link>https://realsoccerexpand.netlify.app/courses/example/stats/</link>
+      <pubDate>Fri, 01 Jan 2021 00:00:00 +0000</pubDate>
+      <guid>https://realsoccerexpand.netlify.app/courses/example/stats/</guid>
+      <description>&lt;p&gt;Introduction to statistics for data science.&lt;/p&gt;
+&lt;p&gt;
+  &lt;i class=&#34;fas fa-clock  pr-1 fa-fw&#34;&gt;&lt;/i&gt; 1-2 hours per week, for 8 weeks&lt;/p&gt;
+&lt;h2 id=&#34;learn&#34;&gt;Learn&lt;/h2&gt;
+&lt;p&gt;The general form of the &lt;strong&gt;normal&lt;/strong&gt; probability density function is:&lt;/p&gt;
+&lt;p&gt;$$
+f(x) = \frac{1}{\sigma \sqrt{2\pi} } e^{-\frac{1}{2}\left(\frac{x-\mu}{\sigma}\right)^2}
+$$&lt;/p&gt;
+&lt;div class=&#34;alert alert-note&#34;&gt;
+  &lt;div&gt;
+    The parameter $\mu$ is the mean or expectation of the distribution.
+$\sigma$ is its standard deviation.
+The variance of the distribution is $\sigma^{2}$.
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&#34;quiz&#34;&gt;Quiz&lt;/h2&gt;
+&lt;details class=&#34;spoiler &#34;  id=&#34;spoiler-2&#34;&gt;
+  &lt;summary&gt;What is the parameter $\mu$?&lt;/summary&gt;
+  &lt;p&gt;The parameter $\mu$ is the mean or expectation of the distribution.&lt;/p&gt;
+&lt;/details&gt;</description>
+    </item>
+    
+    <item>
+      <title>Example Talk</title>
+      <link>https://realsoccerexpand.netlify.app/talk/example-talk/</link>
+      <pubDate>Sat, 01 Jun 2030 13:00:00 +0000</pubDate>
+      <guid>https://realsoccerexpand.netlify.app/talk/example-talk/</guid>
+      <description>&lt;div class=&#34;alert alert-note&#34;&gt;
+  &lt;div&gt;
+    Click on the &lt;strong&gt;Slides&lt;/strong&gt; button above to view the built-in slides feature.
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Slides can be added in a few ways:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Create&lt;/strong&gt; slides using Wowchemy&amp;rsquo;s &lt;a href=&#34;https://wowchemy.com/docs/managing-content/#create-slides&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;em&gt;Slides&lt;/em&gt;&lt;/a&gt; feature and link using &lt;code&gt;slides&lt;/code&gt; parameter in the front matter of the talk file&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Upload&lt;/strong&gt; an existing slide deck to &lt;code&gt;static/&lt;/code&gt; and link using &lt;code&gt;url_slides&lt;/code&gt; parameter in the front matter of the talk file&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Embed&lt;/strong&gt; your slides (e.g. Google Slides) or presentation video on this page using &lt;a href=&#34;https://wowchemy.com/docs/writing-markdown-latex/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;shortcodes&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Further event details, including &lt;a href=&#34;https://wowchemy.com/docs/writing-markdown-latex/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;page elements&lt;/a&gt; such as image galleries, can be added to the body of this page.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Get your open access event data from statsbomb</title>
+      <link>https://realsoccerexpand.netlify.app/post/getting-statsbomb-event-data/</link>
+      <pubDate>Sun, 25 Apr 2021 00:00:00 +0000</pubDate>
+      <guid>https://realsoccerexpand.netlify.app/post/getting-statsbomb-event-data/</guid>
+      <description>&lt;p&gt;This is the first of all the blog posts that are to be published further. In this tutorial we will learn how to download open access event data from &lt;a href=&#34;https://github.com/statsbomb/open-data#:~:text=StatsBomb%20Open%20Data%20Welcome%20to%20the%20StatsBomb%20Open,encourage%20new%20research%20and%20analysis%20at%20all%20levels.&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;strong&gt;statsbomb&lt;/strong&gt;&lt;/a&gt; using the Python package &lt;a href=&#34;https://github.com/statsbomb/statsbombpy&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;code&gt;statsbombpy&lt;/code&gt;&lt;/a&gt;. Use &lt;code&gt;pip&lt;/code&gt; to install &lt;code&gt;statsbombpy&lt;/code&gt; by using the following command:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;pip install statsbombpy
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The open data from &lt;strong&gt;Statsbomb&lt;/strong&gt; can be accessed without any need of authetication from the user but it is always advised to go through the &lt;em&gt;Terms &amp;amp; Conditions&lt;/em&gt; section stated at their documentation page.&lt;/p&gt;
+&lt;p&gt;Now we will go step by step to understand how to extract the relevant data. Before that, we need to import the &lt;code&gt;statsbombpy&lt;/code&gt; package.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;from statsbombpy import sb
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We then import the &lt;code&gt;numpy&lt;/code&gt; and the &lt;code&gt;pandas&lt;/code&gt; packages that help us manipulate our datasets and perform analyses like data cleaning and data extraction.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import numpy as np
+import pandas as pd
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;To get access to the &lt;em&gt;Competitions&lt;/em&gt; dataset type the following:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;comp = sb.competitions()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## credentials were not supplied. open data access only
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The dataset &lt;code&gt;comp&lt;/code&gt; can now be printed by typing the following:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;print(comp.to_markdown())
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## |    |   competition_id |   season_id | country_name             | competition_name        | competition_gender   | season_name   | match_updated              | match_available            |
+## |---:|-----------------:|------------:|:-------------------------|:------------------------|:---------------------|:--------------|:---------------------------|:---------------------------|
+## |  0 |               16 |           4 | Europe                   | Champions League        | male                 | 2018/2019     | 2021-04-19T17:36:05.724116 | 2021-04-19T17:36:05.724116 |
+## |  1 |               16 |           1 | Europe                   | Champions League        | male                 | 2017/2018     | 2021-01-23T21:55:30.425330 | 2021-01-23T21:55:30.425330 |
+## |  2 |               16 |           2 | Europe                   | Champions League        | male                 | 2016/2017     | 2020-08-26T12:33:15.869622 | 2020-07-29T05:00           |
+## |  3 |               16 |          27 | Europe                   | Champions League        | male                 | 2015/2016     | 2020-08-26T12:33:15.869622 | 2020-07-29T05:00           |
+## |  4 |               16 |          26 | Europe                   | Champions League        | male                 | 2014/2015     | 2020-08-26T12:33:15.869622 | 2020-07-29T05:00           |
+## |  5 |               16 |          25 | Europe                   | Champions League        | male                 | 2013/2014     | 2020-08-26T12:33:15.869622 | 2020-07-29T05:00           |
+## |  6 |               16 |          24 | Europe                   | Champions League        | male                 | 2012/2013     | 2020-08-26T12:33:15.869622 | 2020-07-29T05:00           |
+## |  7 |               16 |          23 | Europe                   | Champions League        | male                 | 2011/2012     | 2020-08-26T12:33:15.869622 | 2020-07-29T05:00           |
+## |  8 |               16 |          22 | Europe                   | Champions League        | male                 | 2010/2011     | 2020-07-29T05:00           | 2020-07-29T05:00           |
+## |  9 |               16 |          21 | Europe                   | Champions League        | male                 | 2009/2010     | 2020-07-29T05:00           | 2020-07-29T05:00           |
+## | 10 |               16 |          41 | Europe                   | Champions League        | male                 | 2008/2009     | 2020-08-30T10:18:39.435424 | 2020-08-30T10:18:39.435424 |
+## | 11 |               16 |          39 | Europe                   | Champions League        | male                 | 2006/2007     | 2021-03-31T04:18:30.437060 | 2021-03-31T04:18:30.437060 |
+## | 12 |               16 |          37 | Europe                   | Champions League        | male                 | 2004/2005     | 2021-04-01T06:18:57.459032 | 2021-04-01T06:18:57.459032 |
+## | 13 |               16 |          44 | Europe                   | Champions League        | male                 | 2003/2004     | 2021-04-01T00:34:59.472485 | 2021-04-01T00:34:59.472485 |
+## | 14 |               16 |          76 | Europe                   | Champions League        | male                 | 1999/2000     | 2020-07-29T05:00           | 2020-07-29T05:00           |
+## | 15 |               37 |          42 | England                  | FA Women&#39;s Super League | female               | 2019/2020     | 2020-10-20T18:35:33.568528 | 2020-10-20T18:35:33.568528 |
+## | 16 |               37 |           4 | England                  | FA Women&#39;s Super League | female               | 2018/2019     | 2021-04-09T20:39:24.201269 | 2021-04-09T20:39:24.201269 |
+## | 17 |               43 |           3 | International            | FIFA World Cup          | male                 | 2018          | 2020-10-25T14:03:50.263266 | 2020-10-25T14:03:50.263266 |
+## | 18 |               11 |          42 | Spain                    | La Liga                 | male                 | 2019/2020     | 2020-12-18T12:10:38.985394 | 2020-12-18T12:10:38.985394 |
+## | 19 |               11 |           4 | Spain                    | La Liga                 | male                 | 2018/2019     | 2021-04-20T03:24:51.029365 | 2021-04-20T03:24:51.029365 |
+## | 20 |               11 |           1 | Spain                    | La Liga                 | male                 | 2017/2018     | 2021-04-19T17:36:05.805404 | 2021-04-19T17:36:05.805404 |
+## | 21 |               11 |           2 | Spain                    | La Liga                 | male                 | 2016/2017     | 2021-02-02T23:24:58.985975 | 2021-02-02T23:24:58.985975 |
+## | 22 |               11 |          27 | Spain                    | La Liga                 | male                 | 2015/2016     | 2020-07-29T05:00           | 2020-07-29T05:00           |
+## | 23 |               11 |          26 | Spain                    | La Liga                 | male                 | 2014/2015     | 2020-07-29T05:00           | 2020-07-29T05:00           |
+## | 24 |               11 |          25 | Spain                    | La Liga                 | male                 | 2013/2014     | 2020-07-29T05:00           | 2020-07-29T05:00           |
+## | 25 |               11 |          24 | Spain                    | La Liga                 | male                 | 2012/2013     | 2020-07-29T05:00           | 2020-07-29T05:00           |
+## | 26 |               11 |          23 | Spain                    | La Liga                 | male                 | 2011/2012     | 2020-07-29T05:00           | 2020-07-29T05:00           |
+## | 27 |               11 |          22 | Spain                    | La Liga                 | male                 | 2010/2011     | 2020-07-29T05:00           | 2020-07-29T05:00           |
+## | 28 |               11 |          21 | Spain                    | La Liga                 | male                 | 2009/2010     | 2020-07-29T05:00           | 2020-07-29T05:00           |
+## | 29 |               11 |          41 | Spain                    | La Liga                 | male                 | 2008/2009     | 2020-07-29T05:00           | 2020-07-29T05:00           |
+## | 30 |               11 |          40 | Spain                    | La Liga                 | male                 | 2007/2008     | 2020-07-29T05:00           | 2020-07-29T05:00           |
+## | 31 |               11 |          39 | Spain                    | La Liga                 | male                 | 2006/2007     | 2020-07-29T05:00           | 2020-07-29T05:00           |
+## | 32 |               11 |          38 | Spain                    | La Liga                 | male                 | 2005/2006     | 2020-07-29T05:00           | 2020-07-29T05:00           |
+## | 33 |               11 |          37 | Spain                    | La Liga                 | male                 | 2004/2005     | 2020-07-29T05:00           | 2020-07-29T05:00           |
+## | 34 |               49 |           3 | United States of America | NWSL                    | female               | 2018          | 2020-07-29T05:00           | 2020-07-29T05:00           |
+## | 35 |                2 |          44 | England                  | Premier League          | male                 | 2003/2004     | 2020-08-31T20:40:28.969635 | 2020-08-31T20:40:28.969635 |
+## | 36 |               72 |          30 | International            | Women&#39;s World Cup       | female               | 2019          | 2020-07-29T05:00           | 2020-07-29T05:00           |
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We can extract the column names of &lt;code&gt;comp&lt;/code&gt; to understand the dataset better and draw out relevant information from the same. Type the following:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;print(comp.columns)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Index([&#39;competition_id&#39;, &#39;season_id&#39;, &#39;country_name&#39;, &#39;competition_name&#39;,
+##        &#39;competition_gender&#39;, &#39;season_name&#39;, &#39;match_updated&#39;,
+##        &#39;match_available&#39;],
+##       dtype=&#39;object&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Let us make sense of a particular row from the &lt;code&gt;comp&lt;/code&gt; dataset. For example, if we look into row number &lt;code&gt;18&lt;/code&gt; we notice some relevant information: the &lt;code&gt;competition_id&lt;/code&gt; is &lt;code&gt;11&lt;/code&gt;, the &lt;code&gt;season_id&lt;/code&gt; is 42, the &lt;code&gt;country_name&lt;/code&gt; is &lt;code&gt;Spain&lt;/code&gt;, the &lt;code&gt;competition_name&lt;/code&gt; is &lt;code&gt;La Liga&lt;/code&gt;, the &lt;code&gt;season_name&lt;/code&gt; is &lt;code&gt;2019/2020&lt;/code&gt;, and so on. Suppose we are satisfied with the aboive information, and we want to analyze a game from 2019/20&amp;rsquo;s La Liga season. Obviously row number &lt;code&gt;18&lt;/code&gt; from &lt;code&gt;comp&lt;/code&gt; provides us with that. We keep note of the &lt;code&gt;competition_id&lt;/code&gt; and &lt;code&gt;season_id&lt;/code&gt; at that row, which are &lt;code&gt;11&lt;/code&gt; and &lt;code&gt;42&lt;/code&gt; respectively. Now we extract out the matches dataset by typing the following:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;mat = sb.matches(competition_id=11, season_id=42)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## credentials were not supplied. open data access only
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;print(mat.to_markdown())
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## |    |   match_id | match_date   | kick_off     | competition     | season    | home_team        | away_team        |   home_score |   away_score | match_status   | match_status_360   | last_updated               | last_updated_360   |   match_week | competition_stage   | stadium                         | referee           | data_version   |   shot_fidelity_version |   xy_fidelity_version |
+## |---:|-----------:|:-------------|:-------------|:----------------|:----------|:-----------------|:-----------------|-------------:|-------------:|:---------------|:-------------------|:---------------------------|:-------------------|-------------:|:--------------------|:--------------------------------|:------------------|:---------------|------------------------:|----------------------:|
+## |  0 |     303421 | 2020-07-19   | 17:00:00.000 | Spain - La Liga | 2019/2020 | Deportivo Alavés | Barcelona        |            0 |            5 | available      | unscheduled        | 2020-07-29T05:00           |                    |           38 | Regular Season      | Estadio de Mendizorroza         | J. Martínez       | 1.1.0          |                       2 |                     2 |
+## |  1 |     303493 | 2020-06-23   | 22:00:00.000 | Spain - La Liga | 2019/2020 | Barcelona        | Athletic Bilbao  |            1 |            0 | available      | unscheduled        | 2020-07-29T05:00           |                    |           31 | Regular Season      | Camp Nou                        | Jesús Gil         | 1.1.0          |                       2 |                     2 |
+## |  2 |     303516 | 2020-06-27   | 17:00:00.000 | Spain - La Liga | 2019/2020 | Celta Vigo       | Barcelona        |            2 |            2 | available      | unscheduled        | 2020-07-29T05:00           |                    |           32 | Regular Season      | Abanca-Balaídos                 | G. Cuadra         | 1.1.0          |                       2 |                     2 |
+## |  3 |     303680 | 2020-07-11   | 19:30:00.000 | Spain - La Liga | 2019/2020 | Real Valladolid  | Barcelona        |            0 |            1 | available      | unscheduled        | 2020-12-18T12:10:38.985394 |                    |           36 | Regular Season      | Estadio Municipal José Zorrilla | Antonio Mateu     | 1.1.0          |                       2 |                     2 |
+## |  4 |     303532 | 2020-06-16   | 22:00:00.000 | Spain - La Liga | 2019/2020 | Barcelona        | Leganés          |            2 |            0 | available      | unscheduled        | 2020-07-29T05:00           |                    |           29 | Regular Season      | Camp Nou                        | J. Martínez       | 1.1.0          |                       2 |                     2 |
+## |  5 |     303400 | 2020-01-25   | 16:00:00.000 | Spain - La Liga | 2019/2020 | Valencia         | Barcelona        |            2 |            0 | available      | unscheduled        | 2020-07-29T05:00           |                    |           21 | Regular Season      | Estadio de Mestalla             | Jesús Gil         | 1.1.0          |                       2 |                     2 |
+## |  6 |     303634 | 2020-07-16   | 21:00:00.000 | Spain - La Liga | 2019/2020 | Barcelona        | Osasuna          |            1 |            2 | available      | unscheduled        | 2020-09-18T13:16:12.825671 |                    |           37 | Regular Season      | Camp Nou                        | J. Sánchez        | 1.1.0          |                       2 |                     2 |
+## |  7 |     303479 | 2020-03-07   | 18:30:00.000 | Spain - La Liga | 2019/2020 | Barcelona        | Real Sociedad    |            1 |            0 | available      | unscheduled        | 2020-07-29T05:00           |                    |           27 | Regular Season      | Camp Nou                        | J. Martínez       | 1.1.0          |                       2 |                     2 |
+## |  8 |     303615 | 2020-07-08   | 22:00:00.000 | Spain - La Liga | 2019/2020 | Barcelona        | Espanyol         |            1 |            0 | available      | unscheduled        | 2020-09-11T23:12:41.238499 |                    |           35 | Regular Season      | Camp Nou                        | J. Munuera        | 1.1.0          |                       2 |                     2 |
+## |  9 |     303696 | 2020-06-30   | 22:00:00.000 | Spain - La Liga | 2019/2020 | Barcelona        | Atlético Madrid  |            2 |            2 | available      | unscheduled        | 2020-07-29T05:00           |                    |           33 | Regular Season      | Camp Nou                        | A. Hernández      | 1.1.0          |                       2 |                     2 |
+## | 10 |     303664 | 2019-12-14   | 16:00:00.000 | Spain - La Liga | 2019/2020 | Real Sociedad    | Barcelona        |            2 |            2 | available      | unscheduled        | 2020-07-29T05:00           |                    |           17 | Regular Season      | Reale Arena                     | J. Alberola Rojas | 1.1.0          |                       2 |                     2 |
+## | 11 |     303596 | 2019-12-18   | 20:00:00.000 | Spain - La Liga | 2019/2020 | Barcelona        | Real Madrid      |            0 |            0 | available      | unscheduled        | 2020-07-29T05:00           |                    |           10 | Regular Season      | Camp Nou                        | A. Hernández      | 1.1.0          |                       2 |                     2 |
+## | 12 |     303487 | 2019-11-09   | 21:00:00.000 | Spain - La Liga | 2019/2020 | Barcelona        | Celta Vigo       |            4 |            1 | available      | unscheduled        | 2020-07-29T05:00           |                    |           13 | Regular Season      | Camp Nou                        | G. Cuadra         | 1.1.0          |                       2 |                     2 |
+## | 13 |     303600 | 2019-10-29   | 21:15:00.000 | Spain - La Liga | 2019/2020 | Barcelona        | Real Valladolid  |            5 |            1 | available      | unscheduled        | 2020-07-29T05:00           |                    |           11 | Regular Season      | Camp Nou                        | J. Alberola Rojas | 1.1.0          |                       2 |                     2 |
+## | 14 |     303548 | 2020-06-13   | 22:00:00.000 | Spain - La Liga | 2019/2020 | Mallorca         | Barcelona        |            0 |            4 | available      | unscheduled        | 2020-07-29T05:00           |                    |           28 | Regular Season      | Iberostar Estadi                | C. Del Cerro      | 1.1.0          |                       2 |                     2 |
+## | 15 |     303473 | 2019-10-06   | 21:00:00.000 | Spain - La Liga | 2019/2020 | Barcelona        | Sevilla          |            4 |            0 | available      | unscheduled        | 2020-07-29T05:00           |                    |            8 | Regular Season      | Camp Nou                        | Antonio Mateu     | 1.1.0          |                       2 |                     2 |
+## | 16 |     303610 | 2020-01-19   | 21:00:00.000 | Spain - La Liga | 2019/2020 | Barcelona        | Granada          |            1 |            0 | available      | unscheduled        | 2020-07-29T05:00           |                    |           20 | Regular Season      | Camp Nou                        | V. Pizarro        | 1.1.0          |                       2 |                     2 |
+## | 17 |     303652 | 2020-01-04   | 21:00:00.000 | Spain - La Liga | 2019/2020 | Espanyol         | Barcelona        |            2 |            2 | available      | unscheduled        | 2020-07-29T05:00           |                    |           19 | Regular Season      | RCDE Stadium                    | C. Del Cerro      | 1.1.0          |                       2 |                     2 |
+## | 18 |     303430 | 2019-09-24   | 21:00:00.000 | Spain - La Liga | 2019/2020 | Barcelona        | Villarreal       |            2 |            1 | available      | unscheduled        | 2020-07-29T05:00           |                    |            6 | Regular Season      | Camp Nou                        | R. De Burgos      | 1.1.0          |                       2 |                     2 |
+## | 19 |     303674 | 2020-06-19   | 22:00:00.000 | Spain - La Liga | 2019/2020 | Sevilla          | Barcelona        |            0 |            0 | available      | unscheduled        | 2020-07-29T05:00           |                    |           30 | Regular Season      | Estadio Ramón Sánchez Pizjuán   | José González     | 1.1.0          |                       2 |                     2 |
+## | 20 |     303470 | 2020-03-01   | 21:00:00.000 | Spain - La Liga | 2019/2020 | Real Madrid      | Barcelona        |            2 |            0 | available      | unscheduled        | 2020-07-29T05:00           |                    |           26 | Regular Season      | Estadio Santiago Bernabéu       | Antonio Mateu     | 1.1.0          |                       2 |                     2 |
+## | 21 |     303700 | 2019-10-19   | 13:00:00.000 | Spain - La Liga | 2019/2020 | Eibar            | Barcelona        |            0 |            3 | available      | unscheduled        | 2020-07-29T05:00           |                    |            9 | Regular Season      | Estadio Municipal de Ipurúa     | M. Melero         | 1.1.0          |                       2 |                     2 |
+## | 22 |     303707 | 2020-02-09   | 21:00:00.000 | Spain - La Liga | 2019/2020 | Real Betis       | Barcelona        |            2 |            3 | available      | unscheduled        | 2020-07-29T05:00           |                    |           23 | Regular Season      | Estadio Benito Villamarín       | J. Sánchez        | 1.1.0          |                       2 |                     2 |
+## | 23 |     303666 | 2019-09-21   | 21:00:00.000 | Spain - La Liga | 2019/2020 | Granada          | Barcelona        |            2 |            0 | available      | unscheduled        | 2020-07-29T05:00           |                    |            5 | Regular Season      | Estadio Nuevo Los Cármenes      | G. Cuadra         | 1.1.0          |                       2 |                     2 |
+## | 24 |     303725 | 2020-07-05   | 22:00:00.000 | Spain - La Liga | 2019/2020 | Villarreal       | Barcelona        |            1 |            4 | available      | unscheduled        | 2020-07-29T05:00           |                    |           34 | Regular Season      | Estadio de la Cerámica          | C. Del Cerro      | 1.1.0          |                       2 |                     2 |
+## | 25 |     303504 | 2019-11-02   | 16:00:00.000 | Spain - La Liga | 2019/2020 | Levante          | Barcelona        |            3 |            1 | available      | unscheduled        | 2020-07-29T05:00           |                    |           12 | Regular Season      | Estadio Ciudad de Valencia      | A. Hernández      | 1.1.0          |                       2 |                     2 |
+## | 26 |     303715 | 2019-11-23   | 13:00:00.000 | Spain - La Liga | 2019/2020 | Leganés          | Barcelona        |            1 |            2 | available      | unscheduled        | 2020-07-29T05:00           |                    |           14 | Regular Season      | Estadio Municipal de Butarque   | S. Jaime          | 1.1.0          |                       2 |                     2 |
+## | 27 |     303377 | 2020-02-15   | 16:00:00.000 | Spain - La Liga | 2019/2020 | Barcelona        | Getafe           |            2 |            1 | available      | unscheduled        | 2020-07-29T05:00           |                    |           24 | Regular Season      | Camp Nou                        | G. Cuadra         | 1.1.0          |                       2 |                     2 |
+## | 28 |     303524 | 2019-12-01   | 21:00:00.000 | Spain - La Liga | 2019/2020 | Atlético Madrid  | Barcelona        |            0 |            1 | available      | unscheduled        | 2020-07-29T05:00           |                    |           15 | Regular Season      | Estadio Wanda Metropolitano     | Antonio Mateu     | 1.1.0          |                       2 |                     2 |
+## | 29 |     303451 | 2019-12-07   | 21:00:00.000 | Spain - La Liga | 2019/2020 | Barcelona        | Mallorca         |            5 |            2 | available      | unscheduled        | 2020-07-29T05:00           |                    |           16 | Regular Season      | Camp Nou                        | J. Munuera        | 1.1.0          |                       2 |                     2 |
+## | 30 |     303517 | 2019-12-21   | 16:00:00.000 | Spain - La Liga | 2019/2020 | Barcelona        | Deportivo Alavés |            4 |            1 | available      | unscheduled        | 2020-07-29T05:00           |                    |           18 | Regular Season      | Camp Nou                        | M. Melero         | 1.1.0          |                       2 |                     2 |
+## | 31 |     303682 | 2020-02-02   | 21:00:00.000 | Spain - La Liga | 2019/2020 | Barcelona        | Levante          |            2 |            1 | available      | unscheduled        | 2020-07-29T05:00           |                    |           22 | Regular Season      | Camp Nou                        | A. Cordero        | 1.1.0          |                       2 |                     2 |
+## | 32 |     303731 | 2020-02-22   | 16:00:00.000 | Spain - La Liga | 2019/2020 | Barcelona        | Eibar            |            5 |            0 | available      | unscheduled        | 2020-07-29T05:00           |                    |           25 | Regular Season      | Camp Nou                        | C. Soto           | 1.1.0          |                       2 |                     2 |
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Once we have the matches dataset &lt;code&gt;mat&lt;/code&gt;, we can look into it&amp;rsquo;s column names to clearly discern any pertinent information.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;mat.columns
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Index([&#39;match_id&#39;, &#39;match_date&#39;, &#39;kick_off&#39;, &#39;competition&#39;, &#39;season&#39;,
+##        &#39;home_team&#39;, &#39;away_team&#39;, &#39;home_score&#39;, &#39;away_score&#39;, &#39;match_status&#39;,
+##        &#39;match_status_360&#39;, &#39;last_updated&#39;, &#39;last_updated_360&#39;, &#39;match_week&#39;,
+##        &#39;competition_stage&#39;, &#39;stadium&#39;, &#39;referee&#39;, &#39;data_version&#39;,
+##        &#39;shot_fidelity_version&#39;, &#39;xy_fidelity_version&#39;],
+##       dtype=&#39;object&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Evidently, the &lt;code&gt;mat&lt;/code&gt; dataset gives us the match ids, the match dates, the kick off times, the home and away teams, the scores in a particular match, the name of the referee who officiated the match and so on. Here &lt;code&gt;match_id&lt;/code&gt; is the unique id that will help us draw out event data for a particular match from 2019/20&amp;rsquo;s La Liga season. Let us get the event data from a match. Well, let me announce something beforehand. I am a hardcore &lt;a href=&#34;https://www.realmadrid.com/en&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;strong&gt;Real Madrid&lt;/strong&gt;&lt;/a&gt; fan and an avid follower of European football. Focusing on the &lt;code&gt;mat&lt;/code&gt; dataset, it seems, row number &lt;code&gt;20&lt;/code&gt; with the &lt;code&gt;match_id = 303470&lt;/code&gt; catches most of my attention. It was a &lt;strong&gt;Real Madrid vs. Barcelona&lt;/strong&gt; match that took place at the &lt;strong&gt;Estadio Santiago Bernabéu&lt;/strong&gt; stadium pre-pandemic and it ended up 2-0 in Real Madrid&amp;rsquo;s favor 👀 👀 👀 👀. A great feat to be honest! Let us obtain the event data for this match.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;events = sb.events(match_id=303470)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## credentials were not supplied. open data access only
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;eh = events.head() # shows the first few rows
+print(eh.to_markdown())
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## |    |   bad_behaviour_card |   ball_receipt_outcome |   ball_recovery_recovery_failure |   block_deflection |   block_save_block |   carry_end_location |   clearance_aerial_won |   clearance_body_part |   clearance_head |   clearance_left_foot |   clearance_right_foot |   counterpress |   dribble_no_touch |   dribble_outcome |   dribble_overrun |   duel_outcome |   duel_type |   duration |   foul_committed_advantage |   foul_committed_card |   foul_committed_offensive |   foul_committed_type |   foul_won_advantage |   foul_won_defensive |   goalkeeper_body_part |   goalkeeper_end_location |   goalkeeper_outcome |   goalkeeper_position |   goalkeeper_success_in_play |   goalkeeper_technique |   goalkeeper_type | id                                   |   index |   interception_outcome |   location |   match_id |   minute |   miscontrol_aerial_won |   off_camera |   out |   pass_aerial_won |   pass_angle |   pass_assisted_shot_id |   pass_body_part |   pass_cross |   pass_cut_back |   pass_deflected |   pass_end_location |   pass_goal_assist |   pass_height |   pass_inswinging |   pass_length |   pass_miscommunication |   pass_no_touch |   pass_outcome |   pass_outswinging |   pass_recipient |   pass_shot_assist |   pass_switch |   pass_technique |   pass_through_ball |   pass_type |   period | play_pattern   |   player |   position |   possession | possession_team   | related_events                           |   second |   shot_body_part |   shot_deflected |   shot_end_location |   shot_first_time |   shot_freeze_frame |   shot_key_pass_id |   shot_one_on_one |   shot_outcome |   shot_statsbomb_xg |   shot_technique |   shot_type |   substitution_outcome |   substitution_replacement | tactics                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | team        | timestamp    | type        |   under_pressure |
+## |---:|---------------------:|-----------------------:|---------------------------------:|-------------------:|-------------------:|---------------------:|-----------------------:|----------------------:|-----------------:|----------------------:|-----------------------:|---------------:|-------------------:|------------------:|------------------:|---------------:|------------:|-----------:|---------------------------:|----------------------:|---------------------------:|----------------------:|---------------------:|---------------------:|-----------------------:|--------------------------:|---------------------:|----------------------:|-----------------------------:|-----------------------:|------------------:|:-------------------------------------|--------:|-----------------------:|-----------:|-----------:|---------:|------------------------:|-------------:|------:|------------------:|-------------:|------------------------:|-----------------:|-------------:|----------------:|-----------------:|--------------------:|-------------------:|--------------:|------------------:|--------------:|------------------------:|----------------:|---------------:|-------------------:|-----------------:|-------------------:|--------------:|-----------------:|--------------------:|------------:|---------:|:---------------|---------:|-----------:|-------------:|:------------------|:-----------------------------------------|---------:|-----------------:|-----------------:|--------------------:|------------------:|--------------------:|-------------------:|------------------:|---------------:|--------------------:|-----------------:|------------:|-----------------------:|---------------------------:|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:------------|:-------------|:------------|-----------------:|
+## |  0 |                  nan |                    nan |                              nan |                nan |                nan |                  nan |                    nan |                   nan |              nan |                   nan |                    nan |            nan |                nan |               nan |               nan |            nan |         nan |          0 |                        nan |                   nan |                        nan |                   nan |                  nan |                  nan |                    nan |                       nan |                  nan |                   nan |                          nan |                    nan |               nan | 3eba28e7-64c2-4e95-ac89-5d9948154c1d |       1 |                    nan |        nan |     303470 |        0 |                     nan |          nan |   nan |               nan |          nan |                     nan |              nan |          nan |             nan |              nan |                 nan |                nan |           nan |               nan |           nan |                     nan |             nan |            nan |                nan |              nan |                nan |           nan |              nan |                 nan |         nan |        1 | Regular Play   |      nan |        nan |            1 | Real Madrid       | nan                                      |        0 |              nan |              nan |                 nan |               nan |                 nan |                nan |               nan |            nan |                 nan |              nan |         nan |                    nan |                        nan | {&#39;formation&#39;: 4141, &#39;lineup&#39;: [{&#39;player&#39;: {&#39;id&#39;: 3509, &#39;name&#39;: &#39;Thibaut Courtois&#39;}, &#39;position&#39;: {&#39;id&#39;: 1, &#39;name&#39;: &#39;Goalkeeper&#39;}, &#39;jersey_number&#39;: 13}, {&#39;player&#39;: {&#39;id&#39;: 5721, &#39;name&#39;: &#39;Daniel Carvajal Ramos&#39;}, &#39;position&#39;: {&#39;id&#39;: 2, &#39;name&#39;: &#39;Right Back&#39;}, &#39;jersey_number&#39;: 2}, {&#39;player&#39;: {&#39;id&#39;: 5485, &#39;name&#39;: &#39;Raphaël Varane&#39;}, &#39;position&#39;: {&#39;id&#39;: 3, &#39;name&#39;: &#39;Right Center Back&#39;}, &#39;jersey_number&#39;: 5}, {&#39;player&#39;: {&#39;id&#39;: 5201, &#39;name&#39;: &#39;Sergio Ramos García&#39;}, &#39;position&#39;: {&#39;id&#39;: 5, &#39;name&#39;: &#39;Left Center Back&#39;}, &#39;jersey_number&#39;: 4}, {&#39;player&#39;: {&#39;id&#39;: 5552, &#39;name&#39;: &#39;Marcelo Vieira da Silva Júnior&#39;}, &#39;position&#39;: {&#39;id&#39;: 6, &#39;name&#39;: &#39;Left Back&#39;}, &#39;jersey_number&#39;: 12}, {&#39;player&#39;: {&#39;id&#39;: 5539, &#39;name&#39;: &#39;Carlos Henrique Casimiro&#39;}, &#39;position&#39;: {&#39;id&#39;: 10, &#39;name&#39;: &#39;Center Defensive Midfield&#39;}, &#39;jersey_number&#39;: 14}, {&#39;player&#39;: {&#39;id&#39;: 6773, &#39;name&#39;: &#39;Federico Santiago Valverde Dipetta&#39;}, &#39;position&#39;: {&#39;id&#39;: 12, &#39;name&#39;: &#39;Right Midfield&#39;}, &#39;jersey_number&#39;: 15}, {&#39;player&#39;: {&#39;id&#39;: 4926, &#39;name&#39;: &#39;Francisco Román Alarcón Suárez&#39;}, &#39;position&#39;: {&#39;id&#39;: 13, &#39;name&#39;: &#39;Right Center Midfield&#39;}, &#39;jersey_number&#39;: 22}, {&#39;player&#39;: {&#39;id&#39;: 5574, &#39;name&#39;: &#39;Toni Kroos&#39;}, &#39;position&#39;: {&#39;id&#39;: 15, &#39;name&#39;: &#39;Left Center Midfield&#39;}, &#39;jersey_number&#39;: 8}, {&#39;player&#39;: {&#39;id&#39;: 18395, &#39;name&#39;: &#39;Vinícius José Paixão de Oliveira Júnior&#39;}, &#39;position&#39;: {&#39;id&#39;: 16, &#39;name&#39;: &#39;Left Midfield&#39;}, &#39;jersey_number&#39;: 25}, {&#39;player&#39;: {&#39;id&#39;: 19677, &#39;name&#39;: &#39;Karim Benzema&#39;}, &#39;position&#39;: {&#39;id&#39;: 23, &#39;name&#39;: &#39;Center Forward&#39;}, &#39;jersey_number&#39;: 9}]} | Real Madrid | 00:00:00.000 | Starting XI |              nan |
+## |  1 |                  nan |                    nan |                              nan |                nan |                nan |                  nan |                    nan |                   nan |              nan |                   nan |                    nan |            nan |                nan |               nan |               nan |            nan |         nan |          0 |                        nan |                   nan |                        nan |                   nan |                  nan |                  nan |                    nan |                       nan |                  nan |                   nan |                          nan |                    nan |               nan | e9a4b6da-b58f-4c56-a0e3-65bd23a17473 |       2 |                    nan |        nan |     303470 |        0 |                     nan |          nan |   nan |               nan |          nan |                     nan |              nan |          nan |             nan |              nan |                 nan |                nan |           nan |               nan |           nan |                     nan |             nan |            nan |                nan |              nan |                nan |           nan |              nan |                 nan |         nan |        1 | Regular Play   |      nan |        nan |            1 | Real Madrid       | nan                                      |        0 |              nan |              nan |                 nan |               nan |                 nan |                nan |               nan |            nan |                 nan |              nan |         nan |                    nan |                        nan | {&#39;formation&#39;: 442, &#39;lineup&#39;: [{&#39;player&#39;: {&#39;id&#39;: 20055, &#39;name&#39;: &#39;Marc-André ter Stegen&#39;}, &#39;position&#39;: {&#39;id&#39;: 1, &#39;name&#39;: &#39;Goalkeeper&#39;}, &#39;jersey_number&#39;: 1}, {&#39;player&#39;: {&#39;id&#39;: 6374, &#39;name&#39;: &#39;Nélson Cabral Semedo&#39;}, &#39;position&#39;: {&#39;id&#39;: 2, &#39;name&#39;: &#39;Right Back&#39;}, &#39;jersey_number&#39;: 2}, {&#39;player&#39;: {&#39;id&#39;: 5213, &#39;name&#39;: &#39;Gerard Piqué Bernabéu&#39;}, &#39;position&#39;: {&#39;id&#39;: 3, &#39;name&#39;: &#39;Right Center Back&#39;}, &#39;jersey_number&#39;: 3}, {&#39;player&#39;: {&#39;id&#39;: 5492, &#39;name&#39;: &#39;Samuel Yves Umtiti&#39;}, &#39;position&#39;: {&#39;id&#39;: 5, &#39;name&#39;: &#39;Left Center Back&#39;}, &#39;jersey_number&#39;: 23}, {&#39;player&#39;: {&#39;id&#39;: 5211, &#39;name&#39;: &#39;Jordi Alba Ramos&#39;}, &#39;position&#39;: {&#39;id&#39;: 6, &#39;name&#39;: &#39;Left Back&#39;}, &#39;jersey_number&#39;: 18}, {&#39;player&#39;: {&#39;id&#39;: 11392, &#39;name&#39;: &#39;Arthur Henrique Ramos de Oliveira Melo&#39;}, &#39;position&#39;: {&#39;id&#39;: 9, &#39;name&#39;: &#39;Right Defensive Midfield&#39;}, &#39;jersey_number&#39;: 8}, {&#39;player&#39;: {&#39;id&#39;: 5203, &#39;name&#39;: &#39;Sergio Busquets i Burgos&#39;}, &#39;position&#39;: {&#39;id&#39;: 11, &#39;name&#39;: &#39;Left Defensive Midfield&#39;}, &#39;jersey_number&#39;: 5}, {&#39;player&#39;: {&#39;id&#39;: 8206, &#39;name&#39;: &#39;Arturo Erasmo Vidal Pardo&#39;}, &#39;position&#39;: {&#39;id&#39;: 12, &#39;name&#39;: &#39;Right Midfield&#39;}, &#39;jersey_number&#39;: 22}, {&#39;player&#39;: {&#39;id&#39;: 8118, &#39;name&#39;: &#39;Frenkie de Jong&#39;}, &#39;position&#39;: {&#39;id&#39;: 16, &#39;name&#39;: &#39;Left Midfield&#39;}, &#39;jersey_number&#39;: 21}, {&#39;player&#39;: {&#39;id&#39;: 5503, &#39;name&#39;: &#39;Lionel Andrés Messi Cuccittini&#39;}, &#39;position&#39;: {&#39;id&#39;: 22, &#39;name&#39;: &#39;Right Center Forward&#39;}, &#39;jersey_number&#39;: 10}, {&#39;player&#39;: {&#39;id&#39;: 5487, &#39;name&#39;: &#39;Antoine Griezmann&#39;}, &#39;position&#39;: {&#39;id&#39;: 24, &#39;name&#39;: &#39;Left Center Forward&#39;}, &#39;jersey_number&#39;: 17}]}  | Barcelona   | 00:00:00.000 | Starting XI |              nan |
+## |  2 |                  nan |                    nan |                              nan |                nan |                nan |                  nan |                    nan |                   nan |              nan |                   nan |                    nan |            nan |                nan |               nan |               nan |            nan |         nan |          0 |                        nan |                   nan |                        nan |                   nan |                  nan |                  nan |                    nan |                       nan |                  nan |                   nan |                          nan |                    nan |               nan | 0b6f982e-e92c-4732-bc96-b28176e28b28 |       3 |                    nan |        nan |     303470 |        0 |                     nan |          nan |   nan |               nan |          nan |                     nan |              nan |          nan |             nan |              nan |                 nan |                nan |           nan |               nan |           nan |                     nan |             nan |            nan |                nan |              nan |                nan |           nan |              nan |                 nan |         nan |        1 | Regular Play   |      nan |        nan |            1 | Real Madrid       | [&#39;2e806582-2185-47ab-a971-b2898b602ea7&#39;] |        0 |              nan |              nan |                 nan |               nan |                 nan |                nan |               nan |            nan |                 nan |              nan |         nan |                    nan |                        nan | nan                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | Barcelona   | 00:00:00.000 | Half Start  |              nan |
+## |  3 |                  nan |                    nan |                              nan |                nan |                nan |                  nan |                    nan |                   nan |              nan |                   nan |                    nan |            nan |                nan |               nan |               nan |            nan |         nan |          0 |                        nan |                   nan |                        nan |                   nan |                  nan |                  nan |                    nan |                       nan |                  nan |                   nan |                          nan |                    nan |               nan | 2e806582-2185-47ab-a971-b2898b602ea7 |       4 |                    nan |        nan |     303470 |        0 |                     nan |          nan |   nan |               nan |          nan |                     nan |              nan |          nan |             nan |              nan |                 nan |                nan |           nan |               nan |           nan |                     nan |             nan |            nan |                nan |              nan |                nan |           nan |              nan |                 nan |         nan |        1 | Regular Play   |      nan |        nan |            1 | Real Madrid       | [&#39;0b6f982e-e92c-4732-bc96-b28176e28b28&#39;] |        0 |              nan |              nan |                 nan |               nan |                 nan |                nan |               nan |            nan |                 nan |              nan |         nan |                    nan |                        nan | nan                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | Real Madrid | 00:00:00.000 | Half Start  |              nan |
+## |  4 |                  nan |                    nan |                              nan |                nan |                nan |                  nan |                    nan |                   nan |              nan |                   nan |                    nan |            nan |                nan |               nan |               nan |            nan |         nan |          0 |                        nan |                   nan |                        nan |                   nan |                  nan |                  nan |                    nan |                       nan |                  nan |                   nan |                          nan |                    nan |               nan | 91ccd2c5-6471-4fa1-aab6-b8fbe18d57af |    2410 |                    nan |        nan |     303470 |       45 |                     nan |          nan |   nan |               nan |          nan |                     nan |              nan |          nan |             nan |              nan |                 nan |                nan |           nan |               nan |           nan |                     nan |             nan |            nan |                nan |              nan |                nan |           nan |              nan |                 nan |         nan |        2 | From Free Kick |      nan |        nan |          121 | Barcelona         | [&#39;95da779c-a2df-4b0c-a486-661a30ccce63&#39;] |        0 |              nan |              nan |                 nan |               nan |                 nan |                nan |               nan |            nan |                 nan |              nan |         nan |                    nan |                        nan | nan                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | Barcelona   | 00:00:00.000 | Half Start  |              nan |
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We see that we were able to get access to all the events from the &lt;strong&gt;Real Madrid vs. Barcelona&lt;/strong&gt; match. There are &lt;code&gt;88&lt;/code&gt; columns in &lt;code&gt;events&lt;/code&gt;. You can jot down the column names to get a clearer overview of what kinds of events to expect from the match.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;print(events.columns)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Index([&#39;bad_behaviour_card&#39;, &#39;ball_receipt_outcome&#39;,
+##        &#39;ball_recovery_recovery_failure&#39;, &#39;block_deflection&#39;,
+##        &#39;block_save_block&#39;, &#39;carry_end_location&#39;, &#39;clearance_aerial_won&#39;,
+##        &#39;clearance_body_part&#39;, &#39;clearance_head&#39;, &#39;clearance_left_foot&#39;,
+##        &#39;clearance_right_foot&#39;, &#39;counterpress&#39;, &#39;dribble_no_touch&#39;,
+##        &#39;dribble_outcome&#39;, &#39;dribble_overrun&#39;, &#39;duel_outcome&#39;, &#39;duel_type&#39;,
+##        &#39;duration&#39;, &#39;foul_committed_advantage&#39;, &#39;foul_committed_card&#39;,
+##        &#39;foul_committed_offensive&#39;, &#39;foul_committed_type&#39;, &#39;foul_won_advantage&#39;,
+##        &#39;foul_won_defensive&#39;, &#39;goalkeeper_body_part&#39;, &#39;goalkeeper_end_location&#39;,
+##        &#39;goalkeeper_outcome&#39;, &#39;goalkeeper_position&#39;,
+##        &#39;goalkeeper_success_in_play&#39;, &#39;goalkeeper_technique&#39;, &#39;goalkeeper_type&#39;,
+##        &#39;id&#39;, &#39;index&#39;, &#39;interception_outcome&#39;, &#39;location&#39;, &#39;match_id&#39;, &#39;minute&#39;,
+##        &#39;miscontrol_aerial_won&#39;, &#39;off_camera&#39;, &#39;out&#39;, &#39;pass_aerial_won&#39;,
+##        &#39;pass_angle&#39;, &#39;pass_assisted_shot_id&#39;, &#39;pass_body_part&#39;, &#39;pass_cross&#39;,
+##        &#39;pass_cut_back&#39;, &#39;pass_deflected&#39;, &#39;pass_end_location&#39;,
+##        &#39;pass_goal_assist&#39;, &#39;pass_height&#39;, &#39;pass_inswinging&#39;, &#39;pass_length&#39;,
+##        &#39;pass_miscommunication&#39;, &#39;pass_no_touch&#39;, &#39;pass_outcome&#39;,
+##        &#39;pass_outswinging&#39;, &#39;pass_recipient&#39;, &#39;pass_shot_assist&#39;, &#39;pass_switch&#39;,
+##        &#39;pass_technique&#39;, &#39;pass_through_ball&#39;, &#39;pass_type&#39;, &#39;period&#39;,
+##        &#39;play_pattern&#39;, &#39;player&#39;, &#39;position&#39;, &#39;possession&#39;, &#39;possession_team&#39;,
+##        &#39;related_events&#39;, &#39;second&#39;, &#39;shot_body_part&#39;, &#39;shot_deflected&#39;,
+##        &#39;shot_end_location&#39;, &#39;shot_first_time&#39;, &#39;shot_freeze_frame&#39;,
+##        &#39;shot_key_pass_id&#39;, &#39;shot_one_on_one&#39;, &#39;shot_outcome&#39;,
+##        &#39;shot_statsbomb_xg&#39;, &#39;shot_technique&#39;, &#39;shot_type&#39;,
+##        &#39;substitution_outcome&#39;, &#39;substitution_replacement&#39;, &#39;tactics&#39;, &#39;team&#39;,
+##        &#39;timestamp&#39;, &#39;type&#39;, &#39;under_pressure&#39;],
+##       dtype=&#39;object&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This completes our post on how to get access to open event data for a particular football match. We need to filter out only those events on which we want to perform advanced mathematical analyses and build conclusions. These concepts will start making more sense once we dive deeper into analyses in our future posts. In the next immediate post we will simply learn how to visualize a football pitch using the sophisticated package &lt;code&gt;mplsoccer&lt;/code&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Introduction</title>
+      <link>https://realsoccerexpand.netlify.app/post/introduction/</link>
+      <pubDate>Sun, 25 Apr 2021 00:00:00 +0000</pubDate>
+      <guid>https://realsoccerexpand.netlify.app/post/introduction/</guid>
+      <description>&lt;p&gt;This is a dummy website to try using simple functionalities. A simple R code to import all the packages:&lt;/p&gt;
+&lt;p&gt;Install the Following Python package given below:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;from statsbombpy import sb
+import matplotlib.pyplot as plt
+from mplsoccer.pitch import Pitch
+import seaborn as sns
+import numpy as np
+import pandas as pd
+import networkx as nx
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Now show the competition data&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;comp = sb.competitions()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## credentials were not supplied. open data access only
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;print(comp.to_markdown())
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## |    |   competition_id |   season_id | country_name             | competition_name        | competition_gender   | season_name   | match_updated              | match_available            |
+## |---:|-----------------:|------------:|:-------------------------|:------------------------|:---------------------|:--------------|:---------------------------|:---------------------------|
+## |  0 |               16 |           4 | Europe                   | Champions League        | male                 | 2018/2019     | 2021-04-19T17:36:05.724116 | 2021-04-19T17:36:05.724116 |
+## |  1 |               16 |           1 | Europe                   | Champions League        | male                 | 2017/2018     | 2021-01-23T21:55:30.425330 | 2021-01-23T21:55:30.425330 |
+## |  2 |               16 |           2 | Europe                   | Champions League        | male                 | 2016/2017     | 2020-08-26T12:33:15.869622 | 2020-07-29T05:00           |
+## |  3 |               16 |          27 | Europe                   | Champions League        | male                 | 2015/2016     | 2020-08-26T12:33:15.869622 | 2020-07-29T05:00           |
+## |  4 |               16 |          26 | Europe                   | Champions League        | male                 | 2014/2015     | 2020-08-26T12:33:15.869622 | 2020-07-29T05:00           |
+## |  5 |               16 |          25 | Europe                   | Champions League        | male                 | 2013/2014     | 2020-08-26T12:33:15.869622 | 2020-07-29T05:00           |
+## |  6 |               16 |          24 | Europe                   | Champions League        | male                 | 2012/2013     | 2020-08-26T12:33:15.869622 | 2020-07-29T05:00           |
+## |  7 |               16 |          23 | Europe                   | Champions League        | male                 | 2011/2012     | 2020-08-26T12:33:15.869622 | 2020-07-29T05:00           |
+## |  8 |               16 |          22 | Europe                   | Champions League        | male                 | 2010/2011     | 2020-07-29T05:00           | 2020-07-29T05:00           |
+## |  9 |               16 |          21 | Europe                   | Champions League        | male                 | 2009/2010     | 2020-07-29T05:00           | 2020-07-29T05:00           |
+## | 10 |               16 |          41 | Europe                   | Champions League        | male                 | 2008/2009     | 2020-08-30T10:18:39.435424 | 2020-08-30T10:18:39.435424 |
+## | 11 |               16 |          39 | Europe                   | Champions League        | male                 | 2006/2007     | 2021-03-31T04:18:30.437060 | 2021-03-31T04:18:30.437060 |
+## | 12 |               16 |          37 | Europe                   | Champions League        | male                 | 2004/2005     | 2021-04-01T06:18:57.459032 | 2021-04-01T06:18:57.459032 |
+## | 13 |               16 |          44 | Europe                   | Champions League        | male                 | 2003/2004     | 2021-04-01T00:34:59.472485 | 2021-04-01T00:34:59.472485 |
+## | 14 |               16 |          76 | Europe                   | Champions League        | male                 | 1999/2000     | 2020-07-29T05:00           | 2020-07-29T05:00           |
+## | 15 |               37 |          42 | England                  | FA Women&#39;s Super League | female               | 2019/2020     | 2020-10-20T18:35:33.568528 | 2020-10-20T18:35:33.568528 |
+## | 16 |               37 |           4 | England                  | FA Women&#39;s Super League | female               | 2018/2019     | 2021-04-09T20:39:24.201269 | 2021-04-09T20:39:24.201269 |
+## | 17 |               43 |           3 | International            | FIFA World Cup          | male                 | 2018          | 2020-10-25T14:03:50.263266 | 2020-10-25T14:03:50.263266 |
+## | 18 |               11 |          42 | Spain                    | La Liga                 | male                 | 2019/2020     | 2020-12-18T12:10:38.985394 | 2020-12-18T12:10:38.985394 |
+## | 19 |               11 |           4 | Spain                    | La Liga                 | male                 | 2018/2019     | 2021-04-20T03:24:51.029365 | 2021-04-20T03:24:51.029365 |
+## | 20 |               11 |           1 | Spain                    | La Liga                 | male                 | 2017/2018     | 2021-04-19T17:36:05.805404 | 2021-04-19T17:36:05.805404 |
+## | 21 |               11 |           2 | Spain                    | La Liga                 | male                 | 2016/2017     | 2021-02-02T23:24:58.985975 | 2021-02-02T23:24:58.985975 |
+## | 22 |               11 |          27 | Spain                    | La Liga                 | male                 | 2015/2016     | 2020-07-29T05:00           | 2020-07-29T05:00           |
+## | 23 |               11 |          26 | Spain                    | La Liga                 | male                 | 2014/2015     | 2020-07-29T05:00           | 2020-07-29T05:00           |
+## | 24 |               11 |          25 | Spain                    | La Liga                 | male                 | 2013/2014     | 2020-07-29T05:00           | 2020-07-29T05:00           |
+## | 25 |               11 |          24 | Spain                    | La Liga                 | male                 | 2012/2013     | 2020-07-29T05:00           | 2020-07-29T05:00           |
+## | 26 |               11 |          23 | Spain                    | La Liga                 | male                 | 2011/2012     | 2020-07-29T05:00           | 2020-07-29T05:00           |
+## | 27 |               11 |          22 | Spain                    | La Liga                 | male                 | 2010/2011     | 2020-07-29T05:00           | 2020-07-29T05:00           |
+## | 28 |               11 |          21 | Spain                    | La Liga                 | male                 | 2009/2010     | 2020-07-29T05:00           | 2020-07-29T05:00           |
+## | 29 |               11 |          41 | Spain                    | La Liga                 | male                 | 2008/2009     | 2020-07-29T05:00           | 2020-07-29T05:00           |
+## | 30 |               11 |          40 | Spain                    | La Liga                 | male                 | 2007/2008     | 2020-07-29T05:00           | 2020-07-29T05:00           |
+## | 31 |               11 |          39 | Spain                    | La Liga                 | male                 | 2006/2007     | 2020-07-29T05:00           | 2020-07-29T05:00           |
+## | 32 |               11 |          38 | Spain                    | La Liga                 | male                 | 2005/2006     | 2020-07-29T05:00           | 2020-07-29T05:00           |
+## | 33 |               11 |          37 | Spain                    | La Liga                 | male                 | 2004/2005     | 2020-07-29T05:00           | 2020-07-29T05:00           |
+## | 34 |               49 |           3 | United States of America | NWSL                    | female               | 2018          | 2020-07-29T05:00           | 2020-07-29T05:00           |
+## | 35 |                2 |          44 | England                  | Premier League          | male                 | 2003/2004     | 2020-08-31T20:40:28.969635 | 2020-08-31T20:40:28.969635 |
+## | 36 |               72 |          30 | International            | Women&#39;s World Cup       | female               | 2019          | 2020-07-29T05:00           | 2020-07-29T05:00           |
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We will now look into the matches available:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;mat = sb.matches(competition_id=11, season_id=42)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## credentials were not supplied. open data access only
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;print(mat.to_markdown())
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## |    |   match_id | match_date   | kick_off     | competition     | season    | home_team        | away_team        |   home_score |   away_score | match_status   | match_status_360   | last_updated               | last_updated_360   |   match_week | competition_stage   | stadium                         | referee           | data_version   |   shot_fidelity_version |   xy_fidelity_version |
+## |---:|-----------:|:-------------|:-------------|:----------------|:----------|:-----------------|:-----------------|-------------:|-------------:|:---------------|:-------------------|:---------------------------|:-------------------|-------------:|:--------------------|:--------------------------------|:------------------|:---------------|------------------------:|----------------------:|
+## |  0 |     303421 | 2020-07-19   | 17:00:00.000 | Spain - La Liga | 2019/2020 | Deportivo Alavés | Barcelona        |            0 |            5 | available      | unscheduled        | 2020-07-29T05:00           |                    |           38 | Regular Season      | Estadio de Mendizorroza         | J. Martínez       | 1.1.0          |                       2 |                     2 |
+## |  1 |     303493 | 2020-06-23   | 22:00:00.000 | Spain - La Liga | 2019/2020 | Barcelona        | Athletic Bilbao  |            1 |            0 | available      | unscheduled        | 2020-07-29T05:00           |                    |           31 | Regular Season      | Camp Nou                        | Jesús Gil         | 1.1.0          |                       2 |                     2 |
+## |  2 |     303516 | 2020-06-27   | 17:00:00.000 | Spain - La Liga | 2019/2020 | Celta Vigo       | Barcelona        |            2 |            2 | available      | unscheduled        | 2020-07-29T05:00           |                    |           32 | Regular Season      | Abanca-Balaídos                 | G. Cuadra         | 1.1.0          |                       2 |                     2 |
+## |  3 |     303680 | 2020-07-11   | 19:30:00.000 | Spain - La Liga | 2019/2020 | Real Valladolid  | Barcelona        |            0 |            1 | available      | unscheduled        | 2020-12-18T12:10:38.985394 |                    |           36 | Regular Season      | Estadio Municipal José Zorrilla | Antonio Mateu     | 1.1.0          |                       2 |                     2 |
+## |  4 |     303532 | 2020-06-16   | 22:00:00.000 | Spain - La Liga | 2019/2020 | Barcelona        | Leganés          |            2 |            0 | available      | unscheduled        | 2020-07-29T05:00           |                    |           29 | Regular Season      | Camp Nou                        | J. Martínez       | 1.1.0          |                       2 |                     2 |
+## |  5 |     303400 | 2020-01-25   | 16:00:00.000 | Spain - La Liga | 2019/2020 | Valencia         | Barcelona        |            2 |            0 | available      | unscheduled        | 2020-07-29T05:00           |                    |           21 | Regular Season      | Estadio de Mestalla             | Jesús Gil         | 1.1.0          |                       2 |                     2 |
+## |  6 |     303634 | 2020-07-16   | 21:00:00.000 | Spain - La Liga | 2019/2020 | Barcelona        | Osasuna          |            1 |            2 | available      | unscheduled        | 2020-09-18T13:16:12.825671 |                    |           37 | Regular Season      | Camp Nou                        | J. Sánchez        | 1.1.0          |                       2 |                     2 |
+## |  7 |     303479 | 2020-03-07   | 18:30:00.000 | Spain - La Liga | 2019/2020 | Barcelona        | Real Sociedad    |            1 |            0 | available      | unscheduled        | 2020-07-29T05:00           |                    |           27 | Regular Season      | Camp Nou                        | J. Martínez       | 1.1.0          |                       2 |                     2 |
+## |  8 |     303615 | 2020-07-08   | 22:00:00.000 | Spain - La Liga | 2019/2020 | Barcelona        | Espanyol         |            1 |            0 | available      | unscheduled        | 2020-09-11T23:12:41.238499 |                    |           35 | Regular Season      | Camp Nou                        | J. Munuera        | 1.1.0          |                       2 |                     2 |
+## |  9 |     303696 | 2020-06-30   | 22:00:00.000 | Spain - La Liga | 2019/2020 | Barcelona        | Atlético Madrid  |            2 |            2 | available      | unscheduled        | 2020-07-29T05:00           |                    |           33 | Regular Season      | Camp Nou                        | A. Hernández      | 1.1.0          |                       2 |                     2 |
+## | 10 |     303664 | 2019-12-14   | 16:00:00.000 | Spain - La Liga | 2019/2020 | Real Sociedad    | Barcelona        |            2 |            2 | available      | unscheduled        | 2020-07-29T05:00           |                    |           17 | Regular Season      | Reale Arena                     | J. Alberola Rojas | 1.1.0          |                       2 |                     2 |
+## | 11 |     303596 | 2019-12-18   | 20:00:00.000 | Spain - La Liga | 2019/2020 | Barcelona        | Real Madrid      |            0 |            0 | available      | unscheduled        | 2020-07-29T05:00           |                    |           10 | Regular Season      | Camp Nou                        | A. Hernández      | 1.1.0          |                       2 |                     2 |
+## | 12 |     303487 | 2019-11-09   | 21:00:00.000 | Spain - La Liga | 2019/2020 | Barcelona        | Celta Vigo       |            4 |            1 | available      | unscheduled        | 2020-07-29T05:00           |                    |           13 | Regular Season      | Camp Nou                        | G. Cuadra         | 1.1.0          |                       2 |                     2 |
+## | 13 |     303600 | 2019-10-29   | 21:15:00.000 | Spain - La Liga | 2019/2020 | Barcelona        | Real Valladolid  |            5 |            1 | available      | unscheduled        | 2020-07-29T05:00           |                    |           11 | Regular Season      | Camp Nou                        | J. Alberola Rojas | 1.1.0          |                       2 |                     2 |
+## | 14 |     303548 | 2020-06-13   | 22:00:00.000 | Spain - La Liga | 2019/2020 | Mallorca         | Barcelona        |            0 |            4 | available      | unscheduled        | 2020-07-29T05:00           |                    |           28 | Regular Season      | Iberostar Estadi                | C. Del Cerro      | 1.1.0          |                       2 |                     2 |
+## | 15 |     303473 | 2019-10-06   | 21:00:00.000 | Spain - La Liga | 2019/2020 | Barcelona        | Sevilla          |            4 |            0 | available      | unscheduled        | 2020-07-29T05:00           |                    |            8 | Regular Season      | Camp Nou                        | Antonio Mateu     | 1.1.0          |                       2 |                     2 |
+## | 16 |     303610 | 2020-01-19   | 21:00:00.000 | Spain - La Liga | 2019/2020 | Barcelona        | Granada          |            1 |            0 | available      | unscheduled        | 2020-07-29T05:00           |                    |           20 | Regular Season      | Camp Nou                        | V. Pizarro        | 1.1.0          |                       2 |                     2 |
+## | 17 |     303652 | 2020-01-04   | 21:00:00.000 | Spain - La Liga | 2019/2020 | Espanyol         | Barcelona        |            2 |            2 | available      | unscheduled        | 2020-07-29T05:00           |                    |           19 | Regular Season      | RCDE Stadium                    | C. Del Cerro      | 1.1.0          |                       2 |                     2 |
+## | 18 |     303430 | 2019-09-24   | 21:00:00.000 | Spain - La Liga | 2019/2020 | Barcelona        | Villarreal       |            2 |            1 | available      | unscheduled        | 2020-07-29T05:00           |                    |            6 | Regular Season      | Camp Nou                        | R. De Burgos      | 1.1.0          |                       2 |                     2 |
+## | 19 |     303674 | 2020-06-19   | 22:00:00.000 | Spain - La Liga | 2019/2020 | Sevilla          | Barcelona        |            0 |            0 | available      | unscheduled        | 2020-07-29T05:00           |                    |           30 | Regular Season      | Estadio Ramón Sánchez Pizjuán   | José González     | 1.1.0          |                       2 |                     2 |
+## | 20 |     303470 | 2020-03-01   | 21:00:00.000 | Spain - La Liga | 2019/2020 | Real Madrid      | Barcelona        |            2 |            0 | available      | unscheduled        | 2020-07-29T05:00           |                    |           26 | Regular Season      | Estadio Santiago Bernabéu       | Antonio Mateu     | 1.1.0          |                       2 |                     2 |
+## | 21 |     303700 | 2019-10-19   | 13:00:00.000 | Spain - La Liga | 2019/2020 | Eibar            | Barcelona        |            0 |            3 | available      | unscheduled        | 2020-07-29T05:00           |                    |            9 | Regular Season      | Estadio Municipal de Ipurúa     | M. Melero         | 1.1.0          |                       2 |                     2 |
+## | 22 |     303707 | 2020-02-09   | 21:00:00.000 | Spain - La Liga | 2019/2020 | Real Betis       | Barcelona        |            2 |            3 | available      | unscheduled        | 2020-07-29T05:00           |                    |           23 | Regular Season      | Estadio Benito Villamarín       | J. Sánchez        | 1.1.0          |                       2 |                     2 |
+## | 23 |     303666 | 2019-09-21   | 21:00:00.000 | Spain - La Liga | 2019/2020 | Granada          | Barcelona        |            2 |            0 | available      | unscheduled        | 2020-07-29T05:00           |                    |            5 | Regular Season      | Estadio Nuevo Los Cármenes      | G. Cuadra         | 1.1.0          |                       2 |                     2 |
+## | 24 |     303725 | 2020-07-05   | 22:00:00.000 | Spain - La Liga | 2019/2020 | Villarreal       | Barcelona        |            1 |            4 | available      | unscheduled        | 2020-07-29T05:00           |                    |           34 | Regular Season      | Estadio de la Cerámica          | C. Del Cerro      | 1.1.0          |                       2 |                     2 |
+## | 25 |     303504 | 2019-11-02   | 16:00:00.000 | Spain - La Liga | 2019/2020 | Levante          | Barcelona        |            3 |            1 | available      | unscheduled        | 2020-07-29T05:00           |                    |           12 | Regular Season      | Estadio Ciudad de Valencia      | A. Hernández      | 1.1.0          |                       2 |                     2 |
+## | 26 |     303715 | 2019-11-23   | 13:00:00.000 | Spain - La Liga | 2019/2020 | Leganés          | Barcelona        |            1 |            2 | available      | unscheduled        | 2020-07-29T05:00           |                    |           14 | Regular Season      | Estadio Municipal de Butarque   | S. Jaime          | 1.1.0          |                       2 |                     2 |
+## | 27 |     303377 | 2020-02-15   | 16:00:00.000 | Spain - La Liga | 2019/2020 | Barcelona        | Getafe           |            2 |            1 | available      | unscheduled        | 2020-07-29T05:00           |                    |           24 | Regular Season      | Camp Nou                        | G. Cuadra         | 1.1.0          |                       2 |                     2 |
+## | 28 |     303524 | 2019-12-01   | 21:00:00.000 | Spain - La Liga | 2019/2020 | Atlético Madrid  | Barcelona        |            0 |            1 | available      | unscheduled        | 2020-07-29T05:00           |                    |           15 | Regular Season      | Estadio Wanda Metropolitano     | Antonio Mateu     | 1.1.0          |                       2 |                     2 |
+## | 29 |     303451 | 2019-12-07   | 21:00:00.000 | Spain - La Liga | 2019/2020 | Barcelona        | Mallorca         |            5 |            2 | available      | unscheduled        | 2020-07-29T05:00           |                    |           16 | Regular Season      | Camp Nou                        | J. Munuera        | 1.1.0          |                       2 |                     2 |
+## | 30 |     303517 | 2019-12-21   | 16:00:00.000 | Spain - La Liga | 2019/2020 | Barcelona        | Deportivo Alavés |            4 |            1 | available      | unscheduled        | 2020-07-29T05:00           |                    |           18 | Regular Season      | Camp Nou                        | M. Melero         | 1.1.0          |                       2 |                     2 |
+## | 31 |     303682 | 2020-02-02   | 21:00:00.000 | Spain - La Liga | 2019/2020 | Barcelona        | Levante          |            2 |            1 | available      | unscheduled        | 2020-07-29T05:00           |                    |           22 | Regular Season      | Camp Nou                        | A. Cordero        | 1.1.0          |                       2 |                     2 |
+## | 32 |     303731 | 2020-02-22   | 16:00:00.000 | Spain - La Liga | 2019/2020 | Barcelona        | Eibar            |            5 |            0 | available      | unscheduled        | 2020-07-29T05:00           |                    |           25 | Regular Season      | Camp Nou                        | C. Soto           | 1.1.0          |                       2 |                     2 |
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Welcome to Wowchemy, the website builder for Hugo</title>
+      <link>https://realsoccerexpand.netlify.app/post/getting-started/</link>
+      <pubDate>Sun, 13 Dec 2020 00:00:00 +0000</pubDate>
+      <guid>https://realsoccerexpand.netlify.app/post/getting-started/</guid>
+      <description>&lt;h2 id=&#34;overview&#34;&gt;Overview&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;The Wowchemy website builder for Hugo, along with its starter templates, is designed for professional creators, educators, and teams/organizations - although it can be used to create any kind of site&lt;/li&gt;
+&lt;li&gt;The template can be modified and customised to suit your needs. It&amp;rsquo;s a good platform for anyone looking to take control of their data and online identity whilst having the convenience to start off with a &lt;strong&gt;no-code solution (write in Markdown and customize with YAML parameters)&lt;/strong&gt; and having &lt;strong&gt;flexibility to later add even deeper personalization with HTML and CSS&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;You can work with all your favourite tools and apps with hundreds of plugins and integrations to speed up your workflows, interact with your readers, and much more&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;get-started&#34;&gt;Get Started&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;👉 &lt;a href=&#34;https://wowchemy.com/templates/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;strong&gt;Create a new site&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;📚 &lt;a href=&#34;https://wowchemy.com/docs/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;strong&gt;Personalize your site&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;💬 &lt;a href=&#34;https://discord.gg/z8wNYzb&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Chat with the &lt;strong&gt;Wowchemy community&lt;/strong&gt;&lt;/a&gt; or &lt;a href=&#34;https://discourse.gohugo.io&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;strong&gt;Hugo community&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;🐦 Twitter: &lt;a href=&#34;https://twitter.com/wowchemy&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;@wowchemy&lt;/a&gt; &lt;a href=&#34;https://twitter.com/GeorgeCushen&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;@GeorgeCushen&lt;/a&gt; &lt;a href=&#34;https://twitter.com/search?q=%28%23MadeWithWowchemy%20OR%20%23MadeWithAcademic%29&amp;amp;src=typed_query&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;#MadeWithWowchemy&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;💡 &lt;a href=&#34;https://github.com/wowchemy/wowchemy-hugo-modules/issues&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Request a &lt;strong&gt;feature&lt;/strong&gt; or report a &lt;strong&gt;bug&lt;/strong&gt; for &lt;em&gt;Wowchemy&lt;/em&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;⬆️ &lt;strong&gt;Updating Wowchemy?&lt;/strong&gt; View the &lt;a href=&#34;https://wowchemy.com/docs/guide/update/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Update Guide&lt;/a&gt; and &lt;a href=&#34;https://wowchemy.com/updates/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Release Notes&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;crowd-funded-open-source-software&#34;&gt;Crowd-funded open-source software&lt;/h2&gt;
+&lt;p&gt;To help us develop this template and software sustainably under the MIT license, we ask all individuals and businesses that use it to help support its ongoing maintenance and development via sponsorship.&lt;/p&gt;
+&lt;h3 id=&#34;-click-here-to-become-a-sponsor-and-help-support-wowchemys-future-httpswowchemycomplans&#34;&gt;&lt;a href=&#34;https://wowchemy.com/plans/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;❤️ Click here to become a sponsor and help support Wowchemy&amp;rsquo;s future ❤️&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;As a token of appreciation for sponsoring, you can &lt;strong&gt;unlock &lt;a href=&#34;https://wowchemy.com/plans/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;these&lt;/a&gt; awesome rewards and extra features 🦄✨&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;ecosystem&#34;&gt;Ecosystem&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&#34;https://github.com/wowchemy/hugo-academic-cli&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Hugo Academic CLI&lt;/a&gt;:&lt;/strong&gt; Automatically import publications from BibTeX&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;inspiration&#34;&gt;Inspiration&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;https://academic-demo.netlify.com/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Check out the latest &lt;strong&gt;demo&lt;/strong&gt;&lt;/a&gt; of what you&amp;rsquo;ll get in less than 10 minutes, or &lt;a href=&#34;https://wowchemy.com/user-stories/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;view the &lt;strong&gt;showcase&lt;/strong&gt;&lt;/a&gt; of personal, project, and business sites.&lt;/p&gt;
+&lt;h2 id=&#34;features&#34;&gt;Features&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Page builder&lt;/strong&gt; - Create &lt;em&gt;anything&lt;/em&gt; with &lt;a href=&#34;https://wowchemy.com/docs/page-builder/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;strong&gt;widgets&lt;/strong&gt;&lt;/a&gt; and &lt;a href=&#34;https://wowchemy.com/docs/writing-markdown-latex/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;strong&gt;elements&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Edit any type of content&lt;/strong&gt; - Blog posts, publications, talks, slides, projects, and more!&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Create content&lt;/strong&gt; in &lt;a href=&#34;https://wowchemy.com/docs/writing-markdown-latex/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;strong&gt;Markdown&lt;/strong&gt;&lt;/a&gt;, &lt;a href=&#34;https://wowchemy.com/docs/import/jupyter/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;strong&gt;Jupyter&lt;/strong&gt;&lt;/a&gt;, or &lt;a href=&#34;https://wowchemy.com/docs/install-locally/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;strong&gt;RStudio&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Plugin System&lt;/strong&gt; - Fully customizable &lt;a href=&#34;https://wowchemy.com/docs/customization/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;&lt;strong&gt;color&lt;/strong&gt; and &lt;strong&gt;font themes&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Display Code and Math&lt;/strong&gt; - Code highlighting and &lt;a href=&#34;https://en.wikibooks.org/wiki/LaTeX/Mathematics&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;LaTeX math&lt;/a&gt; supported&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Integrations&lt;/strong&gt; - &lt;a href=&#34;https://analytics.google.com&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Google Analytics&lt;/a&gt;, &lt;a href=&#34;https://disqus.com&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Disqus commenting&lt;/a&gt;, Maps, Contact Forms, and more!&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Beautiful Site&lt;/strong&gt; - Simple and refreshing one page design&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Industry-Leading SEO&lt;/strong&gt; - Help get your website found on search engines and social media&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Media Galleries&lt;/strong&gt; - Display your images and videos with captions in a customizable gallery&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Mobile Friendly&lt;/strong&gt; - Look amazing on every screen with a mobile friendly version of your site&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Multi-language&lt;/strong&gt; - 34+ language packs including English, 中文, and Português&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Multi-user&lt;/strong&gt; - Each author gets their own profile page&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Privacy Pack&lt;/strong&gt; - Assists with GDPR&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Stand Out&lt;/strong&gt; - Bring your site to life with animation, parallax backgrounds, and scroll effects&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;One-Click Deployment&lt;/strong&gt; - No servers. No databases. Only files.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;themes&#34;&gt;Themes&lt;/h2&gt;
+&lt;p&gt;Wowchemy and its templates come with &lt;strong&gt;automatic day (light) and night (dark) mode&lt;/strong&gt; built-in. Alternatively, visitors can choose their preferred mode - click the moon icon in the top right of the &lt;a href=&#34;https://academic-demo.netlify.com/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Demo&lt;/a&gt; to see it in action! Day/night mode can also be disabled by the site admin in &lt;code&gt;params.toml&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://wowchemy.com/docs/customization&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Choose a stunning &lt;strong&gt;theme&lt;/strong&gt; and &lt;strong&gt;font&lt;/strong&gt;&lt;/a&gt; for your site. Themes are fully customizable.&lt;/p&gt;
+&lt;h2 id=&#34;license&#34;&gt;License&lt;/h2&gt;
+&lt;p&gt;Copyright 2016-present &lt;a href=&#34;https://georgecushen.com&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;George Cushen&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Released under the &lt;a href=&#34;https://github.com/wowchemy/wowchemy-hugo-modules/blob/master/LICENSE.md&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;MIT&lt;/a&gt; license.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Hello R Markdown</title>
+      <link>https://realsoccerexpand.netlify.app/post/2020-12-01-r-rmarkdown/</link>
+      <pubDate>Tue, 01 Dec 2020 21:13:14 -0500</pubDate>
+      <guid>https://realsoccerexpand.netlify.app/post/2020-12-01-r-rmarkdown/</guid>
+      <description>
+
+
+&lt;div id=&#34;r-markdown&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;R Markdown&lt;/h1&gt;
+&lt;p&gt;This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see &lt;a href=&#34;http://rmarkdown.rstudio.com&#34; class=&#34;uri&#34;&gt;http://rmarkdown.rstudio.com&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;You can embed an R code chunk like this:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;summary(cars)
+##      speed           dist       
+##  Min.   : 4.0   Min.   :  2.00  
+##  1st Qu.:12.0   1st Qu.: 26.00  
+##  Median :15.0   Median : 36.00  
+##  Mean   :15.4   Mean   : 42.98  
+##  3rd Qu.:19.0   3rd Qu.: 56.00  
+##  Max.   :25.0   Max.   :120.00
+fit &amp;lt;- lm(dist ~ speed, data = cars)
+fit
+## 
+## Call:
+## lm(formula = dist ~ speed, data = cars)
+## 
+## Coefficients:
+## (Intercept)        speed  
+##     -17.579        3.932&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;div id=&#34;including-plots&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Including Plots&lt;/h1&gt;
+&lt;p&gt;You can also embed plots. See Figure &lt;a href=&#34;#fig:pie&#34;&gt;1&lt;/a&gt; for example:&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;par(mar = c(0, 1, 0, 1))
+pie(
+  c(280, 60, 20),
+  c(&amp;#39;Sky&amp;#39;, &amp;#39;Sunny side of pyramid&amp;#39;, &amp;#39;Shady side of pyramid&amp;#39;),
+  col = c(&amp;#39;#0292D8&amp;#39;, &amp;#39;#F7EA39&amp;#39;, &amp;#39;#C4B632&amp;#39;),
+  init.angle = -50, border = NA
+)&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&#34;figure&#34;&gt;&lt;span id=&#34;fig:pie&#34;&gt;&lt;/span&gt;
+&lt;img src=&#34;https://realsoccerexpand.netlify.app/post/2020-12-01-r-rmarkdown/index.en_files/figure-html/pie-1.png&#34; alt=&#34;A fancy pie chart.&#34; width=&#34;672&#34; /&gt;
+&lt;p class=&#34;caption&#34;&gt;
+Figure 1: A fancy pie chart.
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Writing technical content in Academic</title>
+      <link>https://realsoccerexpand.netlify.app/post/writing-technical-content/</link>
+      <pubDate>Fri, 12 Jul 2019 00:00:00 +0000</pubDate>
+      <guid>https://realsoccerexpand.netlify.app/post/writing-technical-content/</guid>
+      <description>&lt;p&gt;Academic is designed to give technical content creators a seamless experience. You can focus on the content and Academic handles the rest.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Highlight your code snippets, take notes on math classes, and draw diagrams from textual representation.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;On this page, you&amp;rsquo;ll find some examples of the types of technical content that can be rendered with Academic.&lt;/p&gt;
+&lt;h2 id=&#34;examples&#34;&gt;Examples&lt;/h2&gt;
+&lt;h3 id=&#34;code&#34;&gt;Code&lt;/h3&gt;
+&lt;p&gt;Academic supports a Markdown extension for highlighting code syntax. You can enable this feature by toggling the &lt;code&gt;highlight&lt;/code&gt; option in your &lt;code&gt;config/_default/params.toml&lt;/code&gt; file.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;```python
+import pandas as pd
+data = pd.read_csv(&amp;quot;data.csv&amp;quot;)
+data.head()
+```
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;renders as&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;import pandas as pd
+data = pd.read_csv(&amp;quot;data.csv&amp;quot;)
+data.head()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;charts&#34;&gt;Charts&lt;/h3&gt;
+&lt;p&gt;Academic supports the popular &lt;a href=&#34;https://plot.ly/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Plotly&lt;/a&gt; chart format.&lt;/p&gt;
+&lt;p&gt;Save your Plotly JSON in your page folder, for example &lt;code&gt;chart.json&lt;/code&gt;, and then add the &lt;code&gt;{{&amp;lt; chart data=&amp;quot;chart&amp;quot; &amp;gt;}}&lt;/code&gt; shortcode where you would like the chart to appear.&lt;/p&gt;
+&lt;p&gt;Demo:&lt;/p&gt;
+
+
+&lt;div id=&#34;chart-598231764&#34; class=&#34;chart&#34;&gt;&lt;/div&gt;
+&lt;script&gt;
+  (function() {
+    let a = setInterval( function() {
+      if ( typeof window.Plotly === &#39;undefined&#39; ) {
+        return;
+      }
+      clearInterval( a );
+
+      Plotly.d3.json(&#34;./line-chart.json&#34;, function(chart) {
+        Plotly.plot(&#39;chart-598231764&#39;, chart.data, chart.layout, {responsive: true});
+      });
+    }, 500 );
+  })();
+&lt;/script&gt;
+&lt;p&gt;You might also find the &lt;a href=&#34;http://plotly-json-editor.getforge.io/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Plotly JSON Editor&lt;/a&gt; useful.&lt;/p&gt;
+&lt;h3 id=&#34;math&#34;&gt;Math&lt;/h3&gt;
+&lt;p&gt;Academic supports a Markdown extension for $\LaTeX$ math. You can enable this feature by toggling the &lt;code&gt;math&lt;/code&gt; option in your &lt;code&gt;config/_default/params.toml&lt;/code&gt; file.&lt;/p&gt;
+&lt;p&gt;To render &lt;em&gt;inline&lt;/em&gt; or &lt;em&gt;block&lt;/em&gt; math, wrap your LaTeX math with &lt;code&gt;$...$&lt;/code&gt; or &lt;code&gt;$$...$$&lt;/code&gt;, respectively.&lt;/p&gt;
+&lt;p&gt;Example &lt;strong&gt;math block&lt;/strong&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-latex&#34;&gt;$$\gamma_{n} = \frac{ 
+\left | \left (\mathbf x_{n} - \mathbf x_{n-1} \right )^T 
+\left [\nabla F (\mathbf x_{n}) - \nabla F (\mathbf x_{n-1}) \right ] \right |}
+{\left \|\nabla F(\mathbf{x}_{n}) - \nabla F(\mathbf{x}_{n-1}) \right \|^2}$$
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;renders as&lt;/p&gt;
+&lt;p&gt;$$\gamma_{n} = \frac{ \left | \left (\mathbf x_{n} - \mathbf x_{n-1} \right )^T \left [\nabla F (\mathbf x_{n}) - \nabla F (\mathbf x_{n-1}) \right ] \right |}{\left |\nabla F(\mathbf{x}_{n}) - \nabla F(\mathbf{x}_{n-1}) \right |^2}$$&lt;/p&gt;
+&lt;p&gt;Example &lt;strong&gt;inline math&lt;/strong&gt; &lt;code&gt;$\nabla F(\mathbf{x}_{n})$&lt;/code&gt; renders as $\nabla F(\mathbf{x}_{n})$.&lt;/p&gt;
+&lt;p&gt;Example &lt;strong&gt;multi-line math&lt;/strong&gt; using the &lt;code&gt;\\\\&lt;/code&gt; math linebreak:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-latex&#34;&gt;$$f(k;p_{0}^{*}) = \begin{cases}p_{0}^{*} &amp;amp; \text{if }k=1, \\\\
+1-p_{0}^{*} &amp;amp; \text{if }k=0.\end{cases}$$
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;renders as&lt;/p&gt;
+&lt;p&gt;$$f(k;p_{0}^{*}) = \begin{cases}p_{0}^{*} &amp;amp; \text{if }k=1, \\&lt;br&gt;
+1-p_{0}^{*} &amp;amp; \text{if }k=0.\end{cases}$$&lt;/p&gt;
+&lt;h3 id=&#34;diagrams&#34;&gt;Diagrams&lt;/h3&gt;
+&lt;p&gt;Academic supports a Markdown extension for diagrams. You can enable this feature by toggling the &lt;code&gt;diagram&lt;/code&gt; option in your &lt;code&gt;config/_default/params.toml&lt;/code&gt; file or by adding &lt;code&gt;diagram: true&lt;/code&gt; to your page front matter.&lt;/p&gt;
+&lt;p&gt;An example &lt;strong&gt;flowchart&lt;/strong&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;```mermaid
+graph TD
+A[Hard] --&amp;gt;|Text| B(Round)
+B --&amp;gt; C{Decision}
+C --&amp;gt;|One| D[Result 1]
+C --&amp;gt;|Two| E[Result 2]
+```
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;renders as&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-mermaid&#34;&gt;graph TD
+A[Hard] --&amp;gt;|Text| B(Round)
+B --&amp;gt; C{Decision}
+C --&amp;gt;|One| D[Result 1]
+C --&amp;gt;|Two| E[Result 2]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;An example &lt;strong&gt;sequence diagram&lt;/strong&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;```mermaid
+sequenceDiagram
+Alice-&amp;gt;&amp;gt;John: Hello John, how are you?
+loop Healthcheck
+    John-&amp;gt;&amp;gt;John: Fight against hypochondria
+end
+Note right of John: Rational thoughts!
+John--&amp;gt;&amp;gt;Alice: Great!
+John-&amp;gt;&amp;gt;Bob: How about you?
+Bob--&amp;gt;&amp;gt;John: Jolly good!
+```
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;renders as&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-mermaid&#34;&gt;sequenceDiagram
+Alice-&amp;gt;&amp;gt;John: Hello John, how are you?
+loop Healthcheck
+    John-&amp;gt;&amp;gt;John: Fight against hypochondria
+end
+Note right of John: Rational thoughts!
+John--&amp;gt;&amp;gt;Alice: Great!
+John-&amp;gt;&amp;gt;Bob: How about you?
+Bob--&amp;gt;&amp;gt;John: Jolly good!
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;An example &lt;strong&gt;Gantt diagram&lt;/strong&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;```mermaid
+gantt
+section Section
+Completed :done,    des1, 2014-01-06,2014-01-08
+Active        :active,  des2, 2014-01-07, 3d
+Parallel 1   :         des3, after des1, 1d
+Parallel 2   :         des4, after des1, 1d
+Parallel 3   :         des5, after des3, 1d
+Parallel 4   :         des6, after des4, 1d
+```
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;renders as&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-mermaid&#34;&gt;gantt
+section Section
+Completed :done,    des1, 2014-01-06,2014-01-08
+Active        :active,  des2, 2014-01-07, 3d
+Parallel 1   :         des3, after des1, 1d
+Parallel 2   :         des4, after des1, 1d
+Parallel 3   :         des5, after des3, 1d
+Parallel 4   :         des6, after des4, 1d
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;An example &lt;strong&gt;class diagram&lt;/strong&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;```mermaid
+classDiagram
+Class01 &amp;lt;|-- AveryLongClass : Cool
+&amp;lt;&amp;lt;interface&amp;gt;&amp;gt; Class01
+Class09 --&amp;gt; C2 : Where am i?
+Class09 --* C3
+Class09 --|&amp;gt; Class07
+Class07 : equals()
+Class07 : Object[] elementData
+Class01 : size()
+Class01 : int chimp
+Class01 : int gorilla
+class Class10 {
+  &amp;lt;&amp;lt;service&amp;gt;&amp;gt;
+  int id
+  size()
+}
+```
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;renders as&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-mermaid&#34;&gt;classDiagram
+Class01 &amp;lt;|-- AveryLongClass : Cool
+&amp;lt;&amp;lt;interface&amp;gt;&amp;gt; Class01
+Class09 --&amp;gt; C2 : Where am i?
+Class09 --* C3
+Class09 --|&amp;gt; Class07
+Class07 : equals()
+Class07 : Object[] elementData
+Class01 : size()
+Class01 : int chimp
+Class01 : int gorilla
+class Class10 {
+  &amp;lt;&amp;lt;service&amp;gt;&amp;gt;
+  int id
+  size()
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;An example &lt;strong&gt;state diagram&lt;/strong&gt;:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;```mermaid
+stateDiagram
+[*] --&amp;gt; Still
+Still --&amp;gt; [*]
+Still --&amp;gt; Moving
+Moving --&amp;gt; Still
+Moving --&amp;gt; Crash
+Crash --&amp;gt; [*]
+```
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;renders as&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-mermaid&#34;&gt;stateDiagram
+[*] --&amp;gt; Still
+Still --&amp;gt; [*]
+Still --&amp;gt; Moving
+Moving --&amp;gt; Still
+Moving --&amp;gt; Crash
+Crash --&amp;gt; [*]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;todo-lists&#34;&gt;Todo lists&lt;/h3&gt;
+&lt;p&gt;You can even write your todo lists in Academic too:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-markdown&#34;&gt;- [x] Write math example
+- [x] Write diagram example
+- [ ] Do something else
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;renders as&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;input checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; Write math example&lt;/li&gt;
+&lt;li&gt;&lt;input checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; Write diagram example&lt;/li&gt;
+&lt;li&gt;&lt;input disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; Do something else&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;tables&#34;&gt;Tables&lt;/h3&gt;
+&lt;p&gt;Represent your data in tables:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-markdown&#34;&gt;| First Header  | Second Header |
+| ------------- | ------------- |
+| Content Cell  | Content Cell  |
+| Content Cell  | Content Cell  |
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;renders as&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;First Header&lt;/th&gt;
+&lt;th&gt;Second Header&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Content Cell&lt;/td&gt;
+&lt;td&gt;Content Cell&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Content Cell&lt;/td&gt;
+&lt;td&gt;Content Cell&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;callouts&#34;&gt;Callouts&lt;/h3&gt;
+&lt;p&gt;Academic supports a &lt;a href=&#34;https://wowchemy.com/docs/content/writing-markdown-latex/#callouts&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;shortcode for callouts&lt;/a&gt;, also referred to as &lt;em&gt;asides&lt;/em&gt;, &lt;em&gt;hints&lt;/em&gt;, or &lt;em&gt;alerts&lt;/em&gt;. By wrapping a paragraph in &lt;code&gt;{{% callout note %}} ... {{% /callout %}}&lt;/code&gt;, it will render as an aside.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-markdown&#34;&gt;{{% callout note %}}
+A Markdown aside is useful for displaying notices, hints, or definitions to your readers.
+{{% /callout %}}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;renders as&lt;/p&gt;
+&lt;div class=&#34;alert alert-note&#34;&gt;
+  &lt;div&gt;
+    A Markdown aside is useful for displaying notices, hints, or definitions to your readers.
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;h3 id=&#34;spoilers&#34;&gt;Spoilers&lt;/h3&gt;
+&lt;p&gt;Add a spoiler to a page to reveal text, such as an answer to a question, after a button is clicked.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-markdown&#34;&gt;{{&amp;lt; spoiler text=&amp;quot;Click to view the spoiler&amp;quot; &amp;gt;}}
+You found me!
+{{&amp;lt; /spoiler &amp;gt;}}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;renders as&lt;/p&gt;
+&lt;details class=&#34;spoiler &#34;  id=&#34;spoiler-2&#34;&gt;
+  &lt;summary&gt;Click to view the spoiler&lt;/summary&gt;
+  &lt;p&gt;You found me!&lt;/p&gt;
+&lt;/details&gt;
+&lt;h3 id=&#34;icons&#34;&gt;Icons&lt;/h3&gt;
+&lt;p&gt;Academic enables you to use a wide range of &lt;a href=&#34;https://sourcethemes.com/academic/docs/page-builder/#icons&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;icons from &lt;em&gt;Font Awesome&lt;/em&gt; and &lt;em&gt;Academicons&lt;/em&gt;&lt;/a&gt; in addition to &lt;a href=&#34;https://sourcethemes.com/academic/docs/writing-markdown-latex/#emojis&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;emojis&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Here are some examples using the &lt;code&gt;icon&lt;/code&gt; shortcode to render icons:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-markdown&#34;&gt;{{&amp;lt; icon name=&amp;quot;terminal&amp;quot; pack=&amp;quot;fas&amp;quot; &amp;gt;}} Terminal  
+{{&amp;lt; icon name=&amp;quot;python&amp;quot; pack=&amp;quot;fab&amp;quot; &amp;gt;}} Python  
+{{&amp;lt; icon name=&amp;quot;r-project&amp;quot; pack=&amp;quot;fab&amp;quot; &amp;gt;}} R
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;renders as&lt;/p&gt;
+&lt;p&gt;
+  &lt;i class=&#34;fas fa-terminal  pr-1 fa-fw&#34;&gt;&lt;/i&gt; Terminal&lt;br&gt;
+
+  &lt;i class=&#34;fab fa-python  pr-1 fa-fw&#34;&gt;&lt;/i&gt; Python&lt;br&gt;
+
+  &lt;i class=&#34;fab fa-r-project  pr-1 fa-fw&#34;&gt;&lt;/i&gt; R&lt;/p&gt;
+&lt;h3 id=&#34;did-you-find-this-page-helpful-consider-sharing-it-&#34;&gt;Did you find this page helpful? Consider sharing it 🙌&lt;/h3&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>An example preprint / working paper</title>
+      <link>https://realsoccerexpand.netlify.app/publication/preprint/</link>
+      <pubDate>Sun, 07 Apr 2019 00:00:00 +0000</pubDate>
+      <guid>https://realsoccerexpand.netlify.app/publication/preprint/</guid>
+      <description>&lt;div class=&#34;alert alert-note&#34;&gt;
+  &lt;div&gt;
+    Create your slides in Markdown - click the &lt;em&gt;Slides&lt;/em&gt; button to check out the example.
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Supplementary notes can be added here, including &lt;a href=&#34;https://wowchemy.com/docs/writing-markdown-latex/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;code, math, and images&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Display Jupyter Notebooks with Academic</title>
+      <link>https://realsoccerexpand.netlify.app/post/jupyter/</link>
+      <pubDate>Tue, 05 Feb 2019 00:00:00 +0000</pubDate>
+      <guid>https://realsoccerexpand.netlify.app/post/jupyter/</guid>
+      <description>&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;from IPython.core.display import Image
+Image(&#39;https://www.python.org/static/community_logos/python-logo-master-v3-TM-flattened.png&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;./index_1_0.png&#34; alt=&#34;png&#34;&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;print(&amp;quot;Welcome to Academic!&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;Welcome to Academic!
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;install-python-and-jupyterlab&#34;&gt;Install Python and JupyterLab&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.anaconda.com/distribution/#download-section&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Install Anaconda&lt;/a&gt; which includes Python 3 and JupyterLab.&lt;/p&gt;
+&lt;p&gt;Alternatively, install JupyterLab with &lt;code&gt;pip3 install jupyterlab&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id=&#34;create-or-upload-a-jupyter-notebook&#34;&gt;Create or upload a Jupyter notebook&lt;/h2&gt;
+&lt;p&gt;Run the following commands in your Terminal, substituting &lt;code&gt;&amp;lt;MY-WEBSITE-FOLDER&amp;gt;&lt;/code&gt; and &lt;code&gt;&amp;lt;SHORT-POST-TITLE&amp;gt;&lt;/code&gt; with the file path to your Academic website folder and a short title for your blog post (use hyphens instead of spaces), respectively:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;mkdir -p &amp;lt;MY-WEBSITE-FOLDER&amp;gt;/content/post/&amp;lt;SHORT-POST-TITLE&amp;gt;/
+cd &amp;lt;MY-WEBSITE-FOLDER&amp;gt;/content/post/&amp;lt;SHORT-POST-TITLE&amp;gt;/
+jupyter lab index.ipynb
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The &lt;code&gt;jupyter&lt;/code&gt; command above will launch the JupyterLab editor, allowing us to add Academic metadata and write the content.&lt;/p&gt;
+&lt;h2 id=&#34;edit-your-post-metadata&#34;&gt;Edit your post metadata&lt;/h2&gt;
+&lt;p&gt;The first cell of your Jupter notebook will contain your post metadata (&lt;a href=&#34;https://sourcethemes.com/academic/docs/front-matter/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;front matter&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;In Jupter, choose &lt;em&gt;Markdown&lt;/em&gt; as the type of the first cell and wrap your Academic metadata in three dashes, indicating that it is YAML front matter:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;---
+title: My post&#39;s title
+date: 2019-09-01
+
+# Put any other Academic metadata here...
+---
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Edit the metadata of your post, using the &lt;a href=&#34;https://sourcethemes.com/academic/docs/managing-content&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;documentation&lt;/a&gt; as a guide to the available options.&lt;/p&gt;
+&lt;p&gt;To set a &lt;a href=&#34;https://sourcethemes.com/academic/docs/managing-content/#featured-image&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;featured image&lt;/a&gt;, place an image named &lt;code&gt;featured&lt;/code&gt; into your post&amp;rsquo;s folder.&lt;/p&gt;
+&lt;p&gt;For other tips, such as using math, see the guide on &lt;a href=&#34;https://sourcethemes.com/academic/docs/writing-markdown-latex/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;writing content with Academic&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 id=&#34;convert-notebook-to-markdown&#34;&gt;Convert notebook to Markdown&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;jupyter nbconvert index.ipynb --to markdown --NbConvertApp.output_files_dir=.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;example&#34;&gt;Example&lt;/h2&gt;
+&lt;p&gt;This post was created with Jupyter. The orginal files can be found at &lt;a href=&#34;https://github.com/gcushen/hugo-academic/tree/master/exampleSite/content/post/jupyter&#34;&gt;https://github.com/gcushen/hugo-academic/tree/master/exampleSite/content/post/jupyter&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Slides</title>
+      <link>https://realsoccerexpand.netlify.app/slides/example/</link>
+      <pubDate>Tue, 05 Feb 2019 00:00:00 +0000</pubDate>
+      <guid>https://realsoccerexpand.netlify.app/slides/example/</guid>
+      <description>&lt;h1 id=&#34;create-slides-in-markdown-with-wowchemy&#34;&gt;Create slides in Markdown with Wowchemy&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&#34;https://wowchemy.com/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Wowchemy&lt;/a&gt; | &lt;a href=&#34;https://owchemy.com/docs/managing-content/#create-slides&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Documentation&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;features&#34;&gt;Features&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Efficiently write slides in Markdown&lt;/li&gt;
+&lt;li&gt;3-in-1: Create, Present, and Publish your slides&lt;/li&gt;
+&lt;li&gt;Supports speaker notes&lt;/li&gt;
+&lt;li&gt;Mobile friendly slides&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;controls&#34;&gt;Controls&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Next: &lt;code&gt;Right Arrow&lt;/code&gt; or &lt;code&gt;Space&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Previous: &lt;code&gt;Left Arrow&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Start: &lt;code&gt;Home&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Finish: &lt;code&gt;End&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Overview: &lt;code&gt;Esc&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Speaker notes: &lt;code&gt;S&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Fullscreen: &lt;code&gt;F&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Zoom: &lt;code&gt;Alt + Click&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/hakimel/reveal.js#pdf-export&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;PDF Export&lt;/a&gt;: &lt;code&gt;E&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;code-highlighting&#34;&gt;Code Highlighting&lt;/h2&gt;
+&lt;p&gt;Inline code: &lt;code&gt;variable&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Code block:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;porridge = &amp;quot;blueberry&amp;quot;
+if porridge == &amp;quot;blueberry&amp;quot;:
+    print(&amp;quot;Eating...&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;math&#34;&gt;Math&lt;/h2&gt;
+&lt;p&gt;In-line math: $x + y = z$&lt;/p&gt;
+&lt;p&gt;Block math:&lt;/p&gt;
+&lt;p&gt;$$
+f\left( x \right) = ;\frac{{2\left( {x + 4} \right)\left( {x - 4} \right)}}{{\left( {x + 4} \right)\left( {x + 1} \right)}}
+$$&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;fragments&#34;&gt;Fragments&lt;/h2&gt;
+&lt;p&gt;Make content appear incrementally&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;{{% fragment %}} One {{% /fragment %}}
+{{% fragment %}} **Two** {{% /fragment %}}
+{{% fragment %}} Three {{% /fragment %}}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Press &lt;code&gt;Space&lt;/code&gt; to play!&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;fragment &#34; &gt;
+One
+&lt;/span&gt;
+&lt;span class=&#34;fragment &#34; &gt;
+&lt;strong&gt;Two&lt;/strong&gt;
+&lt;/span&gt;
+&lt;span class=&#34;fragment &#34; &gt;
+Three
+&lt;/span&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;A fragment can accept two optional parameters:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;class&lt;/code&gt;: use a custom style (requires definition in custom CSS)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;weight&lt;/code&gt;: sets the order in which a fragment appears&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;speaker-notes&#34;&gt;Speaker Notes&lt;/h2&gt;
+&lt;p&gt;Add speaker notes to your presentation&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-markdown&#34;&gt;{{% speaker_note %}}
+- Only the speaker can read these notes
+- Press `S` key to view
+{{% /speaker_note %}}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Press the &lt;code&gt;S&lt;/code&gt; key to view the speaker notes!&lt;/p&gt;
+&lt;aside class=&#34;notes&#34;&gt;
+  &lt;ul&gt;
+&lt;li&gt;Only the speaker can read these notes&lt;/li&gt;
+&lt;li&gt;Press &lt;code&gt;S&lt;/code&gt; key to view&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;/aside&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;themes&#34;&gt;Themes&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;black: Black background, white text, blue links (default)&lt;/li&gt;
+&lt;li&gt;white: White background, black text, blue links&lt;/li&gt;
+&lt;li&gt;league: Gray background, white text, blue links&lt;/li&gt;
+&lt;li&gt;beige: Beige background, dark text, brown links&lt;/li&gt;
+&lt;li&gt;sky: Blue background, thin dark text, blue links&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;ul&gt;
+&lt;li&gt;night: Black background, thick white text, orange links&lt;/li&gt;
+&lt;li&gt;serif: Cappuccino background, gray text, brown links&lt;/li&gt;
+&lt;li&gt;simple: White background, black text, blue links&lt;/li&gt;
+&lt;li&gt;solarized: Cream-colored background, dark green text, blue links&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+
+&lt;section data-noprocess data-shortcode-slide
+  
+      
+      data-background-image=&#34;/media/boards.jpg&#34;
+  &gt;
+
+&lt;h2 id=&#34;custom-slide&#34;&gt;Custom Slide&lt;/h2&gt;
+&lt;p&gt;Customize the slide style and background&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-markdown&#34;&gt;{{&amp;lt; slide background-image=&amp;quot;/media/boards.jpg&amp;quot; &amp;gt;}}
+{{&amp;lt; slide background-color=&amp;quot;#0000FF&amp;quot; &amp;gt;}}
+{{&amp;lt; slide class=&amp;quot;my-style&amp;quot; &amp;gt;}}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;custom-css-example&#34;&gt;Custom CSS Example&lt;/h2&gt;
+&lt;p&gt;Let&amp;rsquo;s make headers navy colored.&lt;/p&gt;
+&lt;p&gt;Create &lt;code&gt;assets/css/reveal_custom.css&lt;/code&gt; with:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-css&#34;&gt;.reveal section h1,
+.reveal section h2,
+.reveal section h3 {
+  color: navy;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;questions&#34;&gt;Questions?&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/wowchemy/wowchemy-hugo-modules/discussions&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Ask&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://wowchemy.com/docs/managing-content/#create-slides&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Documentation&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>External Project</title>
+      <link>https://realsoccerexpand.netlify.app/project/external-project/</link>
+      <pubDate>Wed, 27 Apr 2016 00:00:00 +0000</pubDate>
+      <guid>https://realsoccerexpand.netlify.app/project/external-project/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Internal Project</title>
+      <link>https://realsoccerexpand.netlify.app/project/internal-project/</link>
+      <pubDate>Wed, 27 Apr 2016 00:00:00 +0000</pubDate>
+      <guid>https://realsoccerexpand.netlify.app/project/internal-project/</guid>
+      <description>&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis posuere tellus ac convallis placerat. Proin tincidunt magna sed ex sollicitudin condimentum. Sed ac faucibus dolor, scelerisque sollicitudin nisi. Cras purus urna, suscipit quis sapien eu, pulvinar tempor diam. Quisque risus orci, mollis id ante sit amet, gravida egestas nisl. Sed ac tempus magna. Proin in dui enim. Donec condimentum, sem id dapibus fringilla, tellus enim condimentum arcu, nec volutpat est felis vel metus. Vestibulum sit amet erat at nulla eleifend gravida.&lt;/p&gt;
+&lt;p&gt;Nullam vel molestie justo. Curabitur vitae efficitur leo. In hac habitasse platea dictumst. Sed pulvinar mauris dui, eget varius purus congue ac. Nulla euismod, lorem vel elementum dapibus, nunc justo porta mi, sed tempus est est vel tellus. Nam et enim eleifend, laoreet sem sit amet, elementum sem. Morbi ut leo congue, maximus velit ut, finibus arcu. In et libero cursus, rutrum risus non, molestie leo. Nullam congue quam et volutpat malesuada. Sed risus tortor, pulvinar et dictum nec, sodales non mi. Phasellus lacinia commodo laoreet. Nam mollis, erat in feugiat consectetur, purus eros egestas tellus, in auctor urna odio at nibh. Mauris imperdiet nisi ac magna convallis, at rhoncus ligula cursus.&lt;/p&gt;
+&lt;p&gt;Cras aliquam rhoncus ipsum, in hendrerit nunc mattis vitae. Duis vitae efficitur metus, ac tempus leo. Cras nec fringilla lacus. Quisque sit amet risus at ipsum pharetra commodo. Sed aliquam mauris at consequat eleifend. Praesent porta, augue sed viverra bibendum, neque ante euismod ante, in vehicula justo lorem ac eros. Suspendisse augue libero, venenatis eget tincidunt ut, malesuada at lorem. Donec vitae bibendum arcu. Aenean maximus nulla non pretium iaculis. Quisque imperdiet, nulla in pulvinar aliquet, velit quam ultrices quam, sit amet fringilla leo sem vel nunc. Mauris in lacinia lacus.&lt;/p&gt;
+&lt;p&gt;Suspendisse a tincidunt lacus. Curabitur at urna sagittis, dictum ante sit amet, euismod magna. Sed rutrum massa id tortor commodo, vitae elementum turpis tempus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean purus turpis, venenatis a ullamcorper nec, tincidunt et massa. Integer posuere quam rutrum arcu vehicula imperdiet. Mauris ullamcorper quam vitae purus congue, quis euismod magna eleifend. Vestibulum semper vel augue eget tincidunt. Fusce eget justo sodales, dapibus odio eu, ultrices lorem. Duis condimentum lorem id eros commodo, in facilisis mauris scelerisque. Morbi sed auctor leo. Nullam volutpat a lacus quis pharetra. Nulla congue rutrum magna a ornare.&lt;/p&gt;
+&lt;p&gt;Aliquam in turpis accumsan, malesuada nibh ut, hendrerit justo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Quisque sed erat nec justo posuere suscipit. Donec ut efficitur arcu, in malesuada neque. Nunc dignissim nisl massa, id vulputate nunc pretium nec. Quisque eget urna in risus suscipit ultricies. Pellentesque odio odio, tincidunt in eleifend sed, posuere a diam. Nam gravida nisl convallis semper elementum. Morbi vitae felis faucibus, vulputate orci placerat, aliquet nisi. Aliquam erat volutpat. Maecenas sagittis pulvinar purus, sed porta quam laoreet at.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>An example journal article</title>
+      <link>https://realsoccerexpand.netlify.app/publication/journal-article/</link>
+      <pubDate>Tue, 01 Sep 2015 00:00:00 +0000</pubDate>
+      <guid>https://realsoccerexpand.netlify.app/publication/journal-article/</guid>
+      <description>&lt;div class=&#34;alert alert-note&#34;&gt;
+  &lt;div&gt;
+    Click the &lt;em&gt;Cite&lt;/em&gt; button above to demo the feature to enable visitors to import publication metadata into their reference management software.
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;alert alert-note&#34;&gt;
+  &lt;div&gt;
+    Create your slides in Markdown - click the &lt;em&gt;Slides&lt;/em&gt; button to check out the example.
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Supplementary notes can be added here, including &lt;a href=&#34;https://wowchemy.com/docs/writing-markdown-latex/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;code, math, and images&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>An example conference paper</title>
+      <link>https://realsoccerexpand.netlify.app/publication/conference-paper/</link>
+      <pubDate>Mon, 01 Jul 2013 00:00:00 +0000</pubDate>
+      <guid>https://realsoccerexpand.netlify.app/publication/conference-paper/</guid>
+      <description>&lt;div class=&#34;alert alert-note&#34;&gt;
+  &lt;div&gt;
+    Click the &lt;em&gt;Cite&lt;/em&gt; button above to demo the feature to enable visitors to import publication metadata into their reference management software.
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;alert alert-note&#34;&gt;
+  &lt;div&gt;
+    Create your slides in Markdown - click the &lt;em&gt;Slides&lt;/em&gt; button to check out the example.
+  &lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Supplementary notes can be added here, including &lt;a href=&#34;https://wowchemy.com/docs/writing-markdown-latex/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;code, math, and images&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://realsoccerexpand.netlify.app/admin/config.yml</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://realsoccerexpand.netlify.app/admin/config.yml</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
