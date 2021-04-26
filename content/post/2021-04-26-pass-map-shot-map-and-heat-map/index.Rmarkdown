@@ -1,0 +1,120 @@
+---
+title: Draw a pass map, a shot map and their corresponding heat maps
+author: Indranil Ghosh
+date: '2021-04-26'
+slug: pass-map-shot-map-and-heat-map
+categories: ["Python", "visualization"]
+tags: ["football pitch", "pass map", "shot map", "heat map", "seaborn", "statsbomb api"]
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2021-04-26T20:27:24+05:30'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+In this post, we will learn how to draw simple pass maps and shot maps and visualize their corresponding heat maps. We will study use the event data from the *Real Madrid vs. Barcelona* match that we discussed about in the [first post](https://realsoccerexpand.netlify.app/post/getting-statsbomb-event-data/). Before that we need to `pip` install the [`seaborn`](https://seaborn.pydata.org/) package which is a Python package built on `matplotlib` and is used for generating informative and appealing statistical graphs for analysis purposes. 
+
+```{python eval=FALSE}
+pip install seaborn
+```
+
+Let us now import the pertinent packages for this tutorial:
+
+```{python}
+import numpy as np
+import pandas as pd
+from statsbombpy import sb
+import matplotlib.pyplot as plt
+from mplsoccer.pitch import Pitch
+import seaborn as sns
+```
+
+Let us rewrite the code till the point where we were able to extract the event data for the *Madrid vs. Barca* match. The competitions dataset:
+
+```{python}
+comp = sb.competitions()
+print(comp.to_markdown())
+```
+
+The matches dataset:
+
+```{python}
+mat = sb.matches(competition_id=11, season_id=42)
+print(mat.to_markdown())
+```
+
+The events dataset:
+```{python}
+events = sb.events(match_id=303470)
+eh = events.head() # shows the first few rows
+print(eh.to_markdown())
+```
+
+We can get an overview of all the different kinds of events that took place during the match, by looking intro the column names of the `events` dataset:
+
+```{python}
+print(events.columns)
+```
+
+In the first part of this tutorial we will focus on the passes played by a player during the match. It seems relevant information can be drawn if we filter out the following columns from the whole `events` dataset: `'team'`, `'type'`, `'minute'`, `'location'`, `'pass_end_location'`, `'pass_outcome'`, and `'player'`. We can easily do this in Python:
+
+```{python}
+events_pass = events[['team', 'type', 'minute', 'location', 'pass_end_location', 'pass_outcome', 'player']]
+```
+
+Let us look at the first and the last 10 rows of the `events_pass` dataset. We can do that by using the `head()` and `tail` function provided by `pandas`.
+
+```{python}
+e1 = events_pass.head(10) # extracts the first 10 rows
+print(e1.to_markdown())
+```
+
+```{python}
+e2 = events_pass.tail(10) # extracts the last 10 rows
+print(e2.to_markdown())
+```
+
+Now, looking at both `e1` and `e2`, we notice that the `player` column gives us the names of the players who were associated with different events during the match. Suppose, we are only interested to generate the pass map and its corresponding heat map for a particular player, for example, `'Toni Kroos'`. For that, we have to clean the `events_pass` dataset in such a way that, we have only those rows where `player='Toni Kroos'`. Be very careful to use the exact spelling while performing these string operations, otherwise the reader will end up with unnecessary syntax and/or logical errors. Before filtering, let us collect the name of all the players who were involved in this match. For this, we use the `unique()' function provided by `pandas` that helps us extract a unique data from a column.
+
+```{python}
+players = events_pass.player.unique()
+print(players)
+```
+
+We will now filter the dataset by the player name (`'Toni Kroos'` in our case). One good practice is to simply copy the particular player name from the `players` list that we just generated and use it according to our needs. This way, the spelling errors can be avoided. The filtration with python is an easy process:
+
+```{python}
+events_pass_p1 = events_pass[events_pass['player'] == 'Toni Kroos']
+```
+
+The first and the last 10 rows can be viewed again for the new `events_pass_p1` dataset:
+
+```{python}
+print(events_pass_p1.head(10).to_markdown())
+```
+
+```{python}
+print(events_pass_p1.tail(10).to_markdown())
+```
+
+Now, looking into both `e1` and `e2` our intuition tells us that the `type` column in `events_pass_p1` has event types other than passes, which we do not want for now. Thus, we have to again clean the dataset such that we have only those rows where `type = Pass`. The other rows can be discarded for now. Before that, let us analyse what event types other than 'Pass' are available for `'Toni Kroos'`:
+
+```{python}
+print(events_pass_p1.type.unique())
+```
+
+Seems our German maestro have been involved in a lot of events throught the game. But let us focus on his passes fro now. We will again filter the dataset and reset its index so that the indexing restarts from `0`:
+
+```{python}
+events_pass_p1 = events_pass_p1[events_pass_p1['type'] == 'Pass'].reset_index()
+print(events_pass_p1.to_markdown())
+```
+
+So, till now, we have been successful in extracting out the pass event data for `'Toni Kroos'` from the match. That is a brilliant achievement to be honest. You deserve a pat on your back!
+
+Getting back, we observe that `'Toni Kroos'` has been involved in `72` passes. We will later work out his pass success rate. But look at the number. Isn't he a brilliant midfielder that the German national team and the Real Madrid team have in their disposal? What a playmaker he is! 

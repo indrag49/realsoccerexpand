@@ -73,7 +73,7 @@ plt.show()
 
 <img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-5.png" width="672" />
 
-The reader might have noticed that by default, the pitch has a horizontal appearance. If the user wants it to be vertical, they should pass an additional argument `orientation` and set it to `vertical`.
+The reader might have noticed that by default, the pitch has a horizontal appearance. If the user wants it to be vertical, they should pass an additional argument `orientation` and set it to `'vertical'`.
 
 
 ```python
@@ -85,7 +85,7 @@ plt.show()
 
 <img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-7.png" width="672" />
 
-The user can also make the pitch appear half by setting the `view` argument to be `half`.
+The user can also make the pitch appear half by setting the `view` argument to be `'half'`.
 
 
 ```python

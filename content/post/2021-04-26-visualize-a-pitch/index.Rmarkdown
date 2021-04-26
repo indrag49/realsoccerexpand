@@ -62,7 +62,7 @@ fig, ax = pitch.draw()
 plt.show()
 ```
 
-The reader might have noticed that by default, the pitch has a horizontal appearance. If the user wants it to be vertical, they should pass an additional argument `orientation` and set it to `vertical`.
+The reader might have noticed that by default, the pitch has a horizontal appearance. If the user wants it to be vertical, they should pass an additional argument `orientation` and set it to `'vertical'`.
 
 ```{python}
 pitch = Pitch(orientation = 'vertical', pitch_color = 'grass', line_color = 'white', stripe = True, constrained_layout = True,
@@ -71,7 +71,7 @@ fig, ax = pitch.draw()
 plt.show()
 ```
 
-The user can also make the pitch appear half by setting the `view` argument to be `half`.
+The user can also make the pitch appear half by setting the `view` argument to be `'half'`.
 
 ```{python}
 pitch = Pitch(view = 'half', pitch_color = 'grass', line_color = 'white', stripe = True, constrained_layout = True,
