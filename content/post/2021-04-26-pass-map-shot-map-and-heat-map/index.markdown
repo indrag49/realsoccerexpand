@@ -69,8 +69,8 @@ print(comp.to_markdown())
 ## | 12 |               16 |          37 | Europe                   | Champions League        | male                 | 2004/2005     | 2021-04-01T06:18:57.459032 | 2021-04-01T06:18:57.459032 |
 ## | 13 |               16 |          44 | Europe                   | Champions League        | male                 | 2003/2004     | 2021-04-01T00:34:59.472485 | 2021-04-01T00:34:59.472485 |
 ## | 14 |               16 |          76 | Europe                   | Champions League        | male                 | 1999/2000     | 2020-07-29T05:00           | 2020-07-29T05:00           |
-## | 15 |               37 |          42 | England                  | FA Women's Super League | female               | 2019/2020     | 2020-10-20T18:35:33.568528 | 2020-10-20T18:35:33.568528 |
-## | 16 |               37 |           4 | England                  | FA Women's Super League | female               | 2018/2019     | 2021-04-09T20:39:24.201269 | 2021-04-09T20:39:24.201269 |
+## | 15 |               37 |          42 | England                  | FA Women's Super League | female               | 2019/2020     | 2021-04-27T06:27:03.599355 | 2021-04-27T06:27:03.599355 |
+## | 16 |               37 |           4 | England                  | FA Women's Super League | female               | 2018/2019     | 2021-04-27T08:59:34.340    | 2021-04-09T20:39:24.201269 |
 ## | 17 |               43 |           3 | International            | FIFA World Cup          | male                 | 2018          | 2020-10-25T14:03:50.263266 | 2020-10-25T14:03:50.263266 |
 ## | 18 |               11 |          42 | Spain                    | La Liga                 | male                 | 2019/2020     | 2020-12-18T12:10:38.985394 | 2020-12-18T12:10:38.985394 |
 ## | 19 |               11 |           4 | Spain                    | La Liga                 | male                 | 2018/2019     | 2021-04-20T03:24:51.029365 | 2021-04-20T03:24:51.029365 |
@@ -344,7 +344,7 @@ print(events_pass_p1.type.unique())
 ##  'Shot' 'Dispossessed' 'Foul Won']
 ```
 
-Seems our German maestro have been involved in a lot of events throught the game. But let us focus on his passes fro now. We will again filter the dataset and reset its index so that the indexing restarts from `0`:
+Seems our German maestro has been involved in a lot of events throughout the game. But let us focus on his passes foo now. We will again filter the dataset and reset its index so that the indexing restarts from `0`:
 
 
 ```python
@@ -903,7 +903,6 @@ for i in range(len(events_pass_p1)):
     else:
         pitch.arrows(events_pass_p1.location_x[i], events_pass_p1.location_y[i], events_pass_p1.pass_end_location_x[i], events_pass_p1.pass_end_location_y[i], ax=ax, color='red', width=3)
         pitch.scatter(events_pass_p1.location_x[i], events_pass_p1.location_y[i], ax = ax, color='red')
-        
 ```
 
 ```python
@@ -979,3 +978,511 @@ events_pass_p1['pass_outcome'].value_counts(normalize=True).mul(100).plot.bar()
 We notice that `'Kroos'` had created around 87.67% of successful passes. Wild!
 
 We have completed our study on generating the pass map and its corresponding heat map for a particular player. The reader is suggested to go ahead and try out the same analysis for other players from the same game, for example for `'Lionel Andrés Messi Cuccittini'` (our king Messi) or for `'Luka Modrić'` (our all time favorite Lukita). For those who does not know, both of them are Ballon d'Or winners. So, I can guarantee the readers will be ecstatic to analyze the pass maps for these players. The readers can also compare the pass maps between two players from opposition teams or visualize the pass maps for a particular team (although this might look clumsy. Hint: skip the step where the filtration by the player's name is happening). A lot of customizations are possible. In the next part we will perform the same analysis on the shots instead of passes and we will visualize the shot maps and their corresponding heat maps for both the teams.
+
+Let us create a new dataset by extracting out the relevant information on shot events from the original `events` dataset.
+
+
+```python
+events_shot = events[['team', 'type', 'minute', 'location', 'shot_end_location', 'shot_outcome', 'player']]
+```
+
+We can check how the `events_shot` dataset looks by printing its first and last 10 rows:
+
+
+```python
+print(events_shot.head(10).to_markdown())
+```
+
+```
+## |    | team        | type        |   minute | location     |   shot_end_location |   shot_outcome | player                         |
+## |---:|:------------|:------------|---------:|:-------------|--------------------:|---------------:|:-------------------------------|
+## |  0 | Real Madrid | Starting XI |        0 | nan          |                 nan |            nan | nan                            |
+## |  1 | Barcelona   | Starting XI |        0 | nan          |                 nan |            nan | nan                            |
+## |  2 | Barcelona   | Half Start  |        0 | nan          |                 nan |            nan | nan                            |
+## |  3 | Real Madrid | Half Start  |        0 | nan          |                 nan |            nan | nan                            |
+## |  4 | Barcelona   | Half Start  |       45 | nan          |                 nan |            nan | nan                            |
+## |  5 | Real Madrid | Half Start  |       45 | nan          |                 nan |            nan | nan                            |
+## |  6 | Real Madrid | Pass        |        0 | [60.0, 40.0] |                 nan |            nan | Karim Benzema                  |
+## |  7 | Real Madrid | Pass        |        0 | [53.3, 43.5] |                 nan |            nan | Francisco Román Alarcón Suárez |
+## |  8 | Real Madrid | Pass        |        0 | [47.1, 36.9] |                 nan |            nan | Carlos Henrique Casimiro       |
+## |  9 | Real Madrid | Pass        |        0 | [47.1, 31.0] |                 nan |            nan | Toni Kroos                     |
+```
+
+
+```python
+print(events_shot.tail(10).to_markdown())
+```
+
+```
+## |      | team        | type           |   minute |   location |   shot_end_location |   shot_outcome | player                                 |
+## |-----:|:------------|:---------------|---------:|-----------:|--------------------:|---------------:|:---------------------------------------|
+## | 4217 | Barcelona   | Half End       |       45 |        nan |                 nan |            nan | nan                                    |
+## | 4218 | Real Madrid | Half End       |       93 |        nan |                 nan |            nan | nan                                    |
+## | 4219 | Barcelona   | Half End       |       93 |        nan |                 nan |            nan | nan                                    |
+## | 4220 | Barcelona   | Substitution   |       69 |        nan |                 nan |            nan | Arturo Erasmo Vidal Pardo              |
+## | 4221 | Real Madrid | Substitution   |       78 |        nan |                 nan |            nan | Francisco Román Alarcón Suárez         |
+## | 4222 | Barcelona   | Substitution   |       79 |        nan |                 nan |            nan | Arthur Henrique Ramos de Oliveira Melo |
+## | 4223 | Barcelona   | Substitution   |       80 |        nan |                 nan |            nan | Antoine Griezmann                      |
+## | 4224 | Real Madrid | Substitution   |       85 |        nan |                 nan |            nan | Federico Santiago Valverde Dipetta     |
+## | 4225 | Real Madrid | Substitution   |       90 |        nan |                 nan |            nan | Karim Benzema                          |
+## | 4226 | Barcelona   | Tactical Shift |       70 |        nan |                 nan |            nan | nan                                    |
+```
+
+Let us first filter the dataset by setting the event type to be `Shot`, that is only consider those rows where the column `type` is set as `'Shot'`. During our last analysis, we set this as `'Pass'`
+
+
+```python
+events_shot = events_shot[events_shot['type']  == 'Shot']
+print(events_shot.to_markdown())
+```
+
+```
+## |      | team        | type   |   minute | location      | shot_end_location   | shot_outcome   | player                                  |
+## |-----:|:------------|:-------|---------:|:--------------|:--------------------|:---------------|:----------------------------------------|
+## | 4110 | Real Madrid | Shot   |        6 | [104.5, 51.0] | [120.0, 42.7, 4.2]  | Off T          | Karim Benzema                           |
+## | 4111 | Real Madrid | Shot   |       14 | [104.0, 33.0] | [120.0, 35.6, 4.6]  | Off T          | Toni Kroos                              |
+## | 4112 | Barcelona   | Shot   |       20 | [108.5, 38.5] | [120.0, 36.3, 4.0]  | Off T          | Antoine Griezmann                       |
+## | 4113 | Real Madrid | Shot   |       28 | [95.2, 42.1]  | [120.0, 41.8, 4.8]  | Off T          | Toni Kroos                              |
+## | 4114 | Barcelona   | Shot   |       29 | [107.6, 53.6] | [117.7, 43.3, 0.2]  | Saved          | Lionel Andrés Messi Cuccittini          |
+## | 4115 | Real Madrid | Shot   |       33 | [112.6, 39.1] | [114.4, 49.3]       | Wayward        | Karim Benzema                           |
+## | 4116 | Barcelona   | Shot   |       33 | [109.0, 27.1] | [111.2, 30.2, 0.7]  | Saved          | Arthur Henrique Ramos de Oliveira Melo  |
+## | 4117 | Barcelona   | Shot   |       36 | [100.8, 37.4] | [101.9, 37.7]       | Blocked        | Antoine Griezmann                       |
+## | 4118 | Real Madrid | Shot   |       36 | [103.9, 26.1] | [117.3, 38.6, 1.6]  | Saved          | Vinícius José Paixão de Oliveira Júnior |
+## | 4119 | Barcelona   | Shot   |       37 | [102.7, 40.7] | [115.1, 40.0, 1.4]  | Saved          | Lionel Andrés Messi Cuccittini          |
+## | 4120 | Barcelona   | Shot   |       39 | [102.6, 42.7] | [103.8, 42.5]       | Blocked        | Arturo Erasmo Vidal Pardo               |
+## | 4121 | Barcelona   | Shot   |       46 | [102.8, 26.2] | [103.7, 26.9]       | Blocked        | Lionel Andrés Messi Cuccittini          |
+## | 4122 | Real Madrid | Shot   |       55 | [100.6, 24.0] | [119.4, 43.0, 2.2]  | Saved          | Francisco Román Alarcón Suárez          |
+## | 4123 | Real Madrid | Shot   |       57 | [94.5, 30.4]  | [120.0, 49.7, 6.7]  | Off T          | Carlos Henrique Casimiro                |
+## | 4124 | Real Madrid | Shot   |       60 | [112.3, 38.4] | [119.5, 40.7]       | Blocked        | Francisco Román Alarcón Suárez          |
+## | 4125 | Real Madrid | Shot   |       61 | [93.3, 40.9]  | [120.0, 45.3, 3.9]  | Off T          | Toni Kroos                              |
+## | 4126 | Real Madrid | Shot   |       62 | [114.1, 49.7] | [120.0, 38.3, 3.8]  | Off T          | Karim Benzema                           |
+## | 4127 | Barcelona   | Shot   |       69 | [111.1, 57.5] | [112.4, 54.5, 0.4]  | Saved          | Martin Braithwaite Christensen          |
+## | 4128 | Real Madrid | Shot   |       70 | [115.8, 27.3] | [120.0, 37.8, 0.4]  | Goal           | Vinícius José Paixão de Oliveira Júnior |
+## | 4129 | Barcelona   | Shot   |       82 | [111.9, 34.7] | [120.0, 34.8, 3.8]  | Off T          | Gerard Piqué Bernabéu                   |
+## | 4130 | Real Madrid | Shot   |       88 | [99.7, 39.1]  | [109.6, 38.2]       | Blocked        | Sergio Ramos García                     |
+## | 4131 | Real Madrid | Shot   |       91 | [117.6, 50.1] | [120.0, 39.4, 0.2]  | Goal           | Mariano Díaz Mejía                      |
+```
+
+If we now closely examine `events_shot`, we see that it has the following relevant columns:
+
+* `team`: the team the player who took the shot belonged to,
+* `type`: it is set to ''Shot'` at all rows because we have filtered the dataset by this type,
+* `minute`: the minute when the shot took place,
+* `location`: the location of the ball where the shot was taken on the pitch. It is a list of numbers denoting the coordinates,
+* `shot_end_location`: the location of the ball where it ended after shot was taken. It is a list of numbers denoting the coordinates,
+* `shot_outcome`: the outcome of a particular shot, and 
+* `player`: the player who took the shot.
+
+Let us look into the different outcomes of the shots during the match:
+
+
+```python
+print(events_shot.shot_outcome.unique())
+```
+
+```
+## ['Off T' 'Saved' 'Wayward' 'Blocked' 'Goal']
+```
+
+Now, like we have done in case of passes, we will again split the `location` and `shot_end_location` into two columns each with their x-coordinates in one and the y-coordinates in the other.
+
+
+```python
+shot_Loc = events_shot['location']
+shot_Loc = pd.DataFrame(shot_Loc.to_list(), columns=['location_x', 'location_y'])
+print(shot_Loc.to_markdown())
+```
+
+```
+## |    |   location_x |   location_y |
+## |---:|-------------:|-------------:|
+## |  0 |        104.5 |         51   |
+## |  1 |        104   |         33   |
+## |  2 |        108.5 |         38.5 |
+## |  3 |         95.2 |         42.1 |
+## |  4 |        107.6 |         53.6 |
+## |  5 |        112.6 |         39.1 |
+## |  6 |        109   |         27.1 |
+## |  7 |        100.8 |         37.4 |
+## |  8 |        103.9 |         26.1 |
+## |  9 |        102.7 |         40.7 |
+## | 10 |        102.6 |         42.7 |
+## | 11 |        102.8 |         26.2 |
+## | 12 |        100.6 |         24   |
+## | 13 |         94.5 |         30.4 |
+## | 14 |        112.3 |         38.4 |
+## | 15 |         93.3 |         40.9 |
+## | 16 |        114.1 |         49.7 |
+## | 17 |        111.1 |         57.5 |
+## | 18 |        115.8 |         27.3 |
+## | 19 |        111.9 |         34.7 |
+## | 20 |         99.7 |         39.1 |
+## | 21 |        117.6 |         50.1 |
+```
+
+
+```python
+shot_end_Loc = events_shot['shot_end_location']
+shot_end_Loc = pd.DataFrame(shot_end_Loc.to_list(), columns=['shot_end_location_x', 'shot_end_location_y', 'shot_end_location_z'])
+print(shot_end_Loc.to_markdown())
+```
+
+```
+## |    |   shot_end_location_x |   shot_end_location_y |   shot_end_location_z |
+## |---:|----------------------:|----------------------:|----------------------:|
+## |  0 |                 120   |                  42.7 |                   4.2 |
+## |  1 |                 120   |                  35.6 |                   4.6 |
+## |  2 |                 120   |                  36.3 |                   4   |
+## |  3 |                 120   |                  41.8 |                   4.8 |
+## |  4 |                 117.7 |                  43.3 |                   0.2 |
+## |  5 |                 114.4 |                  49.3 |                 nan   |
+## |  6 |                 111.2 |                  30.2 |                   0.7 |
+## |  7 |                 101.9 |                  37.7 |                 nan   |
+## |  8 |                 117.3 |                  38.6 |                   1.6 |
+## |  9 |                 115.1 |                  40   |                   1.4 |
+## | 10 |                 103.8 |                  42.5 |                 nan   |
+## | 11 |                 103.7 |                  26.9 |                 nan   |
+## | 12 |                 119.4 |                  43   |                   2.2 |
+## | 13 |                 120   |                  49.7 |                   6.7 |
+## | 14 |                 119.5 |                  40.7 |                 nan   |
+## | 15 |                 120   |                  45.3 |                   3.9 |
+## | 16 |                 120   |                  38.3 |                   3.8 |
+## | 17 |                 112.4 |                  54.5 |                   0.4 |
+## | 18 |                 120   |                  37.8 |                   0.4 |
+## | 19 |                 120   |                  34.8 |                   3.8 |
+## | 20 |                 109.6 |                  38.2 |                 nan   |
+## | 21 |                 120   |                  39.4 |                   0.2 |
+```
+
+So, we can add these rows to our `events_shot` dataframe.
+
+
+```python
+events_shot = events_shot.reset_index()
+events_shot['location_x'] = shot_Loc['location_x']
+events_shot['location_y'] = shot_Loc['location_y']
+events_shot['shot_end_location_x'] = shot_end_Loc['shot_end_location_x']
+events_shot['shot_end_location_y'] = shot_end_Loc['shot_end_location_y']
+print(events_shot.to_markdown())
+```
+
+```
+## |    |   index | team        | type   |   minute | location      | shot_end_location   | shot_outcome   | player                                  |   location_x |   location_y |   shot_end_location_x |   shot_end_location_y |
+## |---:|--------:|:------------|:-------|---------:|:--------------|:--------------------|:---------------|:----------------------------------------|-------------:|-------------:|----------------------:|----------------------:|
+## |  0 |    4110 | Real Madrid | Shot   |        6 | [104.5, 51.0] | [120.0, 42.7, 4.2]  | Off T          | Karim Benzema                           |        104.5 |         51   |                 120   |                  42.7 |
+## |  1 |    4111 | Real Madrid | Shot   |       14 | [104.0, 33.0] | [120.0, 35.6, 4.6]  | Off T          | Toni Kroos                              |        104   |         33   |                 120   |                  35.6 |
+## |  2 |    4112 | Barcelona   | Shot   |       20 | [108.5, 38.5] | [120.0, 36.3, 4.0]  | Off T          | Antoine Griezmann                       |        108.5 |         38.5 |                 120   |                  36.3 |
+## |  3 |    4113 | Real Madrid | Shot   |       28 | [95.2, 42.1]  | [120.0, 41.8, 4.8]  | Off T          | Toni Kroos                              |         95.2 |         42.1 |                 120   |                  41.8 |
+## |  4 |    4114 | Barcelona   | Shot   |       29 | [107.6, 53.6] | [117.7, 43.3, 0.2]  | Saved          | Lionel Andrés Messi Cuccittini          |        107.6 |         53.6 |                 117.7 |                  43.3 |
+## |  5 |    4115 | Real Madrid | Shot   |       33 | [112.6, 39.1] | [114.4, 49.3]       | Wayward        | Karim Benzema                           |        112.6 |         39.1 |                 114.4 |                  49.3 |
+## |  6 |    4116 | Barcelona   | Shot   |       33 | [109.0, 27.1] | [111.2, 30.2, 0.7]  | Saved          | Arthur Henrique Ramos de Oliveira Melo  |        109   |         27.1 |                 111.2 |                  30.2 |
+## |  7 |    4117 | Barcelona   | Shot   |       36 | [100.8, 37.4] | [101.9, 37.7]       | Blocked        | Antoine Griezmann                       |        100.8 |         37.4 |                 101.9 |                  37.7 |
+## |  8 |    4118 | Real Madrid | Shot   |       36 | [103.9, 26.1] | [117.3, 38.6, 1.6]  | Saved          | Vinícius José Paixão de Oliveira Júnior |        103.9 |         26.1 |                 117.3 |                  38.6 |
+## |  9 |    4119 | Barcelona   | Shot   |       37 | [102.7, 40.7] | [115.1, 40.0, 1.4]  | Saved          | Lionel Andrés Messi Cuccittini          |        102.7 |         40.7 |                 115.1 |                  40   |
+## | 10 |    4120 | Barcelona   | Shot   |       39 | [102.6, 42.7] | [103.8, 42.5]       | Blocked        | Arturo Erasmo Vidal Pardo               |        102.6 |         42.7 |                 103.8 |                  42.5 |
+## | 11 |    4121 | Barcelona   | Shot   |       46 | [102.8, 26.2] | [103.7, 26.9]       | Blocked        | Lionel Andrés Messi Cuccittini          |        102.8 |         26.2 |                 103.7 |                  26.9 |
+## | 12 |    4122 | Real Madrid | Shot   |       55 | [100.6, 24.0] | [119.4, 43.0, 2.2]  | Saved          | Francisco Román Alarcón Suárez          |        100.6 |         24   |                 119.4 |                  43   |
+## | 13 |    4123 | Real Madrid | Shot   |       57 | [94.5, 30.4]  | [120.0, 49.7, 6.7]  | Off T          | Carlos Henrique Casimiro                |         94.5 |         30.4 |                 120   |                  49.7 |
+## | 14 |    4124 | Real Madrid | Shot   |       60 | [112.3, 38.4] | [119.5, 40.7]       | Blocked        | Francisco Román Alarcón Suárez          |        112.3 |         38.4 |                 119.5 |                  40.7 |
+## | 15 |    4125 | Real Madrid | Shot   |       61 | [93.3, 40.9]  | [120.0, 45.3, 3.9]  | Off T          | Toni Kroos                              |         93.3 |         40.9 |                 120   |                  45.3 |
+## | 16 |    4126 | Real Madrid | Shot   |       62 | [114.1, 49.7] | [120.0, 38.3, 3.8]  | Off T          | Karim Benzema                           |        114.1 |         49.7 |                 120   |                  38.3 |
+## | 17 |    4127 | Barcelona   | Shot   |       69 | [111.1, 57.5] | [112.4, 54.5, 0.4]  | Saved          | Martin Braithwaite Christensen          |        111.1 |         57.5 |                 112.4 |                  54.5 |
+## | 18 |    4128 | Real Madrid | Shot   |       70 | [115.8, 27.3] | [120.0, 37.8, 0.4]  | Goal           | Vinícius José Paixão de Oliveira Júnior |        115.8 |         27.3 |                 120   |                  37.8 |
+## | 19 |    4129 | Barcelona   | Shot   |       82 | [111.9, 34.7] | [120.0, 34.8, 3.8]  | Off T          | Gerard Piqué Bernabéu                   |        111.9 |         34.7 |                 120   |                  34.8 |
+## | 20 |    4130 | Real Madrid | Shot   |       88 | [99.7, 39.1]  | [109.6, 38.2]       | Blocked        | Sergio Ramos García                     |         99.7 |         39.1 |                 109.6 |                  38.2 |
+## | 21 |    4131 | Real Madrid | Shot   |       91 | [117.6, 50.1] | [120.0, 39.4, 0.2]  | Goal           | Mariano Díaz Mejía                      |        117.6 |         50.1 |                 120   |                  39.4 |
+```
+
+We can now discard the unnecessary columns:
+
+
+```python
+events_shot = events_shot[['team', 'minute', 'player', 'location_x', 'location_y', 'shot_end_location_x', 'shot_end_location_y', 'shot_outcome']]
+print(events_shot.to_markdown())
+```
+
+```
+## |    | team        |   minute | player                                  |   location_x |   location_y |   shot_end_location_x |   shot_end_location_y | shot_outcome   |
+## |---:|:------------|---------:|:----------------------------------------|-------------:|-------------:|----------------------:|----------------------:|:---------------|
+## |  0 | Real Madrid |        6 | Karim Benzema                           |        104.5 |         51   |                 120   |                  42.7 | Off T          |
+## |  1 | Real Madrid |       14 | Toni Kroos                              |        104   |         33   |                 120   |                  35.6 | Off T          |
+## |  2 | Barcelona   |       20 | Antoine Griezmann                       |        108.5 |         38.5 |                 120   |                  36.3 | Off T          |
+## |  3 | Real Madrid |       28 | Toni Kroos                              |         95.2 |         42.1 |                 120   |                  41.8 | Off T          |
+## |  4 | Barcelona   |       29 | Lionel Andrés Messi Cuccittini          |        107.6 |         53.6 |                 117.7 |                  43.3 | Saved          |
+## |  5 | Real Madrid |       33 | Karim Benzema                           |        112.6 |         39.1 |                 114.4 |                  49.3 | Wayward        |
+## |  6 | Barcelona   |       33 | Arthur Henrique Ramos de Oliveira Melo  |        109   |         27.1 |                 111.2 |                  30.2 | Saved          |
+## |  7 | Barcelona   |       36 | Antoine Griezmann                       |        100.8 |         37.4 |                 101.9 |                  37.7 | Blocked        |
+## |  8 | Real Madrid |       36 | Vinícius José Paixão de Oliveira Júnior |        103.9 |         26.1 |                 117.3 |                  38.6 | Saved          |
+## |  9 | Barcelona   |       37 | Lionel Andrés Messi Cuccittini          |        102.7 |         40.7 |                 115.1 |                  40   | Saved          |
+## | 10 | Barcelona   |       39 | Arturo Erasmo Vidal Pardo               |        102.6 |         42.7 |                 103.8 |                  42.5 | Blocked        |
+## | 11 | Barcelona   |       46 | Lionel Andrés Messi Cuccittini          |        102.8 |         26.2 |                 103.7 |                  26.9 | Blocked        |
+## | 12 | Real Madrid |       55 | Francisco Román Alarcón Suárez          |        100.6 |         24   |                 119.4 |                  43   | Saved          |
+## | 13 | Real Madrid |       57 | Carlos Henrique Casimiro                |         94.5 |         30.4 |                 120   |                  49.7 | Off T          |
+## | 14 | Real Madrid |       60 | Francisco Román Alarcón Suárez          |        112.3 |         38.4 |                 119.5 |                  40.7 | Blocked        |
+## | 15 | Real Madrid |       61 | Toni Kroos                              |         93.3 |         40.9 |                 120   |                  45.3 | Off T          |
+## | 16 | Real Madrid |       62 | Karim Benzema                           |        114.1 |         49.7 |                 120   |                  38.3 | Off T          |
+## | 17 | Barcelona   |       69 | Martin Braithwaite Christensen          |        111.1 |         57.5 |                 112.4 |                  54.5 | Saved          |
+## | 18 | Real Madrid |       70 | Vinícius José Paixão de Oliveira Júnior |        115.8 |         27.3 |                 120   |                  37.8 | Goal           |
+## | 19 | Barcelona   |       82 | Gerard Piqué Bernabéu                   |        111.9 |         34.7 |                 120   |                  34.8 | Off T          |
+## | 20 | Real Madrid |       88 | Sergio Ramos García                     |         99.7 |         39.1 |                 109.6 |                  38.2 | Blocked        |
+## | 21 | Real Madrid |       91 | Mariano Díaz Mejía                      |        117.6 |         50.1 |                 120   |                  39.4 | Goal           |
+```
+
+We have been again successful in cleaning and manipulating our dataset optimally according to our needs. We will now split the datset into two datasets, one for `Real Madrid` and the other for `Barcelona`.
+
+
+```python
+events_shot_Real = events_shot[events_shot['team'] == 'Real Madrid']
+print(events_shot_Real.to_markdown())
+```
+
+```
+## |    | team        |   minute | player                                  |   location_x |   location_y |   shot_end_location_x |   shot_end_location_y | shot_outcome   |
+## |---:|:------------|---------:|:----------------------------------------|-------------:|-------------:|----------------------:|----------------------:|:---------------|
+## |  0 | Real Madrid |        6 | Karim Benzema                           |        104.5 |         51   |                 120   |                  42.7 | Off T          |
+## |  1 | Real Madrid |       14 | Toni Kroos                              |        104   |         33   |                 120   |                  35.6 | Off T          |
+## |  3 | Real Madrid |       28 | Toni Kroos                              |         95.2 |         42.1 |                 120   |                  41.8 | Off T          |
+## |  5 | Real Madrid |       33 | Karim Benzema                           |        112.6 |         39.1 |                 114.4 |                  49.3 | Wayward        |
+## |  8 | Real Madrid |       36 | Vinícius José Paixão de Oliveira Júnior |        103.9 |         26.1 |                 117.3 |                  38.6 | Saved          |
+## | 12 | Real Madrid |       55 | Francisco Román Alarcón Suárez          |        100.6 |         24   |                 119.4 |                  43   | Saved          |
+## | 13 | Real Madrid |       57 | Carlos Henrique Casimiro                |         94.5 |         30.4 |                 120   |                  49.7 | Off T          |
+## | 14 | Real Madrid |       60 | Francisco Román Alarcón Suárez          |        112.3 |         38.4 |                 119.5 |                  40.7 | Blocked        |
+## | 15 | Real Madrid |       61 | Toni Kroos                              |         93.3 |         40.9 |                 120   |                  45.3 | Off T          |
+## | 16 | Real Madrid |       62 | Karim Benzema                           |        114.1 |         49.7 |                 120   |                  38.3 | Off T          |
+## | 18 | Real Madrid |       70 | Vinícius José Paixão de Oliveira Júnior |        115.8 |         27.3 |                 120   |                  37.8 | Goal           |
+## | 20 | Real Madrid |       88 | Sergio Ramos García                     |         99.7 |         39.1 |                 109.6 |                  38.2 | Blocked        |
+## | 21 | Real Madrid |       91 | Mariano Díaz Mejía                      |        117.6 |         50.1 |                 120   |                  39.4 | Goal           |
+```
+
+
+```python
+events_shot_Barca = events_shot[events_shot['team'] == 'Barcelona']
+print(events_shot_Barca.to_markdown())
+```
+
+```
+## |    | team      |   minute | player                                 |   location_x |   location_y |   shot_end_location_x |   shot_end_location_y | shot_outcome   |
+## |---:|:----------|---------:|:---------------------------------------|-------------:|-------------:|----------------------:|----------------------:|:---------------|
+## |  2 | Barcelona |       20 | Antoine Griezmann                      |        108.5 |         38.5 |                 120   |                  36.3 | Off T          |
+## |  4 | Barcelona |       29 | Lionel Andrés Messi Cuccittini         |        107.6 |         53.6 |                 117.7 |                  43.3 | Saved          |
+## |  6 | Barcelona |       33 | Arthur Henrique Ramos de Oliveira Melo |        109   |         27.1 |                 111.2 |                  30.2 | Saved          |
+## |  7 | Barcelona |       36 | Antoine Griezmann                      |        100.8 |         37.4 |                 101.9 |                  37.7 | Blocked        |
+## |  9 | Barcelona |       37 | Lionel Andrés Messi Cuccittini         |        102.7 |         40.7 |                 115.1 |                  40   | Saved          |
+## | 10 | Barcelona |       39 | Arturo Erasmo Vidal Pardo              |        102.6 |         42.7 |                 103.8 |                  42.5 | Blocked        |
+## | 11 | Barcelona |       46 | Lionel Andrés Messi Cuccittini         |        102.8 |         26.2 |                 103.7 |                  26.9 | Blocked        |
+## | 17 | Barcelona |       69 | Martin Braithwaite Christensen         |        111.1 |         57.5 |                 112.4 |                  54.5 | Saved          |
+## | 19 | Barcelona |       82 | Gerard Piqué Bernabéu                  |        111.9 |         34.7 |                 120   |                  34.8 | Off T          |
+```
+
+So we have all the ingredients for visualization of the shot maps along with their heat maps for both the teams. We have already seen the unique types of shot outcomes and we will color code them accordingly. Let us first visualize the shot map and its corresponding heat map for `Real Madrid`. Note that we could have plotted the maps in a similar fashion to the one we did for passes. But let us make the exercise a little sophiticated by not using a for loop. Only caveat is that we now have to re-filter the dataset `events_shot_Real` by the outcomes of the shots. Let us first check what the shot outcomes are for `Real Madrid`:
+
+
+```python
+print(events_shot_Real.shot_outcome.unique())
+```
+
+```
+## ['Off T' 'Wayward' 'Saved' 'Blocked' 'Goal']
+```
+
+So let us filter `events_shot_Real` by `shot_outcome` and generate separate datasets:
+
+
+```python
+events_shot_Real_Goal = events_shot_Real[events_shot_Real['shot_outcome'] == 'Goal']
+events_shot_Real_off_wayward = events_shot_Real[(events_shot_Real['shot_outcome'] == 'Off T') | (events_shot_Real['shot_outcome'] == 'Wayward')]
+events_shot_Real_saved_blocked = events_shot_Real[(events_shot_Real['shot_outcome'] == 'Saved') | (events_shot_Real['shot_outcome'] == 'Blocked')]
+
+print(events_shot_Real_Goal.to_markdown())
+```
+
+```
+## |    | team        |   minute | player                                  |   location_x |   location_y |   shot_end_location_x |   shot_end_location_y | shot_outcome   |
+## |---:|:------------|---------:|:----------------------------------------|-------------:|-------------:|----------------------:|----------------------:|:---------------|
+## | 18 | Real Madrid |       70 | Vinícius José Paixão de Oliveira Júnior |        115.8 |         27.3 |                   120 |                  37.8 | Goal           |
+## | 21 | Real Madrid |       91 | Mariano Díaz Mejía                      |        117.6 |         50.1 |                   120 |                  39.4 | Goal           |
+```
+
+```python
+print(events_shot_Real_off_wayward.to_markdown())
+```
+
+```
+## |    | team        |   minute | player                   |   location_x |   location_y |   shot_end_location_x |   shot_end_location_y | shot_outcome   |
+## |---:|:------------|---------:|:-------------------------|-------------:|-------------:|----------------------:|----------------------:|:---------------|
+## |  0 | Real Madrid |        6 | Karim Benzema            |        104.5 |         51   |                 120   |                  42.7 | Off T          |
+## |  1 | Real Madrid |       14 | Toni Kroos               |        104   |         33   |                 120   |                  35.6 | Off T          |
+## |  3 | Real Madrid |       28 | Toni Kroos               |         95.2 |         42.1 |                 120   |                  41.8 | Off T          |
+## |  5 | Real Madrid |       33 | Karim Benzema            |        112.6 |         39.1 |                 114.4 |                  49.3 | Wayward        |
+## | 13 | Real Madrid |       57 | Carlos Henrique Casimiro |         94.5 |         30.4 |                 120   |                  49.7 | Off T          |
+## | 15 | Real Madrid |       61 | Toni Kroos               |         93.3 |         40.9 |                 120   |                  45.3 | Off T          |
+## | 16 | Real Madrid |       62 | Karim Benzema            |        114.1 |         49.7 |                 120   |                  38.3 | Off T          |
+```
+
+Now let us plot the pitch and the shot and heat maps:
+
+
+```python
+# Pitch drawing code
+pitch = Pitch(pitch_color = 'black', line_color = 'white', constrained_layout = True, tight_layout = False, goal_type = 'box')
+fig, ax = pitch.draw()
+
+# Heat map code
+res = sns.kdeplot(events_shot_Real['location_x'], events_shot_Real['location_y'], fill = True, 
+thresh = 0.05, alpha = 0.5, levels = 10, cmap = 'Purples_d')
+
+# Pass map code
+```
+
+```python
+pitch.arrows(events_shot_Real_Goal.location_x, events_shot_Real_Goal.location_y, events_shot_Real_Goal.shot_end_location_x, events_shot_Real_Goal.shot_end_location_y, ax=ax, color='green', width = 3, label = 'Goals')
+```
+
+```python
+pitch.scatter(events_shot_Real_Goal.location_x, events_shot_Real_Goal.location_y, ax = ax, color = 'green')
+```
+
+```python
+pitch.arrows(events_shot_Real_off_wayward.location_x, events_shot_Real_off_wayward.location_y, events_shot_Real_off_wayward.shot_end_location_x, events_shot_Real_off_wayward.shot_end_location_y, ax=ax, color='red', width = 3, label = 'Off T / Wayward')
+```
+
+```python
+pitch.scatter(events_shot_Real_off_wayward.location_x, events_shot_Real_off_wayward.location_y, ax = ax, color = 'red')
+```
+
+```python
+pitch.arrows(events_shot_Real_saved_blocked.location_x, events_shot_Real_saved_blocked.location_y, events_shot_Real_saved_blocked.shot_end_location_x, events_shot_Real_saved_blocked.shot_end_location_y, ax=ax, color='orange', width = 3, label = 'Saved / Blocked')
+```
+
+```python
+pitch.scatter(events_shot_Real_saved_blocked.location_x, events_shot_Real_saved_blocked.location_y, ax = ax, color = 'orange')
+
+# General plot code
+```
+
+```python
+ax.legend(handlelength = 3, edgecolor='None', fontsize = 10)
+```
+
+```python
+plt.title("Real Madrid shot and heat map")
+```
+
+```python
+plt.show()
+```
+
+<img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-9.png" width="672" />
+
+As we already know `Real Madrid` won the game `2-0` against `Barcelona`. This fact is evident by the two `green` arrows depicting the goals scored by `Real Madrid`. We will perform the same operations on the `events_shot_Barca` dataset. Let us first check what the shot outcomes are for `Barcelona`:
+
+
+```python
+print(events_shot_Barca.shot_outcome.unique())
+```
+
+```
+## ['Off T' 'Saved' 'Blocked']
+```
+
+In case of `Barcelona` we will take the data manipulations a little further. Keep in mind that this is an optional but recommended step. Let us remind ourselves that in case of `statsbomb` pitch type, that we are currently using by default, the x-axis ranges from `0` to `120` (refer to the [second post](https://realsoccerexpand.netlify.app/post/visualize-a-pitch/)). Note that the statsbomb data lists the data coordinates in such a way that they are placed only on one half of the pitch, no matter which team we are focusing on. Although we are visualizing our maps separately for both the teams, it is recommended to subtract the values of `location_x` and `shot_location_x` from 120 for any one of the teams (NOT both!!!!). This will just invert the x-axis for one of the teams which will give us a better idea of the locations. Let us perform this operation on the `shots_event_Barsa` dataset.
+
+
+```python
+events_shot_Barca['location_x'] = 120 - events_shot_Barca['location_x']
+```
+
+```
+## C:/Users/indra/AppData/Local/r-miniconda/envs/r-reticulate/python.exe:1: SettingWithCopyWarning: 
+## A value is trying to be set on a copy of a slice from a DataFrame.
+## Try using .loc[row_indexer,col_indexer] = value instead
+## 
+## See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+```
+
+```python
+events_shot_Barca['shot_end_location_x'] = 120 - events_shot_Barca['shot_end_location_x']
+```
+
+Let us again operate the same filtration by `shot_outcome` on the `events_shot_Barca` dataset:
+
+
+```python
+events_shot_Barca_off = events_shot_Barca[events_shot_Barca['shot_outcome'] == 'Off T']
+events_shot_Barca_saved_blocked = events_shot_Barca[(events_shot_Barca['shot_outcome'] == 'Saved') | (events_shot_Barca['shot_outcome'] == 'Blocked')]
+
+print(events_shot_Barca_off.to_markdown())
+```
+
+```
+## |    | team      |   minute | player                |   location_x |   location_y |   shot_end_location_x |   shot_end_location_y | shot_outcome   |
+## |---:|:----------|---------:|:----------------------|-------------:|-------------:|----------------------:|----------------------:|:---------------|
+## |  2 | Barcelona |       20 | Antoine Griezmann     |         11.5 |         38.5 |                     0 |                  36.3 | Off T          |
+## | 19 | Barcelona |       82 | Gerard Piqué Bernabéu |          8.1 |         34.7 |                     0 |                  34.8 | Off T          |
+```
+
+```python
+print(events_shot_Barca_saved_blocked.to_markdown())
+```
+
+```
+## |    | team      |   minute | player                                 |   location_x |   location_y |   shot_end_location_x |   shot_end_location_y | shot_outcome   |
+## |---:|:----------|---------:|:---------------------------------------|-------------:|-------------:|----------------------:|----------------------:|:---------------|
+## |  4 | Barcelona |       29 | Lionel Andrés Messi Cuccittini         |         12.4 |         53.6 |                   2.3 |                  43.3 | Saved          |
+## |  6 | Barcelona |       33 | Arthur Henrique Ramos de Oliveira Melo |         11   |         27.1 |                   8.8 |                  30.2 | Saved          |
+## |  7 | Barcelona |       36 | Antoine Griezmann                      |         19.2 |         37.4 |                  18.1 |                  37.7 | Blocked        |
+## |  9 | Barcelona |       37 | Lionel Andrés Messi Cuccittini         |         17.3 |         40.7 |                   4.9 |                  40   | Saved          |
+## | 10 | Barcelona |       39 | Arturo Erasmo Vidal Pardo              |         17.4 |         42.7 |                  16.2 |                  42.5 | Blocked        |
+## | 11 | Barcelona |       46 | Lionel Andrés Messi Cuccittini         |         17.2 |         26.2 |                  16.3 |                  26.9 | Blocked        |
+## | 17 | Barcelona |       69 | Martin Braithwaite Christensen         |          8.9 |         57.5 |                   7.6 |                  54.5 | Saved          |
+```
+
+Once we are satisfied, we will finally visualize the shot map and the heat map:
+
+
+```python
+# Pitch drawing code
+pitch = Pitch(pitch_color = 'black', line_color = 'white', constrained_layout = True, tight_layout = False, goal_type = 'box')
+fig, ax = pitch.draw()
+
+# Heat map code
+res = sns.kdeplot(events_shot_Barca['location_x'], events_shot_Barca['location_y'], fill = True, 
+thresh = 0.05, alpha = 0.5, levels = 10, cmap = 'Purples_d')
+
+# Pass map code
+```
+
+```python
+pitch.arrows(events_shot_Barca_off.location_x, events_shot_Barca_off.location_y, events_shot_Barca_off.shot_end_location_x, events_shot_Barca_off.shot_end_location_y, ax=ax, color='red', width = 3, label = 'Off T')
+```
+
+```python
+pitch.scatter(events_shot_Barca_off.location_x, events_shot_Barca_off.location_y, ax = ax, color = 'red')
+```
+
+```python
+pitch.arrows(events_shot_Barca_saved_blocked.location_x, events_shot_Barca_saved_blocked.location_y, events_shot_Barca_saved_blocked.shot_end_location_x, events_shot_Barca_saved_blocked.shot_end_location_y, ax=ax, color='orange', width = 3, label = 'Blocked / Saved')
+```
+
+```python
+pitch.scatter(events_shot_Barca_saved_blocked.location_x, events_shot_Barca_saved_blocked.location_y, ax = ax, color = 'orange')
+
+# General plot code
+```
+
+```python
+ax.legend(handlelength = 3, edgecolor='None', fontsize = 10)
+```
+
+```python
+plt.title("Barcelona shot and heat map")
+```
+
+```python
+plt.show()
+```
+
+<img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-11.png" width="672" />
+
+Notice that some of the shots from `Barcelona` were blocked very close to where the shots were taken from. The lengths of the arrows for these cases are compact. Whoo! We have come to the end of this tutorial. I know this tutorial was one hell of a ride. But I can guarantee that if the reader goes through it thoroughly, they can grasp a lot of useful information on soccer data analysis. In the next post tutorial, we will study how to build and visualize pass network of a particular team during a particular match and how to use concepts of *complex network theory* to analyze these pass networks with the help of `NetworkX` Python package. 
+

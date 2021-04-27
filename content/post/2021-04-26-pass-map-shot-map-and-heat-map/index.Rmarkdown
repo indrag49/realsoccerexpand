@@ -108,7 +108,7 @@ Now, looking into both `e1` and `e2` our intuition tells us that the `type` colu
 print(events_pass_p1.type.unique())
 ```
 
-Seems our German maestro have been involved in a lot of events throught the game. But let us focus on his passes fro now. We will again filter the dataset and reset its index so that the indexing restarts from `0`:
+Seems our German maestro has been involved in a lot of events throughout the game. But let us focus on his passes foo now. We will again filter the dataset and reset its index so that the indexing restarts from `0`:
 
 ```{python}
 events_pass_p1 = events_pass_p1[events_pass_p1['type'] == 'Pass'].reset_index()
@@ -184,7 +184,6 @@ for i in range(len(events_pass_p1)):
     else:
         pitch.arrows(events_pass_p1.location_x[i], events_pass_p1.location_y[i], events_pass_p1.pass_end_location_x[i], events_pass_p1.pass_end_location_y[i], ax=ax, color='red', width=3)
         pitch.scatter(events_pass_p1.location_x[i], events_pass_p1.location_y[i], ax = ax, color='red')
-        
 plt.show()
 ```
 
@@ -233,3 +232,183 @@ events_pass_p1['pass_outcome'].value_counts(normalize=True).mul(100).plot.bar()
 We notice that `'Kroos'` had created around 87.67% of successful passes. Wild!
 
 We have completed our study on generating the pass map and its corresponding heat map for a particular player. The reader is suggested to go ahead and try out the same analysis for other players from the same game, for example for `'Lionel Andrés Messi Cuccittini'` (our king Messi) or for `'Luka Modrić'` (our all time favorite Lukita). For those who does not know, both of them are Ballon d'Or winners. So, I can guarantee the readers will be ecstatic to analyze the pass maps for these players. The readers can also compare the pass maps between two players from opposition teams or visualize the pass maps for a particular team (although this might look clumsy. Hint: skip the step where the filtration by the player's name is happening). A lot of customizations are possible. In the next part we will perform the same analysis on the shots instead of passes and we will visualize the shot maps and their corresponding heat maps for both the teams.
+
+Let us create a new dataset by extracting out the relevant information on shot events from the original `events` dataset.
+
+```{python}
+events_shot = events[['team', 'type', 'minute', 'location', 'shot_end_location', 'shot_outcome', 'player']]
+```
+
+We can check how the `events_shot` dataset looks by printing its first and last 10 rows:
+
+```{python}
+print(events_shot.head(10).to_markdown())
+```
+
+```{python}
+print(events_shot.tail(10).to_markdown())
+```
+
+Let us first filter the dataset by setting the event type to be `Shot`, that is only consider those rows where the column `type` is set as `'Shot'`. During our last analysis, we set this as `'Pass'`
+
+```{python}
+events_shot = events_shot[events_shot['type']  == 'Shot']
+print(events_shot.to_markdown())
+```
+
+If we now closely examine `events_shot`, we see that it has the following relevant columns:
+
+* `team`: the team the player who took the shot belonged to,
+* `type`: it is set to ''Shot'` at all rows because we have filtered the dataset by this type,
+* `minute`: the minute when the shot took place,
+* `location`: the location of the ball where the shot was taken on the pitch. It is a list of numbers denoting the coordinates,
+* `shot_end_location`: the location of the ball where it ended after shot was taken. It is a list of numbers denoting the coordinates,
+* `shot_outcome`: the outcome of a particular shot, and 
+* `player`: the player who took the shot.
+
+Let us look into the different outcomes of the shots during the match:
+
+```{python}
+print(events_shot.shot_outcome.unique())
+```
+
+Now, like we have done in case of passes, we will again split the `location` and `shot_end_location` into two columns each with their x-coordinates in one and the y-coordinates in the other.
+
+```{python}
+shot_Loc = events_shot['location']
+shot_Loc = pd.DataFrame(shot_Loc.to_list(), columns=['location_x', 'location_y'])
+print(shot_Loc.to_markdown())
+```
+
+```{python}
+shot_end_Loc = events_shot['shot_end_location']
+shot_end_Loc = pd.DataFrame(shot_end_Loc.to_list(), columns=['shot_end_location_x', 'shot_end_location_y', 'shot_end_location_z'])
+print(shot_end_Loc.to_markdown())
+```
+
+So, we can add these rows to our `events_shot` dataframe.
+
+```{python}
+events_shot = events_shot.reset_index()
+events_shot['location_x'] = shot_Loc['location_x']
+events_shot['location_y'] = shot_Loc['location_y']
+events_shot['shot_end_location_x'] = shot_end_Loc['shot_end_location_x']
+events_shot['shot_end_location_y'] = shot_end_Loc['shot_end_location_y']
+print(events_shot.to_markdown())
+```
+
+We can now discard the unnecessary columns:
+
+```{python}
+events_shot = events_shot[['team', 'minute', 'player', 'location_x', 'location_y', 'shot_end_location_x', 'shot_end_location_y', 'shot_outcome']]
+print(events_shot.to_markdown())
+```
+
+We have been again successful in cleaning and manipulating our dataset optimally according to our needs. We will now split the datset into two datasets, one for `Real Madrid` and the other for `Barcelona`.
+
+```{python}
+events_shot_Real = events_shot[events_shot['team'] == 'Real Madrid']
+print(events_shot_Real.to_markdown())
+```
+
+```{python}
+events_shot_Barca = events_shot[events_shot['team'] == 'Barcelona']
+print(events_shot_Barca.to_markdown())
+```
+
+So we have all the ingredients for visualization of the shot maps along with their heat maps for both the teams. We have already seen the unique types of shot outcomes and we will color code them accordingly. Let us first visualize the shot map and its corresponding heat map for `Real Madrid`. Note that we could have plotted the maps in a similar fashion to the one we did for passes. But let us make the exercise a little sophiticated by not using a for loop. Only caveat is that we now have to re-filter the dataset `events_shot_Real` by the outcomes of the shots. Let us first check what the shot outcomes are for `Real Madrid`:
+
+```{python}
+print(events_shot_Real.shot_outcome.unique())
+```
+
+So let us filter `events_shot_Real` by `shot_outcome` and generate separate datasets:
+
+```{python}
+events_shot_Real_Goal = events_shot_Real[events_shot_Real['shot_outcome'] == 'Goal']
+events_shot_Real_off_wayward = events_shot_Real[(events_shot_Real['shot_outcome'] == 'Off T') | (events_shot_Real['shot_outcome'] == 'Wayward')]
+events_shot_Real_saved_blocked = events_shot_Real[(events_shot_Real['shot_outcome'] == 'Saved') | (events_shot_Real['shot_outcome'] == 'Blocked')]
+
+print(events_shot_Real_Goal.to_markdown())
+print(events_shot_Real_off_wayward.to_markdown())
+```
+
+Now let us plot the pitch and the shot and heat maps:
+
+```{python results=FALSE}
+# Pitch drawing code
+pitch = Pitch(pitch_color = 'black', line_color = 'white', constrained_layout = True, tight_layout = False, goal_type = 'box')
+fig, ax = pitch.draw()
+
+# Heat map code
+res = sns.kdeplot(events_shot_Real['location_x'], events_shot_Real['location_y'], fill = True, 
+thresh = 0.05, alpha = 0.5, levels = 10, cmap = 'Purples_d')
+
+# Pass map code
+pitch.arrows(events_shot_Real_Goal.location_x, events_shot_Real_Goal.location_y, events_shot_Real_Goal.shot_end_location_x, events_shot_Real_Goal.shot_end_location_y, ax=ax, color='green', width = 3, label = 'Goals')
+
+pitch.scatter(events_shot_Real_Goal.location_x, events_shot_Real_Goal.location_y, ax = ax, color = 'green')
+
+pitch.arrows(events_shot_Real_off_wayward.location_x, events_shot_Real_off_wayward.location_y, events_shot_Real_off_wayward.shot_end_location_x, events_shot_Real_off_wayward.shot_end_location_y, ax=ax, color='red', width = 3, label = 'Off T / Wayward')
+
+pitch.scatter(events_shot_Real_off_wayward.location_x, events_shot_Real_off_wayward.location_y, ax = ax, color = 'red')
+
+pitch.arrows(events_shot_Real_saved_blocked.location_x, events_shot_Real_saved_blocked.location_y, events_shot_Real_saved_blocked.shot_end_location_x, events_shot_Real_saved_blocked.shot_end_location_y, ax=ax, color='orange', width = 3, label = 'Saved / Blocked')
+
+pitch.scatter(events_shot_Real_saved_blocked.location_x, events_shot_Real_saved_blocked.location_y, ax = ax, color = 'orange')
+
+# General plot code
+ax.legend(handlelength = 3, edgecolor='None', fontsize = 10)
+plt.title("Real Madrid shot and heat map")
+plt.show()
+```
+
+As we already know `Real Madrid` won the game `2-0` against `Barcelona`. This fact is evident by the two `green` arrows depicting the goals scored by `Real Madrid`. We will perform the same operations on the `events_shot_Barca` dataset. Let us first check what the shot outcomes are for `Barcelona`:
+
+```{python}
+print(events_shot_Barca.shot_outcome.unique())
+```
+
+In case of `Barcelona` we will take the data manipulations a little further. Keep in mind that this is an optional but recommended step. Let us remind ourselves that in case of `statsbomb` pitch type, that we are currently using by default, the x-axis ranges from `0` to `120` (refer to the [second post](https://realsoccerexpand.netlify.app/post/visualize-a-pitch/)). Note that the statsbomb data lists the data coordinates in such a way that they are placed only on one half of the pitch, no matter which team we are focusing on. Although we are visualizing our maps separately for both the teams, it is recommended to subtract the values of `location_x` and `shot_location_x` from 120 for any one of the teams (NOT both!!!!). This will just invert the x-axis for one of the teams which will give us a better idea of the locations. Let us perform this operation on the `shots_event_Barsa` dataset.
+
+```{python}
+events_shot_Barca['location_x'] = 120 - events_shot_Barca['location_x']
+events_shot_Barca['shot_end_location_x'] = 120 - events_shot_Barca['shot_end_location_x']
+```
+
+Let us again operate the same filtration by `shot_outcome` on the `events_shot_Barca` dataset:
+
+```{python}
+events_shot_Barca_off = events_shot_Barca[events_shot_Barca['shot_outcome'] == 'Off T']
+events_shot_Barca_saved_blocked = events_shot_Barca[(events_shot_Barca['shot_outcome'] == 'Saved') | (events_shot_Barca['shot_outcome'] == 'Blocked')]
+
+print(events_shot_Barca_off.to_markdown())
+print(events_shot_Barca_saved_blocked.to_markdown())
+```
+
+Once we are satisfied, we will finally visualize the shot map and the heat map:
+
+```{python results=FALSE}
+# Pitch drawing code
+pitch = Pitch(pitch_color = 'black', line_color = 'white', constrained_layout = True, tight_layout = False, goal_type = 'box')
+fig, ax = pitch.draw()
+
+# Heat map code
+res = sns.kdeplot(events_shot_Barca['location_x'], events_shot_Barca['location_y'], fill = True, 
+thresh = 0.05, alpha = 0.5, levels = 10, cmap = 'Purples_d')
+
+# Pass map code
+pitch.arrows(events_shot_Barca_off.location_x, events_shot_Barca_off.location_y, events_shot_Barca_off.shot_end_location_x, events_shot_Barca_off.shot_end_location_y, ax=ax, color='red', width = 3, label = 'Off T')
+pitch.scatter(events_shot_Barca_off.location_x, events_shot_Barca_off.location_y, ax = ax, color = 'red')
+
+pitch.arrows(events_shot_Barca_saved_blocked.location_x, events_shot_Barca_saved_blocked.location_y, events_shot_Barca_saved_blocked.shot_end_location_x, events_shot_Barca_saved_blocked.shot_end_location_y, ax=ax, color='orange', width = 3, label = 'Blocked / Saved')
+pitch.scatter(events_shot_Barca_saved_blocked.location_x, events_shot_Barca_saved_blocked.location_y, ax = ax, color = 'orange')
+
+# General plot code
+ax.legend(handlelength = 3, edgecolor='None', fontsize = 10)
+plt.title("Barcelona shot and heat map")
+plt.show()
+```
+
+Notice that some of the shots from `Barcelona` were blocked very close to where the shots were taken from. The lengths of the arrows for these cases are compact. Whoo! We have come to the end of this tutorial. I know this tutorial was one hell of a ride. But I can guarantee that if the reader goes through it thoroughly, they can grasp a lot of useful information on soccer data analysis. In the next post tutorial, we will study how to build and visualize pass network of a particular team during a particular match and how to use concepts of *complex network theory* to analyze these pass networks with the help of `NetworkX` Python package. 
+
