@@ -953,4 +953,29 @@ plt.show()
 
 The player is supposed to score a goal on the right side. So `Kroos` moves from the left to the right (remember the axis ranges from the second post). It seems he played most of his passes on his left side on the pitch where the density plot looks condensed. The passes that he took from the corners had both successful and unsuccessful outcomes. Looking into the arguments of the `kdeplot()` function, the `thresh` value sets the lowest iso-proportion level at which the contour lines are to be drawn, `levels` sets the number of contour levels, `fill` sets whether to fill the area between the contours,  the `alpha` sets the transparency of the plot (default value is `1`, lesser than `1` means more transparent), and the `cmap` sets the color map. To study more about `kdeplot()` look [here](https://seaborn.pydata.org/generated/seaborn.kdeplot.html).
 
-We have completed our study on generating the pass map and its correpsonding heat map for a particular player. The reader is suggested to go ahead and try out the same analysis for other players from the same game, for example for `'Lionel Andrés Messi Cuccittini'` (our king Messi) or for `'Luka Modrić'` (our all time favorite Lukita). For those who does not know, both of them are Ballon d'Or winners. So, I can guarantee the readers will be ecstatic to analyse the pass maps for these players. The readers can also compare the pass maps between two players from opposition teams or visualize the pass maps for a particular team (although this might look clumsy. Hint: skip the step where the filtration by the player's name is happening). A lot of customizations are possible. In the next part we will perform the same anaysis on the shots instead of passes and we will visualize the shot maps and their corresponding heat maps for both the teams.
+Finally, for `'Toni Kroos'` let us calculate the percentage of successful and unsuccessful passes.
+
+
+```python
+events_pass_p1['pass_outcome'].value_counts(normalize=True).mul(100)
+```
+
+```
+## Successful      87.671233
+## Incomplete      10.958904
+## Pass Offside     1.369863
+## Name: pass_outcome, dtype: float64
+```
+
+To plot the frequency distribution:
+
+
+```python
+events_pass_p1['pass_outcome'].value_counts(normalize=True).mul(100).plot.bar()
+```
+
+<img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-7.png" width="672" />
+
+We notice that `'Kroos'` had created $ \sim 87.67 \% $ successful passes. Wild!
+
+We have completed our study on generating the pass map and its corresponding heat map for a particular player. The reader is suggested to go ahead and try out the same analysis for other players from the same game, for example for `'Lionel Andrés Messi Cuccittini'` (our king Messi) or for `'Luka Modrić'` (our all time favorite Lukita). For those who does not know, both of them are Ballon d'Or winners. So, I can guarantee the readers will be ecstatic to analyze the pass maps for these players. The readers can also compare the pass maps between two players from opposition teams or visualize the pass maps for a particular team (although this might look clumsy. Hint: skip the step where the filtration by the player's name is happening). A lot of customizations are possible. In the next part we will perform the same analysis on the shots instead of passes and we will visualize the shot maps and their corresponding heat maps for both the teams.
