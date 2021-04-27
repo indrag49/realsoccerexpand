@@ -259,7 +259,7 @@ print(e2.to_markdown())
 ## | 4226 | Barcelona   | Tactical Shift |       70 |        nan |                 nan |            nan | nan                                    |
 ```
 
-Now, looking at both `e1` and `e2`, we notice that the `player` column gives us the names of the players who were associated with different events during the match. Suppose, we are only interested to generate the pass map and its corresponding heat map for a particular player, for example, `'Toni Kroos'`. For that, we have to clean the `events_pass` dataset in such a way that, we have only those rows where `player='Toni Kroos'`. Be very careful to use the exact spelling while performing these string operations, otherwise the reader will end up with unnecessary syntax and/or logical errors. Before filtering, let us collect the name of all the players who were involved in this match. For this, we use the `unique()' function provided by `pandas` that helps us extract a unique data from a column.
+Now, looking at both `e1` and `e2`, we notice that the `player` column gives us the names of the players who were associated with different events during the match. Suppose, we are only interested to generate the pass map and its corresponding heat map for a particular player, for example, `'Toni Kroos'`. For that, we have to clean the `events_pass` dataset in such a way that, we have only those rows where `player='Toni Kroos'`. Be very careful to use the exact spelling while performing these string operations, otherwise the reader will end up with unnecessary syntax and/or logical errors. Before filtering, let us collect the name of all the players who were involved in this match. For this, we use the `unique()` function provided by `pandas` that helps us extract a unique data from a column.
 
 
 ```python
@@ -432,4 +432,525 @@ print(events_pass_p1.to_markdown())
 
 So, till now, we have been successful in extracting out the pass event data for `'Toni Kroos'` from the match. That is a brilliant achievement to be honest. You deserve a pat on your back!
 
-Getting back, we observe that `'Toni Kroos'` has been involved in `73` passes. We will later work out his pass success rate. But look at the number. Isn't he a brilliant midfielder that the German national team and the Real Madrid team have in their disposal? What a playmaker he is! 
+Getting back, we observe that `'Toni Kroos'` has been involved in `73` passes. We will later work out his pass success rate. But look at the number. Isn't he a brilliant midfielder that the German national team and the Real Madrid team have in their disposal? What a playmaker he is! Let us find out what were all his pass outcomes:
+
+
+```python
+print(events_pass_p1.pass_outcome.unique())
+```
+
+```
+## [nan 'Incomplete' 'Pass Offside']
+```
+
+One important thing to notice is that, according to statsbomb data, `nan` as a pass outcome actually means a successful pass. Any other pass outcomes refer to unsuccessful passes. For `'Toni Kross'`, we notice that besides `nan` he has `Incomplete` and `Pass Offside` as pass outcomes. If we look closely the `events_pass_p1` dataframe has the `minute` column which tells us at what minute the pass had started from `Kroos`'s end. It also has the `location` and the `pass_end_location` columns informing us about the coordinates of `Kroos` when he pass the ball and the coordinates of where the ball ended after the pass (successful or unsuccessful). A successful pass means the ball ended with a player and the `pass_end_location` coordinates for this case gives the location of the player who received the ball. Both these columns have elements as lists of two numbers indicating the coordinates. Let us manipulate the `pass_outcome` column by replacing all the `nan` values with `'successful'` with the help of `fillna()` function provided by `pandas`. This will teach us the simplest way to handle `nan` values.
+
+
+```python
+events_pass_p1['pass_outcome'] = events_pass_p1['pass_outcome'].fillna('Successful')
+print(events_pass_p1.to_markdown())
+```
+
+```
+## |    |   index | team        | type   |   minute | location      | pass_end_location   | pass_outcome   | player     |
+## |---:|--------:|:------------|:-------|---------:|:--------------|:--------------------|:---------------|:-----------|
+## |  0 |       9 | Real Madrid | Pass   |        0 | [47.1, 31.0]  | [47.4, 37.1]        | Successful     | Toni Kroos |
+## |  1 |      11 | Real Madrid | Pass   |        0 | [46.6, 29.8]  | [47.1, 36.9]        | Successful     | Toni Kroos |
+## |  2 |      19 | Real Madrid | Pass   |        0 | [54.1, 47.7]  | [44.0, 48.6]        | Successful     | Toni Kroos |
+## |  3 |      24 | Real Madrid | Pass   |        0 | [68.4, 7.1]   | [69.1, 15.2]        | Successful     | Toni Kroos |
+## |  4 |      27 | Real Madrid | Pass   |        0 | [60.7, 6.3]   | [70.7, 1.6]         | Successful     | Toni Kroos |
+## |  5 |      32 | Real Madrid | Pass   |        1 | [115.7, 11.3] | [116.3, 12.2]       | Incomplete     | Toni Kroos |
+## |  6 |      33 | Real Madrid | Pass   |        1 | [120.0, 0.1]  | [111.2, 35.3]       | Incomplete     | Toni Kroos |
+## |  7 |      85 | Real Madrid | Pass   |        3 | [49.3, 5.4]   | [33.1, 24.3]        | Successful     | Toni Kroos |
+## |  8 |     103 | Real Madrid | Pass   |        4 | [43.6, 7.6]   | [34.8, 10.2]        | Successful     | Toni Kroos |
+## |  9 |     116 | Real Madrid | Pass   |        5 | [77.3, 6.0]   | [73.6, 0.7]         | Successful     | Toni Kroos |
+## | 10 |     126 | Real Madrid | Pass   |        6 | [120.0, 0.1]  | [100.0, 11.6]       | Successful     | Toni Kroos |
+## | 11 |     174 | Real Madrid | Pass   |        8 | [20.2, 28.4]  | [30.1, 53.9]        | Successful     | Toni Kroos |
+## | 12 |     177 | Real Madrid | Pass   |        9 | [34.2, 21.9]  | [48.1, 1.8]         | Successful     | Toni Kroos |
+## | 13 |     181 | Real Madrid | Pass   |        9 | [50.7, 21.9]  | [63.3, 66.2]        | Successful     | Toni Kroos |
+## | 14 |     189 | Real Madrid | Pass   |        9 | [70.3, 24.8]  | [90.7, 3.5]         | Successful     | Toni Kroos |
+## | 15 |     198 | Real Madrid | Pass   |       10 | [57.7, 43.5]  | [57.9, 54.1]        | Successful     | Toni Kroos |
+## | 16 |     212 | Real Madrid | Pass   |       11 | [60.7, 23.9]  | [76.6, 1.6]         | Successful     | Toni Kroos |
+## | 17 |     251 | Real Madrid | Pass   |       13 | [83.8, 22.2]  | [99.1, 11.0]        | Successful     | Toni Kroos |
+## | 18 |     253 | Real Madrid | Pass   |       13 | [90.5, 23.1]  | [102.9, 36.9]       | Successful     | Toni Kroos |
+## | 19 |     339 | Real Madrid | Pass   |       19 | [14.4, 66.5]  | [8.4, 75.2]         | Successful     | Toni Kroos |
+## | 20 |     342 | Real Madrid | Pass   |       19 | [23.2, 75.8]  | [7.7, 69.0]         | Successful     | Toni Kroos |
+## | 21 |     358 | Real Madrid | Pass   |       21 | [18.5, 22.0]  | [9.3, 23.4]         | Successful     | Toni Kroos |
+## | 22 |     360 | Real Madrid | Pass   |       21 | [33.6, 2.3]   | [24.7, 40.2]        | Successful     | Toni Kroos |
+## | 23 |     371 | Real Madrid | Pass   |       22 | [92.5, 19.7]  | [101.3, 18.9]       | Successful     | Toni Kroos |
+## | 24 |     384 | Real Madrid | Pass   |       22 | [77.0, 20.6]  | [84.3, 23.7]        | Successful     | Toni Kroos |
+## | 25 |     440 | Real Madrid | Pass   |       25 | [43.5, 44.2]  | [35.0, 50.0]        | Successful     | Toni Kroos |
+## | 26 |     448 | Real Madrid | Pass   |       25 | [59.5, 12.3]  | [70.5, 12.0]        | Successful     | Toni Kroos |
+## | 27 |     450 | Real Madrid | Pass   |       25 | [63.5, 18.4]  | [72.7, 22.3]        | Successful     | Toni Kroos |
+## | 28 |     452 | Real Madrid | Pass   |       25 | [65.6, 16.5]  | [69.2, 29.9]        | Successful     | Toni Kroos |
+## | 29 |     506 | Real Madrid | Pass   |       29 | [47.4, 6.0]   | [54.3, 0.5]         | Successful     | Toni Kroos |
+## | 30 |     510 | Real Madrid | Pass   |       29 | [47.9, 15.4]  | [51.5, 23.5]        | Successful     | Toni Kroos |
+## | 31 |     518 | Real Madrid | Pass   |       30 | [46.8, 35.3]  | [63.9, 6.2]         | Successful     | Toni Kroos |
+## | 32 |     522 | Real Madrid | Pass   |       30 | [62.5, 26.5]  | [79.6, 77.8]        | Successful     | Toni Kroos |
+## | 33 |     530 | Real Madrid | Pass   |       30 | [64.9, 52.6]  | [62.7, 66.2]        | Successful     | Toni Kroos |
+## | 34 |     533 | Real Madrid | Pass   |       30 | [66.3, 42.0]  | [72.1, 18.5]        | Successful     | Toni Kroos |
+## | 35 |     559 | Real Madrid | Pass   |       32 | [73.3, 12.7]  | [91.4, 1.8]         | Successful     | Toni Kroos |
+## | 36 |     621 | Real Madrid | Pass   |       38 | [38.8, 31.3]  | [47.4, 24.1]        | Successful     | Toni Kroos |
+## | 37 |     623 | Real Madrid | Pass   |       38 | [42.0, 26.7]  | [48.7, 11.2]        | Successful     | Toni Kroos |
+## | 38 |     626 | Real Madrid | Pass   |       38 | [57.1, 17.0]  | [56.3, 31.1]        | Successful     | Toni Kroos |
+## | 39 |     628 | Real Madrid | Pass   |       38 | [63.3, 18.7]  | [69.1, 30.1]        | Successful     | Toni Kroos |
+## | 40 |     630 | Real Madrid | Pass   |       38 | [68.1, 19.8]  | [64.3, 26.3]        | Successful     | Toni Kroos |
+## | 41 |     638 | Real Madrid | Pass   |       38 | [89.3, 17.9]  | [86.0, 25.1]        | Successful     | Toni Kroos |
+## | 42 |     650 | Real Madrid | Pass   |       39 | [44.8, 8.5]   | [49.0, 2.0]         | Successful     | Toni Kroos |
+## | 43 |     706 | Real Madrid | Pass   |       43 | [81.3, 4.8]   | [110.1, 46.6]       | Incomplete     | Toni Kroos |
+## | 44 |     799 | Real Madrid | Pass   |       51 | [27.3, 22.4]  | [7.8, 38.3]         | Successful     | Toni Kroos |
+## | 45 |     804 | Real Madrid | Pass   |       51 | [33.2, 30.2]  | [43.0, 21.6]        | Successful     | Toni Kroos |
+## | 46 |     822 | Real Madrid | Pass   |       53 | [43.7, 47.5]  | [54.7, 47.1]        | Successful     | Toni Kroos |
+## | 47 |     840 | Real Madrid | Pass   |       54 | [73.3, 50.2]  | [84.4, 43.7]        | Successful     | Toni Kroos |
+## | 48 |     849 | Real Madrid | Pass   |       54 | [92.4, 29.4]  | [98.9, 23.0]        | Successful     | Toni Kroos |
+## | 49 |     851 | Real Madrid | Pass   |       54 | [112.6, 19.5] | [113.2, 33.0]       | Incomplete     | Toni Kroos |
+## | 50 |     852 | Real Madrid | Pass   |       55 | [120.0, 0.1]  | [107.5, 16.1]       | Successful     | Toni Kroos |
+## | 51 |     854 | Real Madrid | Pass   |       55 | [120.0, 80.0] | [109.9, 46.7]       | Incomplete     | Toni Kroos |
+## | 52 |     855 | Real Madrid | Pass   |       56 | [120.0, 80.0] | [116.6, 52.0]       | Incomplete     | Toni Kroos |
+## | 53 |     873 | Real Madrid | Pass   |       57 | [54.1, 28.8]  | [47.9, 15.3]        | Successful     | Toni Kroos |
+## | 54 |     879 | Real Madrid | Pass   |       58 | [86.4, 24.2]  | [85.2, 40.3]        | Successful     | Toni Kroos |
+## | 55 |     889 | Real Madrid | Pass   |       59 | [80.1, 18.4]  | [98.3, 9.5]         | Successful     | Toni Kroos |
+## | 56 |     900 | Real Madrid | Pass   |       60 | [96.7, 26.6]  | [96.4, 56.9]        | Successful     | Toni Kroos |
+## | 57 |     993 | Real Madrid | Pass   |       68 | [120.0, 0.1]  | [110.8, 43.9]       | Incomplete     | Toni Kroos |
+## | 58 |    1013 | Real Madrid | Pass   |       70 | [90.6, 5.9]   | [112.4, 13.3]       | Successful     | Toni Kroos |
+## | 59 |    1023 | Real Madrid | Pass   |       72 | [75.2, 22.4]  | [84.2, 2.4]         | Successful     | Toni Kroos |
+## | 60 |    1027 | Real Madrid | Pass   |       72 | [72.2, 9.6]   | [80.0, 17.2]        | Successful     | Toni Kroos |
+## | 61 |    1051 | Real Madrid | Pass   |       73 | [110.1, 24.4] | [111.4, 39.7]       | Incomplete     | Toni Kroos |
+## | 62 |    1062 | Real Madrid | Pass   |       74 | [83.6, 30.8]  | [83.2, 40.5]        | Successful     | Toni Kroos |
+## | 63 |    1068 | Real Madrid | Pass   |       75 | [120.0, 80.0] | [99.0, 63.3]        | Successful     | Toni Kroos |
+## | 64 |    1077 | Real Madrid | Pass   |       76 | [40.8, 20.3]  | [47.5, 6.0]         | Successful     | Toni Kroos |
+## | 65 |    1086 | Real Madrid | Pass   |       76 | [86.0, 24.0]  | [83.2, 57.7]        | Successful     | Toni Kroos |
+## | 66 |    1089 | Real Madrid | Pass   |       76 | [75.4, 34.3]  | [72.2, 69.1]        | Successful     | Toni Kroos |
+## | 67 |    1100 | Real Madrid | Pass   |       77 | [65.4, 46.9]  | [73.4, 68.5]        | Successful     | Toni Kroos |
+## | 68 |    1117 | Real Madrid | Pass   |       79 | [79.6, 30.1]  | [77.0, 44.1]        | Successful     | Toni Kroos |
+## | 69 |    1123 | Real Madrid | Pass   |       79 | [70.4, 25.8]  | [64.2, 29.0]        | Successful     | Toni Kroos |
+## | 70 |    1171 | Real Madrid | Pass   |       84 | [22.1, 19.6]  | [13.3, 29.0]        | Successful     | Toni Kroos |
+## | 71 |    1178 | Real Madrid | Pass   |       85 | [55.6, 24.4]  | [116.3, 6.4]        | Pass Offside   | Toni Kroos |
+## | 72 |    1187 | Real Madrid | Pass   |       86 | [64.8, 27.4]  | [41.7, 38.0]        | Successful     | Toni Kroos |
+```
+
+Before diving into plotting the pass map and its heat map, let us complete the last bit of data manipulation. As the elements of `location` and the `pass_end_location` columns are lists, we will break each of the columns into two columns with the x-coordinates in one and y-coordinates in the other. Let us first carry out this manipulation for the `location` column:
+
+
+```python
+Loc = events_pass_p1['location']
+Loc = pd.DataFrame(Loc.to_list(), columns=['location_x', 'location_y'])
+print(Loc.to_markdown())
+```
+
+```
+## |    |   location_x |   location_y |
+## |---:|-------------:|-------------:|
+## |  0 |         47.1 |         31   |
+## |  1 |         46.6 |         29.8 |
+## |  2 |         54.1 |         47.7 |
+## |  3 |         68.4 |          7.1 |
+## |  4 |         60.7 |          6.3 |
+## |  5 |        115.7 |         11.3 |
+## |  6 |        120   |          0.1 |
+## |  7 |         49.3 |          5.4 |
+## |  8 |         43.6 |          7.6 |
+## |  9 |         77.3 |          6   |
+## | 10 |        120   |          0.1 |
+## | 11 |         20.2 |         28.4 |
+## | 12 |         34.2 |         21.9 |
+## | 13 |         50.7 |         21.9 |
+## | 14 |         70.3 |         24.8 |
+## | 15 |         57.7 |         43.5 |
+## | 16 |         60.7 |         23.9 |
+## | 17 |         83.8 |         22.2 |
+## | 18 |         90.5 |         23.1 |
+## | 19 |         14.4 |         66.5 |
+## | 20 |         23.2 |         75.8 |
+## | 21 |         18.5 |         22   |
+## | 22 |         33.6 |          2.3 |
+## | 23 |         92.5 |         19.7 |
+## | 24 |         77   |         20.6 |
+## | 25 |         43.5 |         44.2 |
+## | 26 |         59.5 |         12.3 |
+## | 27 |         63.5 |         18.4 |
+## | 28 |         65.6 |         16.5 |
+## | 29 |         47.4 |          6   |
+## | 30 |         47.9 |         15.4 |
+## | 31 |         46.8 |         35.3 |
+## | 32 |         62.5 |         26.5 |
+## | 33 |         64.9 |         52.6 |
+## | 34 |         66.3 |         42   |
+## | 35 |         73.3 |         12.7 |
+## | 36 |         38.8 |         31.3 |
+## | 37 |         42   |         26.7 |
+## | 38 |         57.1 |         17   |
+## | 39 |         63.3 |         18.7 |
+## | 40 |         68.1 |         19.8 |
+## | 41 |         89.3 |         17.9 |
+## | 42 |         44.8 |          8.5 |
+## | 43 |         81.3 |          4.8 |
+## | 44 |         27.3 |         22.4 |
+## | 45 |         33.2 |         30.2 |
+## | 46 |         43.7 |         47.5 |
+## | 47 |         73.3 |         50.2 |
+## | 48 |         92.4 |         29.4 |
+## | 49 |        112.6 |         19.5 |
+## | 50 |        120   |          0.1 |
+## | 51 |        120   |         80   |
+## | 52 |        120   |         80   |
+## | 53 |         54.1 |         28.8 |
+## | 54 |         86.4 |         24.2 |
+## | 55 |         80.1 |         18.4 |
+## | 56 |         96.7 |         26.6 |
+## | 57 |        120   |          0.1 |
+## | 58 |         90.6 |          5.9 |
+## | 59 |         75.2 |         22.4 |
+## | 60 |         72.2 |          9.6 |
+## | 61 |        110.1 |         24.4 |
+## | 62 |         83.6 |         30.8 |
+## | 63 |        120   |         80   |
+## | 64 |         40.8 |         20.3 |
+## | 65 |         86   |         24   |
+## | 66 |         75.4 |         34.3 |
+## | 67 |         65.4 |         46.9 |
+## | 68 |         79.6 |         30.1 |
+## | 69 |         70.4 |         25.8 |
+## | 70 |         22.1 |         19.6 |
+## | 71 |         55.6 |         24.4 |
+## | 72 |         64.8 |         27.4 |
+```
+
+We see we have divided the `location` column into `location_x` and `location_y` columns. Let us operate the above chunk of code on the `pass_end_location` column too:
+
+
+```python
+Loc_end = events_pass_p1['pass_end_location']
+Loc_end = pd.DataFrame(Loc_end.to_list(), columns=['pass_end_location_x', 'pass_end_location_y'])
+print(Loc_end.to_markdown())
+```
+
+```
+## |    |   pass_end_location_x |   pass_end_location_y |
+## |---:|----------------------:|----------------------:|
+## |  0 |                  47.4 |                  37.1 |
+## |  1 |                  47.1 |                  36.9 |
+## |  2 |                  44   |                  48.6 |
+## |  3 |                  69.1 |                  15.2 |
+## |  4 |                  70.7 |                   1.6 |
+## |  5 |                 116.3 |                  12.2 |
+## |  6 |                 111.2 |                  35.3 |
+## |  7 |                  33.1 |                  24.3 |
+## |  8 |                  34.8 |                  10.2 |
+## |  9 |                  73.6 |                   0.7 |
+## | 10 |                 100   |                  11.6 |
+## | 11 |                  30.1 |                  53.9 |
+## | 12 |                  48.1 |                   1.8 |
+## | 13 |                  63.3 |                  66.2 |
+## | 14 |                  90.7 |                   3.5 |
+## | 15 |                  57.9 |                  54.1 |
+## | 16 |                  76.6 |                   1.6 |
+## | 17 |                  99.1 |                  11   |
+## | 18 |                 102.9 |                  36.9 |
+## | 19 |                   8.4 |                  75.2 |
+## | 20 |                   7.7 |                  69   |
+## | 21 |                   9.3 |                  23.4 |
+## | 22 |                  24.7 |                  40.2 |
+## | 23 |                 101.3 |                  18.9 |
+## | 24 |                  84.3 |                  23.7 |
+## | 25 |                  35   |                  50   |
+## | 26 |                  70.5 |                  12   |
+## | 27 |                  72.7 |                  22.3 |
+## | 28 |                  69.2 |                  29.9 |
+## | 29 |                  54.3 |                   0.5 |
+## | 30 |                  51.5 |                  23.5 |
+## | 31 |                  63.9 |                   6.2 |
+## | 32 |                  79.6 |                  77.8 |
+## | 33 |                  62.7 |                  66.2 |
+## | 34 |                  72.1 |                  18.5 |
+## | 35 |                  91.4 |                   1.8 |
+## | 36 |                  47.4 |                  24.1 |
+## | 37 |                  48.7 |                  11.2 |
+## | 38 |                  56.3 |                  31.1 |
+## | 39 |                  69.1 |                  30.1 |
+## | 40 |                  64.3 |                  26.3 |
+## | 41 |                  86   |                  25.1 |
+## | 42 |                  49   |                   2   |
+## | 43 |                 110.1 |                  46.6 |
+## | 44 |                   7.8 |                  38.3 |
+## | 45 |                  43   |                  21.6 |
+## | 46 |                  54.7 |                  47.1 |
+## | 47 |                  84.4 |                  43.7 |
+## | 48 |                  98.9 |                  23   |
+## | 49 |                 113.2 |                  33   |
+## | 50 |                 107.5 |                  16.1 |
+## | 51 |                 109.9 |                  46.7 |
+## | 52 |                 116.6 |                  52   |
+## | 53 |                  47.9 |                  15.3 |
+## | 54 |                  85.2 |                  40.3 |
+## | 55 |                  98.3 |                   9.5 |
+## | 56 |                  96.4 |                  56.9 |
+## | 57 |                 110.8 |                  43.9 |
+## | 58 |                 112.4 |                  13.3 |
+## | 59 |                  84.2 |                   2.4 |
+## | 60 |                  80   |                  17.2 |
+## | 61 |                 111.4 |                  39.7 |
+## | 62 |                  83.2 |                  40.5 |
+## | 63 |                  99   |                  63.3 |
+## | 64 |                  47.5 |                   6   |
+## | 65 |                  83.2 |                  57.7 |
+## | 66 |                  72.2 |                  69.1 |
+## | 67 |                  73.4 |                  68.5 |
+## | 68 |                  77   |                  44.1 |
+## | 69 |                  64.2 |                  29   |
+## | 70 |                  13.3 |                  29   |
+## | 71 |                 116.3 |                   6.4 |
+## | 72 |                  41.7 |                  38   |
+```
+
+We will now add these columns to our `events_pass_1` data frame as extra columns and validate whether they are generating the correct coordinates:
+
+
+```python
+events_pass_p1['location_x'] = Loc['location_x']
+events_pass_p1['location_y'] = Loc['location_y']
+events_pass_p1['pass_end_location_x'] = Loc_end['pass_end_location_x']
+events_pass_p1['pass_end_location_y'] = Loc_end['pass_end_location_y']
+print(events_pass_p1.to_markdown())
+```
+
+```
+## |    |   index | team        | type   |   minute | location      | pass_end_location   | pass_outcome   | player     |   location_x |   location_y |   pass_end_location_x |   pass_end_location_y |
+## |---:|--------:|:------------|:-------|---------:|:--------------|:--------------------|:---------------|:-----------|-------------:|-------------:|----------------------:|----------------------:|
+## |  0 |       9 | Real Madrid | Pass   |        0 | [47.1, 31.0]  | [47.4, 37.1]        | Successful     | Toni Kroos |         47.1 |         31   |                  47.4 |                  37.1 |
+## |  1 |      11 | Real Madrid | Pass   |        0 | [46.6, 29.8]  | [47.1, 36.9]        | Successful     | Toni Kroos |         46.6 |         29.8 |                  47.1 |                  36.9 |
+## |  2 |      19 | Real Madrid | Pass   |        0 | [54.1, 47.7]  | [44.0, 48.6]        | Successful     | Toni Kroos |         54.1 |         47.7 |                  44   |                  48.6 |
+## |  3 |      24 | Real Madrid | Pass   |        0 | [68.4, 7.1]   | [69.1, 15.2]        | Successful     | Toni Kroos |         68.4 |          7.1 |                  69.1 |                  15.2 |
+## |  4 |      27 | Real Madrid | Pass   |        0 | [60.7, 6.3]   | [70.7, 1.6]         | Successful     | Toni Kroos |         60.7 |          6.3 |                  70.7 |                   1.6 |
+## |  5 |      32 | Real Madrid | Pass   |        1 | [115.7, 11.3] | [116.3, 12.2]       | Incomplete     | Toni Kroos |        115.7 |         11.3 |                 116.3 |                  12.2 |
+## |  6 |      33 | Real Madrid | Pass   |        1 | [120.0, 0.1]  | [111.2, 35.3]       | Incomplete     | Toni Kroos |        120   |          0.1 |                 111.2 |                  35.3 |
+## |  7 |      85 | Real Madrid | Pass   |        3 | [49.3, 5.4]   | [33.1, 24.3]        | Successful     | Toni Kroos |         49.3 |          5.4 |                  33.1 |                  24.3 |
+## |  8 |     103 | Real Madrid | Pass   |        4 | [43.6, 7.6]   | [34.8, 10.2]        | Successful     | Toni Kroos |         43.6 |          7.6 |                  34.8 |                  10.2 |
+## |  9 |     116 | Real Madrid | Pass   |        5 | [77.3, 6.0]   | [73.6, 0.7]         | Successful     | Toni Kroos |         77.3 |          6   |                  73.6 |                   0.7 |
+## | 10 |     126 | Real Madrid | Pass   |        6 | [120.0, 0.1]  | [100.0, 11.6]       | Successful     | Toni Kroos |        120   |          0.1 |                 100   |                  11.6 |
+## | 11 |     174 | Real Madrid | Pass   |        8 | [20.2, 28.4]  | [30.1, 53.9]        | Successful     | Toni Kroos |         20.2 |         28.4 |                  30.1 |                  53.9 |
+## | 12 |     177 | Real Madrid | Pass   |        9 | [34.2, 21.9]  | [48.1, 1.8]         | Successful     | Toni Kroos |         34.2 |         21.9 |                  48.1 |                   1.8 |
+## | 13 |     181 | Real Madrid | Pass   |        9 | [50.7, 21.9]  | [63.3, 66.2]        | Successful     | Toni Kroos |         50.7 |         21.9 |                  63.3 |                  66.2 |
+## | 14 |     189 | Real Madrid | Pass   |        9 | [70.3, 24.8]  | [90.7, 3.5]         | Successful     | Toni Kroos |         70.3 |         24.8 |                  90.7 |                   3.5 |
+## | 15 |     198 | Real Madrid | Pass   |       10 | [57.7, 43.5]  | [57.9, 54.1]        | Successful     | Toni Kroos |         57.7 |         43.5 |                  57.9 |                  54.1 |
+## | 16 |     212 | Real Madrid | Pass   |       11 | [60.7, 23.9]  | [76.6, 1.6]         | Successful     | Toni Kroos |         60.7 |         23.9 |                  76.6 |                   1.6 |
+## | 17 |     251 | Real Madrid | Pass   |       13 | [83.8, 22.2]  | [99.1, 11.0]        | Successful     | Toni Kroos |         83.8 |         22.2 |                  99.1 |                  11   |
+## | 18 |     253 | Real Madrid | Pass   |       13 | [90.5, 23.1]  | [102.9, 36.9]       | Successful     | Toni Kroos |         90.5 |         23.1 |                 102.9 |                  36.9 |
+## | 19 |     339 | Real Madrid | Pass   |       19 | [14.4, 66.5]  | [8.4, 75.2]         | Successful     | Toni Kroos |         14.4 |         66.5 |                   8.4 |                  75.2 |
+## | 20 |     342 | Real Madrid | Pass   |       19 | [23.2, 75.8]  | [7.7, 69.0]         | Successful     | Toni Kroos |         23.2 |         75.8 |                   7.7 |                  69   |
+## | 21 |     358 | Real Madrid | Pass   |       21 | [18.5, 22.0]  | [9.3, 23.4]         | Successful     | Toni Kroos |         18.5 |         22   |                   9.3 |                  23.4 |
+## | 22 |     360 | Real Madrid | Pass   |       21 | [33.6, 2.3]   | [24.7, 40.2]        | Successful     | Toni Kroos |         33.6 |          2.3 |                  24.7 |                  40.2 |
+## | 23 |     371 | Real Madrid | Pass   |       22 | [92.5, 19.7]  | [101.3, 18.9]       | Successful     | Toni Kroos |         92.5 |         19.7 |                 101.3 |                  18.9 |
+## | 24 |     384 | Real Madrid | Pass   |       22 | [77.0, 20.6]  | [84.3, 23.7]        | Successful     | Toni Kroos |         77   |         20.6 |                  84.3 |                  23.7 |
+## | 25 |     440 | Real Madrid | Pass   |       25 | [43.5, 44.2]  | [35.0, 50.0]        | Successful     | Toni Kroos |         43.5 |         44.2 |                  35   |                  50   |
+## | 26 |     448 | Real Madrid | Pass   |       25 | [59.5, 12.3]  | [70.5, 12.0]        | Successful     | Toni Kroos |         59.5 |         12.3 |                  70.5 |                  12   |
+## | 27 |     450 | Real Madrid | Pass   |       25 | [63.5, 18.4]  | [72.7, 22.3]        | Successful     | Toni Kroos |         63.5 |         18.4 |                  72.7 |                  22.3 |
+## | 28 |     452 | Real Madrid | Pass   |       25 | [65.6, 16.5]  | [69.2, 29.9]        | Successful     | Toni Kroos |         65.6 |         16.5 |                  69.2 |                  29.9 |
+## | 29 |     506 | Real Madrid | Pass   |       29 | [47.4, 6.0]   | [54.3, 0.5]         | Successful     | Toni Kroos |         47.4 |          6   |                  54.3 |                   0.5 |
+## | 30 |     510 | Real Madrid | Pass   |       29 | [47.9, 15.4]  | [51.5, 23.5]        | Successful     | Toni Kroos |         47.9 |         15.4 |                  51.5 |                  23.5 |
+## | 31 |     518 | Real Madrid | Pass   |       30 | [46.8, 35.3]  | [63.9, 6.2]         | Successful     | Toni Kroos |         46.8 |         35.3 |                  63.9 |                   6.2 |
+## | 32 |     522 | Real Madrid | Pass   |       30 | [62.5, 26.5]  | [79.6, 77.8]        | Successful     | Toni Kroos |         62.5 |         26.5 |                  79.6 |                  77.8 |
+## | 33 |     530 | Real Madrid | Pass   |       30 | [64.9, 52.6]  | [62.7, 66.2]        | Successful     | Toni Kroos |         64.9 |         52.6 |                  62.7 |                  66.2 |
+## | 34 |     533 | Real Madrid | Pass   |       30 | [66.3, 42.0]  | [72.1, 18.5]        | Successful     | Toni Kroos |         66.3 |         42   |                  72.1 |                  18.5 |
+## | 35 |     559 | Real Madrid | Pass   |       32 | [73.3, 12.7]  | [91.4, 1.8]         | Successful     | Toni Kroos |         73.3 |         12.7 |                  91.4 |                   1.8 |
+## | 36 |     621 | Real Madrid | Pass   |       38 | [38.8, 31.3]  | [47.4, 24.1]        | Successful     | Toni Kroos |         38.8 |         31.3 |                  47.4 |                  24.1 |
+## | 37 |     623 | Real Madrid | Pass   |       38 | [42.0, 26.7]  | [48.7, 11.2]        | Successful     | Toni Kroos |         42   |         26.7 |                  48.7 |                  11.2 |
+## | 38 |     626 | Real Madrid | Pass   |       38 | [57.1, 17.0]  | [56.3, 31.1]        | Successful     | Toni Kroos |         57.1 |         17   |                  56.3 |                  31.1 |
+## | 39 |     628 | Real Madrid | Pass   |       38 | [63.3, 18.7]  | [69.1, 30.1]        | Successful     | Toni Kroos |         63.3 |         18.7 |                  69.1 |                  30.1 |
+## | 40 |     630 | Real Madrid | Pass   |       38 | [68.1, 19.8]  | [64.3, 26.3]        | Successful     | Toni Kroos |         68.1 |         19.8 |                  64.3 |                  26.3 |
+## | 41 |     638 | Real Madrid | Pass   |       38 | [89.3, 17.9]  | [86.0, 25.1]        | Successful     | Toni Kroos |         89.3 |         17.9 |                  86   |                  25.1 |
+## | 42 |     650 | Real Madrid | Pass   |       39 | [44.8, 8.5]   | [49.0, 2.0]         | Successful     | Toni Kroos |         44.8 |          8.5 |                  49   |                   2   |
+## | 43 |     706 | Real Madrid | Pass   |       43 | [81.3, 4.8]   | [110.1, 46.6]       | Incomplete     | Toni Kroos |         81.3 |          4.8 |                 110.1 |                  46.6 |
+## | 44 |     799 | Real Madrid | Pass   |       51 | [27.3, 22.4]  | [7.8, 38.3]         | Successful     | Toni Kroos |         27.3 |         22.4 |                   7.8 |                  38.3 |
+## | 45 |     804 | Real Madrid | Pass   |       51 | [33.2, 30.2]  | [43.0, 21.6]        | Successful     | Toni Kroos |         33.2 |         30.2 |                  43   |                  21.6 |
+## | 46 |     822 | Real Madrid | Pass   |       53 | [43.7, 47.5]  | [54.7, 47.1]        | Successful     | Toni Kroos |         43.7 |         47.5 |                  54.7 |                  47.1 |
+## | 47 |     840 | Real Madrid | Pass   |       54 | [73.3, 50.2]  | [84.4, 43.7]        | Successful     | Toni Kroos |         73.3 |         50.2 |                  84.4 |                  43.7 |
+## | 48 |     849 | Real Madrid | Pass   |       54 | [92.4, 29.4]  | [98.9, 23.0]        | Successful     | Toni Kroos |         92.4 |         29.4 |                  98.9 |                  23   |
+## | 49 |     851 | Real Madrid | Pass   |       54 | [112.6, 19.5] | [113.2, 33.0]       | Incomplete     | Toni Kroos |        112.6 |         19.5 |                 113.2 |                  33   |
+## | 50 |     852 | Real Madrid | Pass   |       55 | [120.0, 0.1]  | [107.5, 16.1]       | Successful     | Toni Kroos |        120   |          0.1 |                 107.5 |                  16.1 |
+## | 51 |     854 | Real Madrid | Pass   |       55 | [120.0, 80.0] | [109.9, 46.7]       | Incomplete     | Toni Kroos |        120   |         80   |                 109.9 |                  46.7 |
+## | 52 |     855 | Real Madrid | Pass   |       56 | [120.0, 80.0] | [116.6, 52.0]       | Incomplete     | Toni Kroos |        120   |         80   |                 116.6 |                  52   |
+## | 53 |     873 | Real Madrid | Pass   |       57 | [54.1, 28.8]  | [47.9, 15.3]        | Successful     | Toni Kroos |         54.1 |         28.8 |                  47.9 |                  15.3 |
+## | 54 |     879 | Real Madrid | Pass   |       58 | [86.4, 24.2]  | [85.2, 40.3]        | Successful     | Toni Kroos |         86.4 |         24.2 |                  85.2 |                  40.3 |
+## | 55 |     889 | Real Madrid | Pass   |       59 | [80.1, 18.4]  | [98.3, 9.5]         | Successful     | Toni Kroos |         80.1 |         18.4 |                  98.3 |                   9.5 |
+## | 56 |     900 | Real Madrid | Pass   |       60 | [96.7, 26.6]  | [96.4, 56.9]        | Successful     | Toni Kroos |         96.7 |         26.6 |                  96.4 |                  56.9 |
+## | 57 |     993 | Real Madrid | Pass   |       68 | [120.0, 0.1]  | [110.8, 43.9]       | Incomplete     | Toni Kroos |        120   |          0.1 |                 110.8 |                  43.9 |
+## | 58 |    1013 | Real Madrid | Pass   |       70 | [90.6, 5.9]   | [112.4, 13.3]       | Successful     | Toni Kroos |         90.6 |          5.9 |                 112.4 |                  13.3 |
+## | 59 |    1023 | Real Madrid | Pass   |       72 | [75.2, 22.4]  | [84.2, 2.4]         | Successful     | Toni Kroos |         75.2 |         22.4 |                  84.2 |                   2.4 |
+## | 60 |    1027 | Real Madrid | Pass   |       72 | [72.2, 9.6]   | [80.0, 17.2]        | Successful     | Toni Kroos |         72.2 |          9.6 |                  80   |                  17.2 |
+## | 61 |    1051 | Real Madrid | Pass   |       73 | [110.1, 24.4] | [111.4, 39.7]       | Incomplete     | Toni Kroos |        110.1 |         24.4 |                 111.4 |                  39.7 |
+## | 62 |    1062 | Real Madrid | Pass   |       74 | [83.6, 30.8]  | [83.2, 40.5]        | Successful     | Toni Kroos |         83.6 |         30.8 |                  83.2 |                  40.5 |
+## | 63 |    1068 | Real Madrid | Pass   |       75 | [120.0, 80.0] | [99.0, 63.3]        | Successful     | Toni Kroos |        120   |         80   |                  99   |                  63.3 |
+## | 64 |    1077 | Real Madrid | Pass   |       76 | [40.8, 20.3]  | [47.5, 6.0]         | Successful     | Toni Kroos |         40.8 |         20.3 |                  47.5 |                   6   |
+## | 65 |    1086 | Real Madrid | Pass   |       76 | [86.0, 24.0]  | [83.2, 57.7]        | Successful     | Toni Kroos |         86   |         24   |                  83.2 |                  57.7 |
+## | 66 |    1089 | Real Madrid | Pass   |       76 | [75.4, 34.3]  | [72.2, 69.1]        | Successful     | Toni Kroos |         75.4 |         34.3 |                  72.2 |                  69.1 |
+## | 67 |    1100 | Real Madrid | Pass   |       77 | [65.4, 46.9]  | [73.4, 68.5]        | Successful     | Toni Kroos |         65.4 |         46.9 |                  73.4 |                  68.5 |
+## | 68 |    1117 | Real Madrid | Pass   |       79 | [79.6, 30.1]  | [77.0, 44.1]        | Successful     | Toni Kroos |         79.6 |         30.1 |                  77   |                  44.1 |
+## | 69 |    1123 | Real Madrid | Pass   |       79 | [70.4, 25.8]  | [64.2, 29.0]        | Successful     | Toni Kroos |         70.4 |         25.8 |                  64.2 |                  29   |
+## | 70 |    1171 | Real Madrid | Pass   |       84 | [22.1, 19.6]  | [13.3, 29.0]        | Successful     | Toni Kroos |         22.1 |         19.6 |                  13.3 |                  29   |
+## | 71 |    1178 | Real Madrid | Pass   |       85 | [55.6, 24.4]  | [116.3, 6.4]        | Pass Offside   | Toni Kroos |         55.6 |         24.4 |                 116.3 |                   6.4 |
+## | 72 |    1187 | Real Madrid | Pass   |       86 | [64.8, 27.4]  | [41.7, 38.0]        | Successful     | Toni Kroos |         64.8 |         27.4 |                  41.7 |                  38   |
+```
+
+Seems like they are generating the correct coordinate values and we ere able to split the original `location` and `pass_end_location` columns. So, we don't actually need the original columns and they can be discarded along with the columns `team`, `type` and `player`, because those would be `'Real Madrid'`, `'Pass'` and `'Toni Kroos'` respectively for all the rows in `events_pass_p1`. Although it doesnot matter in our analysis, but it is always a good practice to clean your data as much as possible!
+
+
+```python
+events_pass_p1 = events_pass_p1[['minute', 'location_x', 'location_y', 'pass_end_location_x', 'pass_end_location_y', 'pass_outcome']]
+print(events_pass_p1.to_markdown())
+```
+
+```
+## |    |   minute |   location_x |   location_y |   pass_end_location_x |   pass_end_location_y | pass_outcome   |
+## |---:|---------:|-------------:|-------------:|----------------------:|----------------------:|:---------------|
+## |  0 |        0 |         47.1 |         31   |                  47.4 |                  37.1 | Successful     |
+## |  1 |        0 |         46.6 |         29.8 |                  47.1 |                  36.9 | Successful     |
+## |  2 |        0 |         54.1 |         47.7 |                  44   |                  48.6 | Successful     |
+## |  3 |        0 |         68.4 |          7.1 |                  69.1 |                  15.2 | Successful     |
+## |  4 |        0 |         60.7 |          6.3 |                  70.7 |                   1.6 | Successful     |
+## |  5 |        1 |        115.7 |         11.3 |                 116.3 |                  12.2 | Incomplete     |
+## |  6 |        1 |        120   |          0.1 |                 111.2 |                  35.3 | Incomplete     |
+## |  7 |        3 |         49.3 |          5.4 |                  33.1 |                  24.3 | Successful     |
+## |  8 |        4 |         43.6 |          7.6 |                  34.8 |                  10.2 | Successful     |
+## |  9 |        5 |         77.3 |          6   |                  73.6 |                   0.7 | Successful     |
+## | 10 |        6 |        120   |          0.1 |                 100   |                  11.6 | Successful     |
+## | 11 |        8 |         20.2 |         28.4 |                  30.1 |                  53.9 | Successful     |
+## | 12 |        9 |         34.2 |         21.9 |                  48.1 |                   1.8 | Successful     |
+## | 13 |        9 |         50.7 |         21.9 |                  63.3 |                  66.2 | Successful     |
+## | 14 |        9 |         70.3 |         24.8 |                  90.7 |                   3.5 | Successful     |
+## | 15 |       10 |         57.7 |         43.5 |                  57.9 |                  54.1 | Successful     |
+## | 16 |       11 |         60.7 |         23.9 |                  76.6 |                   1.6 | Successful     |
+## | 17 |       13 |         83.8 |         22.2 |                  99.1 |                  11   | Successful     |
+## | 18 |       13 |         90.5 |         23.1 |                 102.9 |                  36.9 | Successful     |
+## | 19 |       19 |         14.4 |         66.5 |                   8.4 |                  75.2 | Successful     |
+## | 20 |       19 |         23.2 |         75.8 |                   7.7 |                  69   | Successful     |
+## | 21 |       21 |         18.5 |         22   |                   9.3 |                  23.4 | Successful     |
+## | 22 |       21 |         33.6 |          2.3 |                  24.7 |                  40.2 | Successful     |
+## | 23 |       22 |         92.5 |         19.7 |                 101.3 |                  18.9 | Successful     |
+## | 24 |       22 |         77   |         20.6 |                  84.3 |                  23.7 | Successful     |
+## | 25 |       25 |         43.5 |         44.2 |                  35   |                  50   | Successful     |
+## | 26 |       25 |         59.5 |         12.3 |                  70.5 |                  12   | Successful     |
+## | 27 |       25 |         63.5 |         18.4 |                  72.7 |                  22.3 | Successful     |
+## | 28 |       25 |         65.6 |         16.5 |                  69.2 |                  29.9 | Successful     |
+## | 29 |       29 |         47.4 |          6   |                  54.3 |                   0.5 | Successful     |
+## | 30 |       29 |         47.9 |         15.4 |                  51.5 |                  23.5 | Successful     |
+## | 31 |       30 |         46.8 |         35.3 |                  63.9 |                   6.2 | Successful     |
+## | 32 |       30 |         62.5 |         26.5 |                  79.6 |                  77.8 | Successful     |
+## | 33 |       30 |         64.9 |         52.6 |                  62.7 |                  66.2 | Successful     |
+## | 34 |       30 |         66.3 |         42   |                  72.1 |                  18.5 | Successful     |
+## | 35 |       32 |         73.3 |         12.7 |                  91.4 |                   1.8 | Successful     |
+## | 36 |       38 |         38.8 |         31.3 |                  47.4 |                  24.1 | Successful     |
+## | 37 |       38 |         42   |         26.7 |                  48.7 |                  11.2 | Successful     |
+## | 38 |       38 |         57.1 |         17   |                  56.3 |                  31.1 | Successful     |
+## | 39 |       38 |         63.3 |         18.7 |                  69.1 |                  30.1 | Successful     |
+## | 40 |       38 |         68.1 |         19.8 |                  64.3 |                  26.3 | Successful     |
+## | 41 |       38 |         89.3 |         17.9 |                  86   |                  25.1 | Successful     |
+## | 42 |       39 |         44.8 |          8.5 |                  49   |                   2   | Successful     |
+## | 43 |       43 |         81.3 |          4.8 |                 110.1 |                  46.6 | Incomplete     |
+## | 44 |       51 |         27.3 |         22.4 |                   7.8 |                  38.3 | Successful     |
+## | 45 |       51 |         33.2 |         30.2 |                  43   |                  21.6 | Successful     |
+## | 46 |       53 |         43.7 |         47.5 |                  54.7 |                  47.1 | Successful     |
+## | 47 |       54 |         73.3 |         50.2 |                  84.4 |                  43.7 | Successful     |
+## | 48 |       54 |         92.4 |         29.4 |                  98.9 |                  23   | Successful     |
+## | 49 |       54 |        112.6 |         19.5 |                 113.2 |                  33   | Incomplete     |
+## | 50 |       55 |        120   |          0.1 |                 107.5 |                  16.1 | Successful     |
+## | 51 |       55 |        120   |         80   |                 109.9 |                  46.7 | Incomplete     |
+## | 52 |       56 |        120   |         80   |                 116.6 |                  52   | Incomplete     |
+## | 53 |       57 |         54.1 |         28.8 |                  47.9 |                  15.3 | Successful     |
+## | 54 |       58 |         86.4 |         24.2 |                  85.2 |                  40.3 | Successful     |
+## | 55 |       59 |         80.1 |         18.4 |                  98.3 |                   9.5 | Successful     |
+## | 56 |       60 |         96.7 |         26.6 |                  96.4 |                  56.9 | Successful     |
+## | 57 |       68 |        120   |          0.1 |                 110.8 |                  43.9 | Incomplete     |
+## | 58 |       70 |         90.6 |          5.9 |                 112.4 |                  13.3 | Successful     |
+## | 59 |       72 |         75.2 |         22.4 |                  84.2 |                   2.4 | Successful     |
+## | 60 |       72 |         72.2 |          9.6 |                  80   |                  17.2 | Successful     |
+## | 61 |       73 |        110.1 |         24.4 |                 111.4 |                  39.7 | Incomplete     |
+## | 62 |       74 |         83.6 |         30.8 |                  83.2 |                  40.5 | Successful     |
+## | 63 |       75 |        120   |         80   |                  99   |                  63.3 | Successful     |
+## | 64 |       76 |         40.8 |         20.3 |                  47.5 |                   6   | Successful     |
+## | 65 |       76 |         86   |         24   |                  83.2 |                  57.7 | Successful     |
+## | 66 |       76 |         75.4 |         34.3 |                  72.2 |                  69.1 | Successful     |
+## | 67 |       77 |         65.4 |         46.9 |                  73.4 |                  68.5 | Successful     |
+## | 68 |       79 |         79.6 |         30.1 |                  77   |                  44.1 | Successful     |
+## | 69 |       79 |         70.4 |         25.8 |                  64.2 |                  29   | Successful     |
+## | 70 |       84 |         22.1 |         19.6 |                  13.3 |                  29   | Successful     |
+## | 71 |       85 |         55.6 |         24.4 |                 116.3 |                   6.4 | Pass Offside   |
+## | 72 |       86 |         64.8 |         27.4 |                  41.7 |                  38   | Successful     |
+```
+
+Thus, we have successfully cleaned and manipulated the data. Now we can go ahead and start plotting the pass map for `Toni Kroos` on a football pitch and also visualize its corresponding heat map. Before going through this part, the readers should make sure that they have studied my [second post](https://realsoccerexpand.netlify.app/post/visualize-a-pitch/) on how to draw football pitches using the `mplsoccer` package. Let us draw a simple pitch first:
+
+
+```python
+pitch = Pitch(pitch_color = 'black', line_color = 'white', constrained_layout = True, tight_layout = False, goal_type = 'box')
+fig, ax = pitch.draw()
+plt.show()
+```
+
+<img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-1.png" width="672" />
+
+We now have a pitch on which we will plot the start and end coordinates of the passes and join them with lines having arrows to denote the correct direction of the passes. We will use a for loop to go through each row and extract the coordinates: 
+
+
+```python
+pitch = Pitch(pitch_color = 'black', line_color = 'white', constrained_layout = True, tight_layout = False, goal_type = 'box')
+fig, ax = pitch.draw()
+
+for i in range(len(events_pass_p1)):
+    if events_pass_p1.pass_outcome[i] == 'Successful':
+        pitch.arrows(events_pass_p1.location_x[i], events_pass_p1.location_y[i], events_pass_p1.pass_end_location_x[i], events_pass_p1.pass_end_location_y[i], ax=ax, color='green', width = 3)
+        pitch.scatter(events_pass_p1.location_x[i], events_pass_p1.location_y[i], ax = ax, color = 'green')
+    else:
+        pitch.arrows(events_pass_p1.location_x[i], events_pass_p1.location_y[i], events_pass_p1.pass_end_location_x[i], events_pass_p1.pass_end_location_y[i], ax=ax, color='red', width=3)
+        pitch.scatter(events_pass_p1.location_x[i], events_pass_p1.location_y[i], ax = ax, color='red')
+        
+```
+
+```python
+plt.show()
+```
+
+<img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-3.png" width="672" />
+
+The `pitch.arrows()` function allows us to draw the lines along with their arrow heads and the `pitch.scatter()` function allows us the pin point the starting location of the pass by plotting filled dots. the `width` parameter sets the widths of the lines and the `color` parameter sets the colors. The successful passes are colored `green` and the unsuccessful passes are colored `red`.
+
+This makes us visually analyze `Kroos`'s passing abilities. Look at the number of successful passes he created during the match. Now we will focus on visualizing the heat map on the pass map of `'Toni Kroos'`. We will use `seaborn`'s `kdeplot()` function which portrays the probability density function of the data given by a contour plot showing the relationship of the data distribution between two data variables, here the pass start locations. `kdeplot` stands for *Kernel Distribution Estimation Plot*. Note that we have imported the `seaborn` package as `sns`. Let us draw the heatmap:
+
+
+```python
+# Pitch drawing code
+pitch = Pitch(pitch_color = 'black', line_color = 'white', constrained_layout = True, tight_layout = False, goal_type = 'box')
+fig, ax = pitch.draw()
+
+# Heat map code
+res = sns.kdeplot(events_pass_p1['location_x'], events_pass_p1['location_y'], fill = True,
+    thresh = 0.05, alpha = 0.5, levels = 10, cmap = 'Purples_d')
+
+# Pass map code
+```
+
+```python
+for i in range(len(events_pass_p1)):
+    if events_pass_p1.pass_outcome[i] == 'Successful':
+        pitch.arrows(events_pass_p1.location_x[i], events_pass_p1.location_y[i], events_pass_p1.pass_end_location_x[i], events_pass_p1.pass_end_location_y[i], ax=ax, color='green', width = 3)
+        pitch.scatter(events_pass_p1.location_x[i], events_pass_p1.location_y[i], ax = ax, color = 'green')
+    else:
+        pitch.arrows(events_pass_p1.location_x[i], events_pass_p1.location_y[i], events_pass_p1.pass_end_location_x[i], events_pass_p1.pass_end_location_y[i], ax=ax, color='red', width=3)
+        pitch.scatter(events_pass_p1.location_x[i], events_pass_p1.location_y[i], ax = ax, color='red')
+        
+# General plot code
+```
+
+```python
+plt.title("Toni Kroos pass and heat map")
+```
+
+```python
+plt.show()
+```
+
+<img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-5.png" width="672" />
+
+The player is supposed to score a goal on the right side. So `Kroos` moves from the left to the right (remember the axis ranges from the second post). It seems he played most of his passes on his left side on the pitch where the density plot looks condensed. The passes that he took from the corners had both successful and unsuccessful outcomes. Looking into the arguments of the `kdeplot()` function, the `thresh` value sets the lowest iso-proportion level at which the contour lines are to be drawn, `levels` sets the number of contour levels, `fill` sets whether to fill the area between the contours,  the `alpha` sets the transparency of the plot (default value is `1`, lesser than `1` means more transparent), and the `cmap` sets the color map. To study more about `kdeplot()` look [here](https://seaborn.pydata.org/generated/seaborn.kdeplot.html).
+
+We have completed our study on generating the pass map and its correpsonding heat map for a particular player. The reader is suggested to go ahead and try out the same analysis for other players from the same game, for example for `'Lionel Andrés Messi Cuccittini'` (our king Messi) or for `'Luka Modrić'` (our all time favorite Lukita). For those who does not know, both of them are Ballon d'Or winners. So, I can guarantee the readers will be ecstatic to analyse the pass maps for these players. The readers can also compare the pass maps between two players from opposition teams or visualize the pass maps for a particular team (although this might look clumsy. Hint: skip the step where the filtration by the player's name is happening). A lot of customizations are possible. In the next part we will perform the same anaysis on the shots instead of passes and we will visualize the shot maps and their corresponding heat maps for both the teams.

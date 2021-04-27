@@ -79,7 +79,7 @@ e2 = events_pass.tail(10) # extracts the last 10 rows
 print(e2.to_markdown())
 ```
 
-Now, looking at both `e1` and `e2`, we notice that the `player` column gives us the names of the players who were associated with different events during the match. Suppose, we are only interested to generate the pass map and its corresponding heat map for a particular player, for example, `'Toni Kroos'`. For that, we have to clean the `events_pass` dataset in such a way that, we have only those rows where `player='Toni Kroos'`. Be very careful to use the exact spelling while performing these string operations, otherwise the reader will end up with unnecessary syntax and/or logical errors. Before filtering, let us collect the name of all the players who were involved in this match. For this, we use the `unique()' function provided by `pandas` that helps us extract a unique data from a column.
+Now, looking at both `e1` and `e2`, we notice that the `player` column gives us the names of the players who were associated with different events during the match. Suppose, we are only interested to generate the pass map and its corresponding heat map for a particular player, for example, `'Toni Kroos'`. For that, we have to clean the `events_pass` dataset in such a way that, we have only those rows where `player='Toni Kroos'`. Be very careful to use the exact spelling while performing these string operations, otherwise the reader will end up with unnecessary syntax and/or logical errors. Before filtering, let us collect the name of all the players who were involved in this match. For this, we use the `unique()` function provided by `pandas` that helps us extract a unique data from a column.
 
 ```{python}
 players = events_pass.player.unique()
@@ -117,4 +117,104 @@ print(events_pass_p1.to_markdown())
 
 So, till now, we have been successful in extracting out the pass event data for `'Toni Kroos'` from the match. That is a brilliant achievement to be honest. You deserve a pat on your back!
 
-Getting back, we observe that `'Toni Kroos'` has been involved in `73` passes. We will later work out his pass success rate. But look at the number. Isn't he a brilliant midfielder that the German national team and the Real Madrid team have in their disposal? What a playmaker he is! 
+Getting back, we observe that `'Toni Kroos'` has been involved in `73` passes. We will later work out his pass success rate. But look at the number. Isn't he a brilliant midfielder that the German national team and the Real Madrid team have in their disposal? What a playmaker he is! Let us find out what were all his pass outcomes:
+
+```{python}
+print(events_pass_p1.pass_outcome.unique())
+```
+
+One important thing to notice is that, according to statsbomb data, `nan` as a pass outcome actually means a successful pass. Any other pass outcomes refer to unsuccessful passes. For `'Toni Kross'`, we notice that besides `nan` he has `Incomplete` and `Pass Offside` as pass outcomes. If we look closely the `events_pass_p1` dataframe has the `minute` column which tells us at what minute the pass had started from `Kroos`'s end. It also has the `location` and the `pass_end_location` columns informing us about the coordinates of `Kroos` when he pass the ball and the coordinates of where the ball ended after the pass (successful or unsuccessful). A successful pass means the ball ended with a player and the `pass_end_location` coordinates for this case gives the location of the player who received the ball. Both these columns have elements as lists of two numbers indicating the coordinates. Let us manipulate the `pass_outcome` column by replacing all the `nan` values with `'successful'` with the help of `fillna()` function provided by `pandas`. This will teach us the simplest way to handle `nan` values.
+
+```{python}
+events_pass_p1['pass_outcome'] = events_pass_p1['pass_outcome'].fillna('Successful')
+print(events_pass_p1.to_markdown())
+```
+
+Before diving into plotting the pass map and its heat map, let us complete the last bit of data manipulation. As the elements of `location` and the `pass_end_location` columns are lists, we will break each of the columns into two columns with the x-coordinates in one and y-coordinates in the other. Let us first carry out this manipulation for the `location` column:
+
+```{python}
+Loc = events_pass_p1['location']
+Loc = pd.DataFrame(Loc.to_list(), columns=['location_x', 'location_y'])
+print(Loc.to_markdown())
+```
+
+We see we have divided the `location` column into `location_x` and `location_y` columns. Let us operate the above chunk of code on the `pass_end_location` column too:
+
+```{python}
+Loc_end = events_pass_p1['pass_end_location']
+Loc_end = pd.DataFrame(Loc_end.to_list(), columns=['pass_end_location_x', 'pass_end_location_y'])
+print(Loc_end.to_markdown())
+```
+
+We will now add these columns to our `events_pass_1` data frame as extra columns and validate whether they are generating the correct coordinates:
+
+```{python warnings=FALSE}
+events_pass_p1['location_x'] = Loc['location_x']
+events_pass_p1['location_y'] = Loc['location_y']
+events_pass_p1['pass_end_location_x'] = Loc_end['pass_end_location_x']
+events_pass_p1['pass_end_location_y'] = Loc_end['pass_end_location_y']
+print(events_pass_p1.to_markdown())
+```
+
+Seems like they are generating the correct coordinate values and we ere able to split the original `location` and `pass_end_location` columns. So, we don't actually need the original columns and they can be discarded along with the columns `team`, `type` and `player`, because those would be `'Real Madrid'`, `'Pass'` and `'Toni Kroos'` respectively for all the rows in `events_pass_p1`. Although it doesnot matter in our analysis, but it is always a good practice to clean your data as much as possible!
+
+```{python}
+events_pass_p1 = events_pass_p1[['minute', 'location_x', 'location_y', 'pass_end_location_x', 'pass_end_location_y', 'pass_outcome']]
+print(events_pass_p1.to_markdown())
+```
+
+Thus, we have successfully cleaned and manipulated the data. Now we can go ahead and start plotting the pass map for `Toni Kroos` on a football pitch and also visualize its corresponding heat map. Before going through this part, the readers should make sure that they have studied my [second post](https://realsoccerexpand.netlify.app/post/visualize-a-pitch/) on how to draw football pitches using the `mplsoccer` package. Let us draw a simple pitch first:
+
+```{python}
+pitch = Pitch(pitch_color = 'black', line_color = 'white', constrained_layout = True, tight_layout = False, goal_type = 'box')
+fig, ax = pitch.draw()
+plt.show()
+```
+
+We now have a pitch on which we will plot the start and end coordinates of the passes and join them with lines having arrows to denote the correct direction of the passes. We will use a for loop to go through each row and extract the coordinates: 
+
+```{python results=FALSE}
+pitch = Pitch(pitch_color = 'black', line_color = 'white', constrained_layout = True, tight_layout = False, goal_type = 'box')
+fig, ax = pitch.draw()
+
+for i in range(len(events_pass_p1)):
+    if events_pass_p1.pass_outcome[i] == 'Successful':
+        pitch.arrows(events_pass_p1.location_x[i], events_pass_p1.location_y[i], events_pass_p1.pass_end_location_x[i], events_pass_p1.pass_end_location_y[i], ax=ax, color='green', width = 3)
+        pitch.scatter(events_pass_p1.location_x[i], events_pass_p1.location_y[i], ax = ax, color = 'green')
+    else:
+        pitch.arrows(events_pass_p1.location_x[i], events_pass_p1.location_y[i], events_pass_p1.pass_end_location_x[i], events_pass_p1.pass_end_location_y[i], ax=ax, color='red', width=3)
+        pitch.scatter(events_pass_p1.location_x[i], events_pass_p1.location_y[i], ax = ax, color='red')
+        
+plt.show()
+```
+
+The `pitch.arrows()` function allows us to draw the lines along with their arrow heads and the `pitch.scatter()` function allows us the pin point the starting location of the pass by plotting filled dots. the `width` parameter sets the widths of the lines and the `color` parameter sets the colors. The successful passes are colored `green` and the unsuccessful passes are colored `red`.
+
+This makes us visually analyze `Kroos`'s passing abilities. Look at the number of successful passes he created during the match. Now we will focus on visualizing the heat map on the pass map of `'Toni Kroos'`. We will use `seaborn`'s `kdeplot()` function which portrays the probability density function of the data given by a contour plot showing the relationship of the data distribution between two data variables, here the pass start locations. `kdeplot` stands for *Kernel Distribution Estimation Plot*. Note that we have imported the `seaborn` package as `sns`. Let us draw the heatmap:
+
+```{python results=FALSE}
+# Pitch drawing code
+pitch = Pitch(pitch_color = 'black', line_color = 'white', constrained_layout = True, tight_layout = False, goal_type = 'box')
+fig, ax = pitch.draw()
+
+# Heat map code
+res = sns.kdeplot(events_pass_p1['location_x'], events_pass_p1['location_y'], fill = True,
+    thresh = 0.05, alpha = 0.5, levels = 10, cmap = 'Purples_d')
+
+# Pass map code
+for i in range(len(events_pass_p1)):
+    if events_pass_p1.pass_outcome[i] == 'Successful':
+        pitch.arrows(events_pass_p1.location_x[i], events_pass_p1.location_y[i], events_pass_p1.pass_end_location_x[i], events_pass_p1.pass_end_location_y[i], ax=ax, color='green', width = 3)
+        pitch.scatter(events_pass_p1.location_x[i], events_pass_p1.location_y[i], ax = ax, color = 'green')
+    else:
+        pitch.arrows(events_pass_p1.location_x[i], events_pass_p1.location_y[i], events_pass_p1.pass_end_location_x[i], events_pass_p1.pass_end_location_y[i], ax=ax, color='red', width=3)
+        pitch.scatter(events_pass_p1.location_x[i], events_pass_p1.location_y[i], ax = ax, color='red')
+        
+# General plot code
+plt.title("Toni Kroos pass and heat map")
+plt.show()
+```
+
+The player is supposed to score a goal on the right side. So `Kroos` moves from the left to the right (remember the axis ranges from the second post). It seems he played most of his passes on his left side on the pitch where the density plot looks condensed. The passes that he took from the corners had both successful and unsuccessful outcomes. Looking into the arguments of the `kdeplot()` function, the `thresh` value sets the lowest iso-proportion level at which the contour lines are to be drawn, `levels` sets the number of contour levels, `fill` sets whether to fill the area between the contours,  the `alpha` sets the transparency of the plot (default value is `1`, lesser than `1` means more transparent), and the `cmap` sets the color map. To study more about `kdeplot()` look [here](https://seaborn.pydata.org/generated/seaborn.kdeplot.html).
+
+We have completed our study on generating the pass map and its correpsonding heat map for a particular player. The reader is suggested to go ahead and try out the same analysis for other players from the same game, for example for `'Lionel Andrés Messi Cuccittini'` (our king Messi) or for `'Luka Modrić'` (our all time favorite Lukita). For those who does not know, both of them are Ballon d'Or winners. So, I can guarantee the readers will be ecstatic to analyse the pass maps for these players. The readers can also compare the pass maps between two players from opposition teams or visualize the pass maps for a particular team (although this might look clumsy. Hint: skip the step where the filtration by the player's name is happening). A lot of customizations are possible. In the next part we will perform the same anaysis on the shots instead of passes and we will visualize the shot maps and their corresponding heat maps for both the teams.
