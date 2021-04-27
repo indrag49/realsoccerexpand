@@ -25,3 +25,5 @@ title: Introduction to Football (Soccer) Data Analysis with Python
 ---
 
 This website is set up to teach introductory football (soccer) data analysis to those who are interested. The user will learn how to get open access football data and run analyses on them. Simple mathematical techniques from the fields of network analysis, computational geometry and introductory statistical analyses will be introduced and implemented on football event data and tracking data. The user will also learn how to draw football pitches and generate visualizations out of the data to draw conclusions. The programming language has been chosen to be Python because it is easy to learn, open-source and user friendly.
+
+Logo courtesy: [**Swagata Chakraborty**](https://www.linkedin.com/in/swagata-chakraborty-7747ab1b5/)
