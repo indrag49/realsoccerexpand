@@ -1,0 +1,215 @@
+---
+title: Pass Network Analysis
+author: Indranil Ghosh
+date: '2021-04-28'
+slug: pass-network-analysis
+categories: ["Python", "visualization", "NetworkX"]
+tags: ["statsbomb api", "NetworkX", "Network Analysis", "Pass Network"]
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2021-04-28T10:15:58+05:30'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+In our [last tutorial](https://realsoccerexpand.netlify.app/post/pass-map-shot-map-and-heat-map/) we studied how to draw a pass map, a shot map and their corresponding heat maps. We used statsbomb's open even data from the match between *Real Madrid* and *Barcelona*, which *Real Madrid* ended up winning 2-0. In this post we will again use statsbomb's open event passing data (from a separate game this time, which we will decide on the go) and visualize the resulting pass network of a particular team on the football pitch. We will then use basic concepts from complex network analysis literature to further analyze the network and deduce some results. We will employ the [`NetworkX`](https://networkx.org/) Python package for the analysis purpose. 
+
+Let us `pip` install the package:
+
+```{python eval=FALSE}
+pip install networkx
+```
+
+After installing the package we will import all the necessary packages and modules:
+
+```{python}
+from statsbombpy import sb # statsbomb api
+import matplotlib.pyplot as plt # matplotlib for plotting
+from mplsoccer.pitch import Pitch # for drawing the football pitch
+import seaborn as sns # seaborn for plotting useful statistical graphs
+import numpy as np # numerical python package
+import pandas as pd # pandas for manipulating and analysing data
+import networkx as nx # package for complex network analysis
+```
+
+Let us again work step by step to fetch the event data from a particular match:
+
+```{python results=FALSE}
+comp = sb.competitions()
+```
+
+```{python}
+print(comp.to_markdown())
+```
+
+Let us use the first row from `comp` where the `competition_id` is `16` and `season_id` is `4`. We see that it holds the event data from *UEFA Champions League* ⚽ for the 2017-18 season. Let us now extract out the matches using the above information.
+
+```{python results=FALSE}
+mat = sb.matches(competition_id = 16, season_id = 1)
+```
+
+```{python}
+print(mat.to_markdown())
+```
+
+We see there is only one match available, having `match_id` set to `18245`. It represents the final that took place between *Real Madrid* and *Liverpool* at *Olimpiyskiy National Sports Complex, Moscow* and Real Madrid won with the full time score: 3-1. Finally let us draw out the complete event data from this match:
+
+```{python results=FALSE}
+events = sb.events(match_id = 18245)
+```
+
+We will print the first and the last 10 rows of the dataset to get an idea of how it looks and what information it provides us with:
+
+```{python}
+print(events.head(10).to_markdown())
+```
+
+```{python}
+print(events.tail(10).to_markdown())
+```
+
+As we have been usually doing till now, let us print out the column names of `events` to get an overview of the relevant and the unnecessary rows for this tutorial.
+
+```{python}
+print(events.columns)
+```
+
+If we look into the `events` dataset, we notice that the `tactics` column provides us with team lineups, formations, player ids and their jersey number from both the teams. The corresponding row values for column `type` gives us an idea about whether it was the starting 11 formation or was a tactical shift or any other developments in the teams. Let us generate a completely new dataset only focusing on the `tactics` and the `type` columns. We will filter the data in such a way that the `tactics` column has no rows set to `nan`.
+
+```{python}
+tact = events[events['tactics'].isnull() == False]
+tact = tact[['tactics', 'team', 'type']]
+print(tact.to_markdown())
+```
+
+Let us focus only on the tactics for the starting 11 set up from both the teams. We will build and analyze the pass network generated from among the starting 11 players from either of the teams. If we look into the first two rows of the `type` column in `tact`, we see that they are set as `'Starting XI'`, one for each team. Let us separately fetch the data for the teams, filtering by `type`
+
+```{python}
+tact = tact[tact['type'] == 'Starting XI']
+tact_Real = tact[tact['team'] == 'Real Madrid']
+tact_Liv = tact[tact['team'] == 'Liverpool']
+tact_Real = tact_Real['tactics']
+tact_Liv = tact_Liv['tactics']
+```
+
+Let us see how `tact_Real` and `tact_Barca` look:
+
+```{python}
+print(tact_Real.to_markdown())
+```
+
+```{python}
+print(tact_Liv.to_markdown())
+```
+
+So both `tact_Real` and `tact_Liv` are dataframes made of single rows with their indices (Which we will use to extract the data), and the `tactics` column is made up of a Python `dict` object. For now we are only interested in the key `'lineup'` to get all the information about the players from the teams. 
+
+```{python}
+dict_Real = tact_Real[0]['lineup']
+dict_Liv = tact_Liv[1]['lineup']
+```
+
+We will use the `from_dict()` function provided by `pandas` to convert the dictionary into a dataframe.
+
+```{python}
+lineup_Real = pd.DataFrame.from_dict(dict_Real)
+print(lineup_Real.to_markdown())
+```
+
+```{python}
+lineup_Liv = pd.DataFrame.from_dict(dict_Liv)
+print(lineup_Liv.to_markdown())
+```
+
+We are basically interested in the players name and their corresponding jersey numbers. We will use a simple for loop and store the information in seperate dictionaries for both the teams.
+
+```{python}
+players_Real = {}
+for i in range(len(lineup_Real)):
+    key = lineup_Real.player[i]['name']
+    val = lineup_Real.jersey_number[i]
+    players_Real[key] = val
+print(players_Real)
+```
+
+```{python}
+players_Liv = {}
+for i in range(len(lineup_Liv)):
+    key = lineup_Liv.player[i]['name']
+    val = lineup_Liv.jersey_number[i]
+    players_Liv[key] = val
+print(players_Liv)
+```
+
+So, we have collected the names and the jersey number of the players (starting 11) from both the teams in separate dictionaries named `players_Real` and `players_Liv`. These will come handy later!
+
+Now from the `events` dataset we will extract out the relevant columns for our pass network analysis purposes.
+
+```{python}
+events_pn = events[['minute', 'second', 'team', 'type', 'location', 'pass_end_location', 'pass_outcome', 'player']]
+```
+
+```{python}
+print(events_pn.head(10).to_markdown())
+```
+
+```{python}
+print(events_pn.tail(10).to_markdown())
+```
+
+The next step is to filter the datset by teams and store them as new datasets:
+
+```{python}
+events_pn_Real = events_pn[events_pn['team'] == 'Real Madrid']
+events_pn_Liv = events_pn[events_pn['team'] == 'Liverpool']
+```
+
+View the first 10 rows from both the datasets:
+
+```{python}
+print(events_pn_Real.head(10).to_markdown())
+print(events_pn_Liv.head(10).to_markdown())
+```
+
+As we are only interested in the pass network generation, we will filter the datasets by keeping those rows where `type` is set to `Pass`.
+
+```{python}
+events_pn_Real = events_pn_Real[events_pn_Real['type'] == 'Pass']
+events_pn_Liv = events_pn_Liv[events_pn_Liv['type'] == 'Pass']
+```
+
+Again view the first 10 rows of the filtered datasets:
+
+```{python}
+print(events_pn_Real.head(10).to_markdown())
+print(events_pn_Liv.head(10).to_markdown())
+```
+
+Now, there might be passes which were not successful. Remember from the [third post](https://realsoccerexpand.netlify.app/post/pass-map-shot-map-and-heat-map/) that in the statsbomb data passes whose `shot_outcome` are set as `nan` are actually the successful passes. We will again filter the datasets by successful passes:
+
+```{python}
+events_pn_Real = events_pn_Real[events_pn_Real['pass_outcome'].isnull() == True].reset_index()
+events_pn_Liv = events_pn_Liv[events_pn_Liv['pass_outcome'].isnull() == True].reset_index()
+```
+
+
+Let us very carefully observe the datasets. Suppose from the `events_rn_Real` dataset, we are focusing on the second and the third row (index `1` and `2`). `Luka Modrić` makes the pass at around `0`th `minute` and `10`th `second` (Second row) and `Daniel Carvajal Ramos ` receives the pass at around `0`th `minute` and `11`th `second` (third row). So in both the datasets we need to add two extra columns named as `pass_maker` and `pass_receiver`, where `pass_maker` column would be similar to `player` column and the `pass_receiver` column would be the `player` column whose index would be shifted by one place in the negative direction. This can be achieved by the `shift()` function provided by `pandas`. We will perform this operation on both `events_pn_Real` and `events_pn_Liv`.
+
+```{python}
+events_pn_Real['pass_maker'] = events_pn_Real['player']
+events_pn_Real['pass_receiver'] = events_pn_Real['player'].shift(-1)
+
+events_pn_Liv['pass_maker'] = events_pn_Liv['player']
+events_pn_Liv['pass_receiver'] = events_pn_Liv['player'].shift(-1)
+```
+
+Let us check now how the modified datasets look:
+
+```{python}
+print(events_pn_Real.head(10).to_markdown())
+print(events_pn_Liv.head(10).to_markdown())
