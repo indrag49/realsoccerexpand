@@ -165,22 +165,22 @@ print(events_pn.tail(10).to_markdown())
 The next step is to filter the datset by teams and store them as new datasets:
 
 ```{python}
-events_pn_Real = events_pn[events_pn['team'] == 'Real Madrid']
-events_pn_Liv = events_pn[events_pn['team'] == 'Liverpool']
+events_Real = events_pn[events_pn['team'] == 'Real Madrid']
+events_Liv = events_pn[events_pn['team'] == 'Liverpool']
 ```
 
 View the first 10 rows from both the datasets:
 
 ```{python}
-print(events_pn_Real.head(10).to_markdown())
-print(events_pn_Liv.head(10).to_markdown())
+print(events_Real.head(10).to_markdown())
+print(events_Liv.head(10).to_markdown())
 ```
 
 As we are only interested in the pass network generation, we will filter the datasets by keeping those rows where `type` is set to `Pass`.
 
 ```{python}
-events_pn_Real = events_pn_Real[events_pn_Real['type'] == 'Pass']
-events_pn_Liv = events_pn_Liv[events_pn_Liv['type'] == 'Pass']
+events_pn_Real = events_Real[events_Real['type'] == 'Pass']
+events_pn_Liv = events_Liv[events_Liv['type'] == 'Pass']
 ```
 
 Again view the first 10 rows of the filtered datasets:
@@ -190,17 +190,9 @@ print(events_pn_Real.head(10).to_markdown())
 print(events_pn_Liv.head(10).to_markdown())
 ```
 
-Now, there might be passes which were not successful. Remember from the [third post](https://realsoccerexpand.netlify.app/post/pass-map-shot-map-and-heat-map/) that in the statsbomb data passes whose `shot_outcome` are set as `nan` are actually the successful passes. We will again filter the datasets by successful passes:
+Let us now very carefully observe the datasets. Suppose from the `events_rn_Real` dataset, we are focusing on the second and the third row (index `1` and `2`). `Luka Modrić` makes the pass at around `0`th `minute` and `10`th `second` (Second row) and `Daniel Carvajal Ramos ` receives the pass at around `0`th `minute` and `11`th `second` (third row). So in both the datasets we need to add two extra columns named as `pass_maker` and `pass_receiver`, where `pass_maker` column would be similar to `player` column and the `pass_receiver` column would be the `player` column whose index would be shifted by one place in the negative direction. This can be achieved by the `shift()` function provided by `pandas`. We will perform this operation on both `events_pn_Real` and `events_pn_Liv`.
 
-```{python}
-events_pn_Real = events_pn_Real[events_pn_Real['pass_outcome'].isnull() == True].reset_index()
-events_pn_Liv = events_pn_Liv[events_pn_Liv['pass_outcome'].isnull() == True].reset_index()
-```
-
-
-Let us very carefully observe the datasets. Suppose from the `events_rn_Real` dataset, we are focusing on the second and the third row (index `1` and `2`). `Luka Modrić` makes the pass at around `0`th `minute` and `10`th `second` (Second row) and `Daniel Carvajal Ramos ` receives the pass at around `0`th `minute` and `11`th `second` (third row). So in both the datasets we need to add two extra columns named as `pass_maker` and `pass_receiver`, where `pass_maker` column would be similar to `player` column and the `pass_receiver` column would be the `player` column whose index would be shifted by one place in the negative direction. This can be achieved by the `shift()` function provided by `pandas`. We will perform this operation on both `events_pn_Real` and `events_pn_Liv`.
-
-```{python}
+```{python warnings=FALSE}
 events_pn_Real['pass_maker'] = events_pn_Real['player']
 events_pn_Real['pass_receiver'] = events_pn_Real['player'].shift(-1)
 
@@ -213,3 +205,127 @@ Let us check now how the modified datasets look:
 ```{python}
 print(events_pn_Real.head(10).to_markdown())
 print(events_pn_Liv.head(10).to_markdown())
+```
+
+Now, there might be passes which were not successful. Remember from the [third post](https://realsoccerexpand.netlify.app/post/pass-map-shot-map-and-heat-map/) that in the statsbomb data passes whose `pass_outcome` are set as `nan` are actually the successful passes. We will again filter the datasets by successful passes:
+
+```{python}
+events_pn_Real = events_pn_Real[events_pn_Real['pass_outcome'].isnull() == True].reset_index()
+events_pn_Liv = events_pn_Liv[events_pn_Liv['pass_outcome'].isnull() == True].reset_index()
+```
+
+The first 10 rows of the filtered datasets:
+
+```{python}
+print(events_pn_Real.head(10).to_markdown())
+print(events_pn_Liv.head(10).to_markdown())
+```
+
+So it seems we have been able to logically clean and modify the datasets. Now we are only focused on building the pass netwrok among the players who were in the starting 11 from both the teams. So we will discard out the rows which consist of pass events that took place after the first substitution for either of the teams. Let us find the `minute` and `second` of the first substitution for both `Real Madrid` and `Barcelona`.
+
+So let us filter the datasets `events_Real` and `events_Liv` by setting the `type` to be `Substitution`. This will give us the information of when the first substitution had taken place for the teams.
+
+```{python}
+substitution_Real = events_Real[events_Real['type'] == 'Substitution']
+substitution_Liv = events_Liv[events_Liv['type'] == 'Substitution']
+```
+
+And let us view the datasets:
+
+```{python}
+print(substitution_Real.to_markdown())
+print(substitution_Liv.to_markdown())
+```
+
+We see that the first substitution takes place for `Real Madrid` at the `36`th minute and `17`th second, whereas for `Liverpool` it takes place around `29`th minute and `39`th second. Let us find these out by writing a small Python code:
+
+```{python}
+substitution_Real_minute = np.min(substitution_Real['minute'])
+substitution_Real_minute_data = substitution_Real[substitution_Real['minute'] == substitution_Real_minute]
+substitution_Real_second = np.min(substitution_Real_minute_data['second'])
+print("minute =", substitution_Real_minute, "second =",  substitution_Real_second)
+```
+
+```{python}
+substitution_Liv_minute = np.min(substitution_Liv['minute'])
+substitution_Liv_minute_data = substitution_Liv[substitution_Liv['minute'] == substitution_Liv_minute]
+substitution_Liv_second = np.min(substitution_Liv_minute_data['second'])
+print("minute = ", substitution_Liv_minute, "second = ", substitution_Liv_second)
+```
+
+We see that we have gotten the correct timings of when the first substitutions had taken place. Now we filter our datasets by taking tose pass events that took place before the first substitutions 
+
+```{python}
+events_pn_Real = events_pn_Real[(events_pn_Real['minute'] <= substitution_Real_minute)]
+
+events_pn_Liv = events_pn_Liv[(events_pn_Liv['minute'] <= substitution_Liv_minute)]
+```
+
+Let us again print the first 10 rows of the renewed datasets:
+
+```{python}
+print(events_pn_Real.head(10).to_markdown())
+print(events_pn_Liv.head(10).to_markdown())
+```
+
+Now from the datasets, we will split the `location` and the `pass_end_location` columns into two columns each representing the coordinates and name them as `pass_maker_x`, `pass_maker_y`, `pass_receiver_x` and `pass_receiver_y`.
+
+Let us manipulate the dataset for `Real Madrid` first:
+
+```{python}
+Loc = events_pn_Real['location']
+Loc = pd.DataFrame(Loc.to_list(), columns=['pass_maker_x', 'pass_maker_y'])
+
+Loc_end = events_pn_Real['pass_end_location']
+Loc_end = pd.DataFrame(Loc_end.to_list(), columns=['pass_receiver_x', 'pass_receiver_y'])
+
+events_pn_Real['pass_maker_x'] = Loc['pass_maker_x']
+events_pn_Real['pass_maker_y'] = Loc['pass_maker_y']
+events_pn_Real['pass_receiver_x'] = Loc_end['pass_receiver_x']
+events_pn_Real['pass_receiver_y'] = Loc_end['pass_receiver_y']
+
+events_pn_Real = events_pn_Real[['minute', 'second', 'team', 'type', 'pass_outcome', 'player', 'pass_maker', 'pass_receiver', 'pass_maker_x', 'pass_maker_y', 'pass_receiver_x', 'pass_receiver_y']]
+
+print(events_pn_Real.head(10).to_markdown())
+```
+
+Same manipulation for Liverpool:
+
+```{python}
+Loc = events_pn_Liv['location']
+Loc = pd.DataFrame(Loc.to_list(), columns=['pass_maker_x', 'pass_maker_y'])
+
+Loc_end = events_pn_Liv['pass_end_location']
+Loc_end = pd.DataFrame(Loc_end.to_list(), columns=['pass_receiver_x', 'pass_receiver_y'])
+
+events_pn_Liv['pass_maker_x'] = Loc['pass_maker_x']
+events_pn_Liv['pass_maker_y'] = Loc['pass_maker_y']
+events_pn_Liv['pass_receiver_x'] = Loc_end['pass_receiver_x']
+events_pn_Liv['pass_receiver_y'] = Loc_end['pass_receiver_y']
+
+events_pn_Liv = events_pn_Liv[['minute', 'second', 'team', 'type', 'pass_outcome', 'player', 'pass_maker', 'pass_receiver', 'pass_maker_x', 'pass_maker_y', 'pass_receiver_x', 'pass_receiver_y']]
+
+print(events_pn_Liv.head(10).to_markdown())
+```
+
+Inspired by the way given [here](https://mplsoccer.readthedocs.io/en/latest/gallery/pitch_plots/plot_pass_network.html), we will take the average locations of the starting 11 players on the field for a unified construction of the pass network, and also will count the number of passes created by these player:
+
+```{python}
+av_loc_Real = events_pn_Real.groupby('pass_maker').agg({'pass_maker_x':['mean'], 'pass_maker_y':['mean', 'count']})
+print(av_loc_Real.to_markdown())
+```
+
+As we see the `groupby()` function from `pandas` splits `events_pn_Real` into groups indexed by the player names. Whereas, the `agg()` function aggregates the data into the averages of the pass makers' locations and also counts the number of passes made by these players. Now refine the column names of `av_loc_Real`:
+
+```{python}
+av_loc_Real.columns = ['passer_x', 'passer_y', 'count']
+print(av_loc_Real.to_markdown())
+```
+
+Now do the same operations for `Liverpool`:
+
+```{python}
+av_loc_Liv = events_pn_Liv.groupby('pass_maker').agg({'pass_maker_x':['mean'], 'pass_maker_y':['mean', 'count']})
+av_loc_Liv.columns = ['passer_x', 'passer_y', 'count']
+print(av_loc_Liv.to_markdown())
+```
