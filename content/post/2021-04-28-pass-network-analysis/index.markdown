@@ -592,7 +592,7 @@ print(events_pn_Liv.head(10).to_markdown())
 ## |  9 |      43 |        2 |       19 | Liverpool | Pass   | [30.4, 25.7] | [30.7, 52.9]        |            nan | Virgil van Dijk                     | Virgil van Dijk                     | Dejan Lovren                        |
 ```
 
-So it seems we have been able to logically clean and modify the datasets. Now we are only focused on building the pass netwrok among the players who were in the starting 11 from both the teams. So we will discard out the rows which consist of pass events that took place after the first substitution for either of the teams. Let us find the `minute` and `second` of the first substitution for both `Real Madrid` and `Barcelona`.
+So it seems we have been able to logically clean and modify the datasets. Now we are only focused on building the pass netwrok among the players who were in the starting 11 from both the teams. So we will discard out the rows which consist of pass events that took place after the first substitution for either of the teams. Let us find the `minute` and `second` of the first substitution for both `Real Madrid` and `Liverpool`.
 
 So let us filter the datasets `events_Real` and `events_Liv` by setting the `type` to be `Substitution`. This will give us the information of when the first substitution had taken place for the teams.
 
@@ -936,3 +936,251 @@ print(pass_Liv.head(10).to_markdown())
 ## |  8 | Dejan Lovren     | Loris Karius                        |                  2 |
 ## |  9 | Dejan Lovren     | Mohamed Salah                       |                  1 |
 ```
+
+Now, we will merge the datasets `av_loc_Real` and `pass_Real`, Let us identify the left and the right dataframes for performing the merge. Here, `av_loc_Real` is the left dataframe and `pass_Real` is the right. We will use the `merge()` function from `pandas` to carry out the merging operation. 
+
+
+```python
+pass_Real = pass_Real.merge(av_loc_Real, left_on = 'pass_maker', right_index = True)
+print(pass_Real.head(10).to_markdown())
+```
+
+```
+## |    | pass_maker                          | pass_receiver                  |   number_of_passes |   pass_maker_x |   pass_maker_y |   count |
+## |---:|:------------------------------------|:-------------------------------|-------------------:|---------------:|---------------:|--------:|
+## |  0 | Carlos Henrique Casimiro            | Daniel Carvajal Ramos          |                  1 |        60.8455 |        31.8364 |      11 |
+## |  1 | Carlos Henrique Casimiro            | Luka Modrić                    |                  1 |        60.8455 |        31.8364 |      11 |
+## |  2 | Carlos Henrique Casimiro            | Marcelo Vieira da Silva Júnior |                  1 |        60.8455 |        31.8364 |      11 |
+## |  3 | Carlos Henrique Casimiro            | Raphaël Varane                 |                  1 |        60.8455 |        31.8364 |      11 |
+## |  4 | Carlos Henrique Casimiro            | Sergio Ramos García            |                  1 |        60.8455 |        31.8364 |      11 |
+## |  5 | Carlos Henrique Casimiro            | Toni Kroos                     |                  6 |        60.8455 |        31.8364 |      11 |
+## |  6 | Cristiano Ronaldo dos Santos Aveiro | Daniel Carvajal Ramos          |                  3 |        81.58   |        29.16   |      10 |
+## |  7 | Cristiano Ronaldo dos Santos Aveiro | Karim Benzema                  |                  1 |        81.58   |        29.16   |      10 |
+## |  8 | Cristiano Ronaldo dos Santos Aveiro | Luka Modrić                    |                  1 |        81.58   |        29.16   |      10 |
+## |  9 | Cristiano Ronaldo dos Santos Aveiro | Marcelo Vieira da Silva Júnior |                  4 |        81.58   |        29.16   |      10 |
+```
+
+The `left_on` argument specifies the column names to join our right dataframe on, and the `right_index` argument decides whether to use the index from the right dataframe as the key for joining. Let us do the same operation for the other team:
+
+
+```python
+pass_Liv = pass_Liv.merge(av_loc_Liv, left_on = 'pass_maker', right_index = True)
+print(pass_Liv.head(10).to_markdown())
+```
+
+```
+## |    | pass_maker       | pass_receiver                       |   number_of_passes |   pass_maker_x |   pass_maker_y |   count |
+## |---:|:-----------------|:------------------------------------|-------------------:|---------------:|---------------:|--------:|
+## |  0 | Andrew Robertson | Andrew Robertson                    |                  1 |        59.8154 |        6.83077 |      13 |
+## |  1 | Andrew Robertson | Georginio Wijnaldum                 |                  3 |        59.8154 |        6.83077 |      13 |
+## |  2 | Andrew Robertson | James Philip Milner                 |                  3 |        59.8154 |        6.83077 |      13 |
+## |  3 | Andrew Robertson | Jordan Brian Henderson              |                  2 |        59.8154 |        6.83077 |      13 |
+## |  4 | Andrew Robertson | Roberto Firmino Barbosa de Oliveira |                  2 |        59.8154 |        6.83077 |      13 |
+## |  5 | Andrew Robertson | Virgil van Dijk                     |                  2 |        59.8154 |        6.83077 |      13 |
+## |  6 | Dejan Lovren     | James Philip Milner                 |                  1 |        41.6909 |       60.1727  |      11 |
+## |  7 | Dejan Lovren     | Jordan Brian Henderson              |                  1 |        41.6909 |       60.1727  |      11 |
+## |  8 | Dejan Lovren     | Loris Karius                        |                  2 |        41.6909 |       60.1727  |      11 |
+## |  9 | Dejan Lovren     | Mohamed Salah                       |                  1 |        41.6909 |       60.1727  |      11 |
+```
+
+Finally, we will again perform a merge on these updated datasets for adding the average locations of the pass receivers and the number of times the receiver received the ball. A last touch of data cleaning will fetch us the dataset sufficient to start visualizing the pass networks for both the teams
+
+
+```python
+pass_Real = pass_Real.merge(av_loc_Real, left_on = 'pass_receiver', right_index = True, suffixes = ['', '_receipt'])
+pass_Real.rename(columns = {'pass_maker_x_receipt':'pass_receiver_x', 'pass_maker_y_receipt':'pass_receiver_y', 'count_receipt':'number_of_passes_received'}, inplace = True)
+pass_Real = pass_Real[pass_Real['pass_maker'] != pass_Real['pass_receiver']].reset_index()
+print(pass_Real.to_markdown())
+```
+
+```
+## |    |   index | pass_maker                          | pass_receiver                       |   number_of_passes |   pass_maker_x |   pass_maker_y |   count |   pass_receiver_x |   pass_receiver_y |   number_of_passes_received |
+## |---:|--------:|:------------------------------------|:------------------------------------|-------------------:|---------------:|---------------:|--------:|------------------:|------------------:|----------------------------:|
+## |  0 |       0 | Carlos Henrique Casimiro            | Daniel Carvajal Ramos               |                  1 |        60.8455 |        31.8364 |      11 |           64.3417 |           73.875  |                          24 |
+## |  1 |       6 | Cristiano Ronaldo dos Santos Aveiro | Daniel Carvajal Ramos               |                  3 |        81.58   |        29.16   |      10 |           64.3417 |           73.875  |                          24 |
+## |  2 |      21 | Francisco Román Alarcón Suárez      | Daniel Carvajal Ramos               |                  2 |        62.3235 |        27.0824 |      17 |           64.3417 |           73.875  |                          24 |
+## |  3 |      29 | Karim Benzema                       | Daniel Carvajal Ramos               |                  2 |        65.0818 |        27.9364 |      11 |           64.3417 |           73.875  |                          24 |
+## |  4 |      39 | Luka Modrić                         | Daniel Carvajal Ramos               |                 10 |        60.6048 |        55.0286 |      21 |           64.3417 |           73.875  |                          24 |
+## |  5 |      47 | Marcelo Vieira da Silva Júnior      | Daniel Carvajal Ramos               |                  2 |        59.8652 |        11.1304 |      23 |           64.3417 |           73.875  |                          24 |
+## |  6 |      55 | Raphaël Varane                      | Daniel Carvajal Ramos               |                  3 |        37.4364 |        58.3545 |      22 |           64.3417 |           73.875  |                          24 |
+## |  7 |      62 | Sergio Ramos García                 | Daniel Carvajal Ramos               |                  3 |        41.2824 |        24.5147 |      34 |           64.3417 |           73.875  |                          24 |
+## |  8 |      71 | Toni Kroos                          | Daniel Carvajal Ramos               |                  1 |        51.19   |        24.275  |      40 |           64.3417 |           73.875  |                          24 |
+## |  9 |       1 | Carlos Henrique Casimiro            | Luka Modrić                         |                  1 |        60.8455 |        31.8364 |      11 |           60.6048 |           55.0286 |                          21 |
+## | 10 |       8 | Cristiano Ronaldo dos Santos Aveiro | Luka Modrić                         |                  1 |        81.58   |        29.16   |      10 |           60.6048 |           55.0286 |                          21 |
+## | 11 |      17 | Daniel Carvajal Ramos               | Luka Modrić                         |                  7 |        64.3417 |        73.875  |      24 |           60.6048 |           55.0286 |                          21 |
+## | 12 |      23 | Francisco Román Alarcón Suárez      | Luka Modrić                         |                  1 |        62.3235 |        27.0824 |      17 |           60.6048 |           55.0286 |                          21 |
+## | 13 |      50 | Marcelo Vieira da Silva Júnior      | Luka Modrić                         |                  1 |        59.8652 |        11.1304 |      23 |           60.6048 |           55.0286 |                          21 |
+## | 14 |      58 | Raphaël Varane                      | Luka Modrić                         |                  5 |        37.4364 |        58.3545 |      22 |           60.6048 |           55.0286 |                          21 |
+## | 15 |      65 | Sergio Ramos García                 | Luka Modrić                         |                  2 |        41.2824 |        24.5147 |      34 |           60.6048 |           55.0286 |                          21 |
+## | 16 |      75 | Toni Kroos                          | Luka Modrić                         |                  5 |        51.19   |        24.275  |      40 |           60.6048 |           55.0286 |                          21 |
+## | 17 |       2 | Carlos Henrique Casimiro            | Marcelo Vieira da Silva Júnior      |                  1 |        60.8455 |        31.8364 |      11 |           59.8652 |           11.1304 |                          23 |
+## | 18 |       9 | Cristiano Ronaldo dos Santos Aveiro | Marcelo Vieira da Silva Júnior      |                  4 |        81.58   |        29.16   |      10 |           59.8652 |           11.1304 |                          23 |
+## | 19 |      24 | Francisco Román Alarcón Suárez      | Marcelo Vieira da Silva Júnior      |                  2 |        62.3235 |        27.0824 |      17 |           59.8652 |           11.1304 |                          23 |
+## | 20 |      34 | Keylor Navas Gamboa                 | Marcelo Vieira da Silva Júnior      |                  2 |        10.87   |        41.81   |      10 |           59.8652 |           11.1304 |                          23 |
+## | 21 |      41 | Luka Modrić                         | Marcelo Vieira da Silva Júnior      |                  1 |        60.6048 |        55.0286 |      21 |           59.8652 |           11.1304 |                          23 |
+## | 22 |      66 | Sergio Ramos García                 | Marcelo Vieira da Silva Júnior      |                  9 |        41.2824 |        24.5147 |      34 |           59.8652 |           11.1304 |                          23 |
+## | 23 |      76 | Toni Kroos                          | Marcelo Vieira da Silva Júnior      |                  4 |        51.19   |        24.275  |      40 |           59.8652 |           11.1304 |                          23 |
+## | 24 |       3 | Carlos Henrique Casimiro            | Raphaël Varane                      |                  1 |        60.8455 |        31.8364 |      11 |           37.4364 |           58.3545 |                          22 |
+## | 25 |      18 | Daniel Carvajal Ramos               | Raphaël Varane                      |                  5 |        64.3417 |        73.875  |      24 |           37.4364 |           58.3545 |                          22 |
+## | 26 |      35 | Keylor Navas Gamboa                 | Raphaël Varane                      |                  2 |        10.87   |        41.81   |      10 |           37.4364 |           58.3545 |                          22 |
+## | 27 |      42 | Luka Modrić                         | Raphaël Varane                      |                  3 |        60.6048 |        55.0286 |      21 |           37.4364 |           58.3545 |                          22 |
+## | 28 |      51 | Marcelo Vieira da Silva Júnior      | Raphaël Varane                      |                  2 |        59.8652 |        11.1304 |      23 |           37.4364 |           58.3545 |                          22 |
+## | 29 |      67 | Sergio Ramos García                 | Raphaël Varane                      |                  5 |        41.2824 |        24.5147 |      34 |           37.4364 |           58.3545 |                          22 |
+## | 30 |      77 | Toni Kroos                          | Raphaël Varane                      |                  4 |        51.19   |        24.275  |      40 |           37.4364 |           58.3545 |                          22 |
+## | 31 |       4 | Carlos Henrique Casimiro            | Sergio Ramos García                 |                  1 |        60.8455 |        31.8364 |      11 |           41.2824 |           24.5147 |                          34 |
+## | 32 |      10 | Cristiano Ronaldo dos Santos Aveiro | Sergio Ramos García                 |                  1 |        81.58   |        29.16   |      10 |           41.2824 |           24.5147 |                          34 |
+## | 33 |      25 | Francisco Román Alarcón Suárez      | Sergio Ramos García                 |                  5 |        62.3235 |        27.0824 |      17 |           41.2824 |           24.5147 |                          34 |
+## | 34 |      31 | Karim Benzema                       | Sergio Ramos García                 |                  1 |        65.0818 |        27.9364 |      11 |           41.2824 |           24.5147 |                          34 |
+## | 35 |      36 | Keylor Navas Gamboa                 | Sergio Ramos García                 |                  4 |        10.87   |        41.81   |      10 |           41.2824 |           24.5147 |                          34 |
+## | 36 |      43 | Luka Modrić                         | Sergio Ramos García                 |                  1 |        60.6048 |        55.0286 |      21 |           41.2824 |           24.5147 |                          34 |
+## | 37 |      52 | Marcelo Vieira da Silva Júnior      | Sergio Ramos García                 |                  2 |        59.8652 |        11.1304 |      23 |           41.2824 |           24.5147 |                          34 |
+## | 38 |      59 | Raphaël Varane                      | Sergio Ramos García                 |                  6 |        37.4364 |        58.3545 |      22 |           41.2824 |           24.5147 |                          34 |
+## | 39 |      78 | Toni Kroos                          | Sergio Ramos García                 |                 10 |        51.19   |        24.275  |      40 |           41.2824 |           24.5147 |                          34 |
+## | 40 |       5 | Carlos Henrique Casimiro            | Toni Kroos                          |                  6 |        60.8455 |        31.8364 |      11 |           51.19   |           24.275  |                          40 |
+## | 41 |      19 | Daniel Carvajal Ramos               | Toni Kroos                          |                  1 |        64.3417 |        73.875  |      24 |           51.19   |           24.275  |                          40 |
+## | 42 |      26 | Francisco Román Alarcón Suárez      | Toni Kroos                          |                  4 |        62.3235 |        27.0824 |      17 |           51.19   |           24.275  |                          40 |
+## | 43 |      32 | Karim Benzema                       | Toni Kroos                          |                  4 |        65.0818 |        27.9364 |      11 |           51.19   |           24.275  |                          40 |
+## | 44 |      37 | Keylor Navas Gamboa                 | Toni Kroos                          |                  1 |        10.87   |        41.81   |      10 |           51.19   |           24.275  |                          40 |
+## | 45 |      44 | Luka Modrić                         | Toni Kroos                          |                  4 |        60.6048 |        55.0286 |      21 |           51.19   |           24.275  |                          40 |
+## | 46 |      53 | Marcelo Vieira da Silva Júnior      | Toni Kroos                          |                  5 |        59.8652 |        11.1304 |      23 |           51.19   |           24.275  |                          40 |
+## | 47 |      60 | Raphaël Varane                      | Toni Kroos                          |                  4 |        37.4364 |        58.3545 |      22 |           51.19   |           24.275  |                          40 |
+## | 48 |      68 | Sergio Ramos García                 | Toni Kroos                          |                  9 |        41.2824 |        24.5147 |      34 |           51.19   |           24.275  |                          40 |
+## | 49 |       7 | Cristiano Ronaldo dos Santos Aveiro | Karim Benzema                       |                  1 |        81.58   |        29.16   |      10 |           65.0818 |           27.9364 |                          11 |
+## | 50 |      15 | Daniel Carvajal Ramos               | Karim Benzema                       |                  1 |        64.3417 |        73.875  |      24 |           65.0818 |           27.9364 |                          11 |
+## | 51 |      22 | Francisco Román Alarcón Suárez      | Karim Benzema                       |                  1 |        62.3235 |        27.0824 |      17 |           65.0818 |           27.9364 |                          11 |
+## | 52 |      33 | Keylor Navas Gamboa                 | Karim Benzema                       |                  1 |        10.87   |        41.81   |      10 |           65.0818 |           27.9364 |                          11 |
+## | 53 |      40 | Luka Modrić                         | Karim Benzema                       |                  1 |        60.6048 |        55.0286 |      21 |           65.0818 |           27.9364 |                          11 |
+## | 54 |      49 | Marcelo Vieira da Silva Júnior      | Karim Benzema                       |                  3 |        59.8652 |        11.1304 |      23 |           65.0818 |           27.9364 |                          11 |
+## | 55 |      56 | Raphaël Varane                      | Karim Benzema                       |                  1 |        37.4364 |        58.3545 |      22 |           65.0818 |           27.9364 |                          11 |
+## | 56 |      73 | Toni Kroos                          | Karim Benzema                       |                  2 |        51.19   |        24.275  |      40 |           65.0818 |           27.9364 |                          11 |
+## | 57 |      11 | Daniel Carvajal Ramos               | Carlos Henrique Casimiro            |                  2 |        64.3417 |        73.875  |      24 |           60.8455 |           31.8364 |                          11 |
+## | 58 |      27 | Karim Benzema                       | Carlos Henrique Casimiro            |                  2 |        65.0818 |        27.9364 |      11 |           60.8455 |           31.8364 |                          11 |
+## | 59 |      38 | Luka Modrić                         | Carlos Henrique Casimiro            |                  1 |        60.6048 |        55.0286 |      21 |           60.8455 |           31.8364 |                          11 |
+## | 60 |      45 | Marcelo Vieira da Silva Júnior      | Carlos Henrique Casimiro            |                  2 |        59.8652 |        11.1304 |      23 |           60.8455 |           31.8364 |                          11 |
+## | 61 |      54 | Raphaël Varane                      | Carlos Henrique Casimiro            |                  1 |        37.4364 |        58.3545 |      22 |           60.8455 |           31.8364 |                          11 |
+## | 62 |      69 | Toni Kroos                          | Carlos Henrique Casimiro            |                  2 |        51.19   |        24.275  |      40 |           60.8455 |           31.8364 |                          11 |
+## | 63 |      12 | Daniel Carvajal Ramos               | Cristiano Ronaldo dos Santos Aveiro |                  2 |        64.3417 |        73.875  |      24 |           81.58   |           29.16   |                          10 |
+## | 64 |      20 | Francisco Román Alarcón Suárez      | Cristiano Ronaldo dos Santos Aveiro |                  2 |        62.3235 |        27.0824 |      17 |           81.58   |           29.16   |                          10 |
+## | 65 |      28 | Karim Benzema                       | Cristiano Ronaldo dos Santos Aveiro |                  1 |        65.0818 |        27.9364 |      11 |           81.58   |           29.16   |                          10 |
+## | 66 |      46 | Marcelo Vieira da Silva Júnior      | Cristiano Ronaldo dos Santos Aveiro |                  2 |        59.8652 |        11.1304 |      23 |           81.58   |           29.16   |                          10 |
+## | 67 |      61 | Sergio Ramos García                 | Cristiano Ronaldo dos Santos Aveiro |                  1 |        41.2824 |        24.5147 |      34 |           81.58   |           29.16   |                          10 |
+## | 68 |      70 | Toni Kroos                          | Cristiano Ronaldo dos Santos Aveiro |                  2 |        51.19   |        24.275  |      40 |           81.58   |           29.16   |                          10 |
+## | 69 |      14 | Daniel Carvajal Ramos               | Francisco Román Alarcón Suárez      |                  3 |        64.3417 |        73.875  |      24 |           62.3235 |           27.0824 |                          17 |
+## | 70 |      48 | Marcelo Vieira da Silva Júnior      | Francisco Román Alarcón Suárez      |                  4 |        59.8652 |        11.1304 |      23 |           62.3235 |           27.0824 |                          17 |
+## | 71 |      63 | Sergio Ramos García                 | Francisco Román Alarcón Suárez      |                  4 |        41.2824 |        24.5147 |      34 |           62.3235 |           27.0824 |                          17 |
+## | 72 |      72 | Toni Kroos                          | Francisco Román Alarcón Suárez      |                  8 |        51.19   |        24.275  |      40 |           62.3235 |           27.0824 |                          17 |
+## | 73 |      16 | Daniel Carvajal Ramos               | Keylor Navas Gamboa                 |                  1 |        64.3417 |        73.875  |      24 |           10.87   |           41.81   |                          10 |
+## | 74 |      30 | Karim Benzema                       | Keylor Navas Gamboa                 |                  1 |        65.0818 |        27.9364 |      11 |           10.87   |           41.81   |                          10 |
+## | 75 |      57 | Raphaël Varane                      | Keylor Navas Gamboa                 |                  2 |        37.4364 |        58.3545 |      22 |           10.87   |           41.81   |                          10 |
+## | 76 |      64 | Sergio Ramos García                 | Keylor Navas Gamboa                 |                  1 |        41.2824 |        24.5147 |      34 |           10.87   |           41.81   |                          10 |
+## | 77 |      74 | Toni Kroos                          | Keylor Navas Gamboa                 |                  1 |        51.19   |        24.275  |      40 |           10.87   |           41.81   |                          10 |
+```
+
+
+```python
+pass_Liv = pass_Liv.merge(av_loc_Liv, left_on = 'pass_receiver', right_index = True, suffixes = ['', '_receipt'])
+pass_Liv.rename(columns = {'pass_maker_x_receipt':'pass_receiver_x', 'pass_maker_y_receipt':'pass_receiver_y', 'count_receipt':'number_of_passes_received'}, inplace = True)
+pass_Liv = pass_Liv[pass_Liv['pass_maker'] != pass_Liv['pass_receiver']].reset_index()
+print(pass_Liv.to_markdown())
+```
+
+```
+## |    |   index | pass_maker                          | pass_receiver                       |   number_of_passes |   pass_maker_x |   pass_maker_y |   count |   pass_receiver_x |   pass_receiver_y |   number_of_passes_received |
+## |---:|--------:|:------------------------------------|:------------------------------------|-------------------:|---------------:|---------------:|--------:|------------------:|------------------:|----------------------------:|
+## |  0 |      12 | Georginio Wijnaldum                 | Andrew Robertson                    |                  4 |        76.3909 |       28.5182  |      11 |           59.8154 |           6.83077 |                          13 |
+## |  1 |      18 | James Philip Milner                 | Andrew Robertson                    |                  1 |        72.3533 |       36.1533  |      15 |           59.8154 |           6.83077 |                          13 |
+## |  2 |      28 | Jordan Brian Henderson              | Andrew Robertson                    |                  1 |        61.0353 |       37.1529  |      17 |           59.8154 |           6.83077 |                          13 |
+## |  3 |      36 | Loris Karius                        | Andrew Robertson                    |                  1 |        12.9143 |       40.3857  |       7 |           59.8154 |           6.83077 |                          13 |
+## |  4 |      54 | Trent Alexander-Arnold              | Andrew Robertson                    |                  1 |        64.6667 |       72.55    |      12 |           59.8154 |           6.83077 |                          13 |
+## |  5 |      60 | Virgil van Dijk                     | Andrew Robertson                    |                  3 |        43.3667 |       25.4333  |       9 |           59.8154 |           6.83077 |                          13 |
+## |  6 |       1 | Andrew Robertson                    | Georginio Wijnaldum                 |                  3 |        59.8154 |        6.83077 |      13 |           76.3909 |          28.5182  |                          11 |
+## |  7 |      20 | James Philip Milner                 | Georginio Wijnaldum                 |                  1 |        72.3533 |       36.1533  |      15 |           76.3909 |          28.5182  |                          11 |
+## |  8 |      30 | Jordan Brian Henderson              | Georginio Wijnaldum                 |                  4 |        61.0353 |       37.1529  |      17 |           76.3909 |          28.5182  |                          11 |
+## |  9 |      40 | Mohamed Salah                       | Georginio Wijnaldum                 |                  1 |        77.55   |       64.71    |      10 |           76.3909 |          28.5182  |                          11 |
+## | 10 |      56 | Trent Alexander-Arnold              | Georginio Wijnaldum                 |                  3 |        64.6667 |       72.55    |      12 |           76.3909 |          28.5182  |                          11 |
+## | 11 |      62 | Virgil van Dijk                     | Georginio Wijnaldum                 |                  1 |        43.3667 |       25.4333  |       9 |           76.3909 |          28.5182  |                          11 |
+## | 12 |       2 | Andrew Robertson                    | James Philip Milner                 |                  3 |        59.8154 |        6.83077 |      13 |           72.3533 |          36.1533  |                          15 |
+## | 13 |       6 | Dejan Lovren                        | James Philip Milner                 |                  1 |        41.6909 |       60.1727  |      11 |           72.3533 |          36.1533  |                          15 |
+## | 14 |      13 | Georginio Wijnaldum                 | James Philip Milner                 |                  1 |        76.3909 |       28.5182  |      11 |           72.3533 |          36.1533  |                          15 |
+## | 15 |      31 | Jordan Brian Henderson              | James Philip Milner                 |                  3 |        61.0353 |       37.1529  |      17 |           72.3533 |          36.1533  |                          15 |
+## | 16 |      41 | Mohamed Salah                       | James Philip Milner                 |                  1 |        77.55   |       64.71    |      10 |           72.3533 |          36.1533  |                          15 |
+## | 17 |      47 | Roberto Firmino Barbosa de Oliveira | James Philip Milner                 |                  2 |        78.25   |       43.57    |      10 |           72.3533 |          36.1533  |                          15 |
+## | 18 |      51 | Sadio Mané                          | James Philip Milner                 |                  1 |        86.275  |       22.075   |       4 |           72.3533 |          36.1533  |                          15 |
+## | 19 |       3 | Andrew Robertson                    | Jordan Brian Henderson              |                  2 |        59.8154 |        6.83077 |      13 |           61.0353 |          37.1529  |                          17 |
+## | 20 |       7 | Dejan Lovren                        | Jordan Brian Henderson              |                  1 |        41.6909 |       60.1727  |      11 |           61.0353 |          37.1529  |                          17 |
+## | 21 |      14 | Georginio Wijnaldum                 | Jordan Brian Henderson              |                  2 |        76.3909 |       28.5182  |      11 |           61.0353 |          37.1529  |                          17 |
+## | 22 |      21 | James Philip Milner                 | Jordan Brian Henderson              |                  2 |        72.3533 |       36.1533  |      15 |           61.0353 |          37.1529  |                          17 |
+## | 23 |      38 | Loris Karius                        | Jordan Brian Henderson              |                  1 |        12.9143 |       40.3857  |       7 |           61.0353 |          37.1529  |                          17 |
+## | 24 |      48 | Roberto Firmino Barbosa de Oliveira | Jordan Brian Henderson              |                  2 |        78.25   |       43.57    |      10 |           61.0353 |          37.1529  |                          17 |
+## | 25 |      52 | Sadio Mané                          | Jordan Brian Henderson              |                  1 |        86.275  |       22.075   |       4 |           61.0353 |          37.1529  |                          17 |
+## | 26 |      57 | Trent Alexander-Arnold              | Jordan Brian Henderson              |                  2 |        64.6667 |       72.55    |      12 |           61.0353 |          37.1529  |                          17 |
+## | 27 |      63 | Virgil van Dijk                     | Jordan Brian Henderson              |                  1 |        43.3667 |       25.4333  |       9 |           61.0353 |          37.1529  |                          17 |
+## | 28 |       4 | Andrew Robertson                    | Roberto Firmino Barbosa de Oliveira |                  2 |        59.8154 |        6.83077 |      13 |           78.25   |          43.57    |                          10 |
+## | 29 |      24 | James Philip Milner                 | Roberto Firmino Barbosa de Oliveira |                  1 |        72.3533 |       36.1533  |      15 |           78.25   |          43.57    |                          10 |
+## | 30 |      42 | Mohamed Salah                       | Roberto Firmino Barbosa de Oliveira |                  4 |        77.55   |       64.71    |      10 |           78.25   |          43.57    |                          10 |
+## | 31 |      53 | Sadio Mané                          | Roberto Firmino Barbosa de Oliveira |                  2 |        86.275  |       22.075   |       4 |           78.25   |          43.57    |                          10 |
+## | 32 |      59 | Trent Alexander-Arnold              | Roberto Firmino Barbosa de Oliveira |                  2 |        64.6667 |       72.55    |      12 |           78.25   |          43.57    |                          10 |
+## | 33 |       5 | Andrew Robertson                    | Virgil van Dijk                     |                  2 |        59.8154 |        6.83077 |      13 |           43.3667 |          25.4333  |                           9 |
+## | 34 |      11 | Dejan Lovren                        | Virgil van Dijk                     |                  2 |        41.6909 |       60.1727  |      11 |           43.3667 |          25.4333  |                           9 |
+## | 35 |      17 | Georginio Wijnaldum                 | Virgil van Dijk                     |                  2 |        76.3909 |       28.5182  |      11 |           43.3667 |          25.4333  |                           9 |
+## | 36 |      27 | James Philip Milner                 | Virgil van Dijk                     |                  1 |        72.3533 |       36.1533  |      15 |           43.3667 |          25.4333  |                           9 |
+## | 37 |      35 | Jordan Brian Henderson              | Virgil van Dijk                     |                  2 |        61.0353 |       37.1529  |      17 |           43.3667 |          25.4333  |                           9 |
+## | 38 |      39 | Loris Karius                        | Virgil van Dijk                     |                  1 |        12.9143 |       40.3857  |       7 |           43.3667 |          25.4333  |                           9 |
+## | 39 |      45 | Mohamed Salah                       | Virgil van Dijk                     |                  1 |        77.55   |       64.71    |      10 |           43.3667 |          25.4333  |                           9 |
+## | 40 |       8 | Dejan Lovren                        | Loris Karius                        |                  2 |        41.6909 |       60.1727  |      11 |           12.9143 |          40.3857  |                           7 |
+## | 41 |      22 | James Philip Milner                 | Loris Karius                        |                  1 |        72.3533 |       36.1533  |      15 |           12.9143 |          40.3857  |                           7 |
+## | 42 |      32 | Jordan Brian Henderson              | Loris Karius                        |                  2 |        61.0353 |       37.1529  |      17 |           12.9143 |          40.3857  |                           7 |
+## | 43 |       9 | Dejan Lovren                        | Mohamed Salah                       |                  1 |        41.6909 |       60.1727  |      11 |           77.55   |          64.71    |                          10 |
+## | 44 |      15 | Georginio Wijnaldum                 | Mohamed Salah                       |                  1 |        76.3909 |       28.5182  |      11 |           77.55   |          64.71    |                          10 |
+## | 45 |      23 | James Philip Milner                 | Mohamed Salah                       |                  1 |        72.3533 |       36.1533  |      15 |           77.55   |          64.71    |                          10 |
+## | 46 |      49 | Roberto Firmino Barbosa de Oliveira | Mohamed Salah                       |                  4 |        78.25   |       43.57    |      10 |           77.55   |          64.71    |                          10 |
+## | 47 |      58 | Trent Alexander-Arnold              | Mohamed Salah                       |                  3 |        64.6667 |       72.55    |      12 |           77.55   |          64.71    |                          10 |
+## | 48 |      10 | Dejan Lovren                        | Trent Alexander-Arnold              |                  4 |        41.6909 |       60.1727  |      11 |           64.6667 |          72.55    |                          12 |
+## | 49 |      16 | Georginio Wijnaldum                 | Trent Alexander-Arnold              |                  1 |        76.3909 |       28.5182  |      11 |           64.6667 |          72.55    |                          12 |
+## | 50 |      26 | James Philip Milner                 | Trent Alexander-Arnold              |                  4 |        72.3533 |       36.1533  |      15 |           64.6667 |          72.55    |                          12 |
+## | 51 |      34 | Jordan Brian Henderson              | Trent Alexander-Arnold              |                  1 |        61.0353 |       37.1529  |      17 |           64.6667 |          72.55    |                          12 |
+## | 52 |      44 | Mohamed Salah                       | Trent Alexander-Arnold              |                  2 |        77.55   |       64.71    |      10 |           64.6667 |          72.55    |                          12 |
+## | 53 |      50 | Roberto Firmino Barbosa de Oliveira | Trent Alexander-Arnold              |                  1 |        78.25   |       43.57    |      10 |           64.6667 |          72.55    |                          12 |
+## | 54 |      64 | Virgil van Dijk                     | Trent Alexander-Arnold              |                  1 |        43.3667 |       25.4333  |       9 |           64.6667 |          72.55    |                          12 |
+## | 55 |      19 | James Philip Milner                 | Dejan Lovren                        |                  1 |        72.3533 |       36.1533  |      15 |           41.6909 |          60.1727  |                          11 |
+## | 56 |      29 | Jordan Brian Henderson              | Dejan Lovren                        |                  3 |        61.0353 |       37.1529  |      17 |           41.6909 |          60.1727  |                          11 |
+## | 57 |      37 | Loris Karius                        | Dejan Lovren                        |                  4 |        12.9143 |       40.3857  |       7 |           41.6909 |          60.1727  |                          11 |
+## | 58 |      46 | Roberto Firmino Barbosa de Oliveira | Dejan Lovren                        |                  1 |        78.25   |       43.57    |      10 |           41.6909 |          60.1727  |                          11 |
+## | 59 |      55 | Trent Alexander-Arnold              | Dejan Lovren                        |                  1 |        64.6667 |       72.55    |      12 |           41.6909 |          60.1727  |                          11 |
+## | 60 |      61 | Virgil van Dijk                     | Dejan Lovren                        |                  3 |        43.3667 |       25.4333  |       9 |           41.6909 |          60.1727  |                          11 |
+## | 61 |      25 | James Philip Milner                 | Sadio Mané                          |                  2 |        72.3533 |       36.1533  |      15 |           86.275  |          22.075   |                           4 |
+## | 62 |      33 | Jordan Brian Henderson              | Sadio Mané                          |                  1 |        61.0353 |       37.1529  |      17 |           86.275  |          22.075   |                           4 |
+## | 63 |      43 | Mohamed Salah                       | Sadio Mané                          |                  1 |        77.55   |       64.71    |      10 |           86.275  |          22.075   |                           4 |
+```
+
+We will replace the player names with their jersey numbers and create another pair of new datasets:
+
+
+```python
+pitch = Pitch(pitch_color='black', goal_type = 'box', line_color='white', constrained_layout=True, tight_layout=False)
+fig, ax = pitch.draw()
+arrows = pitch.arrows(pass_Real.pass_maker_x, pass_Real.pass_maker_y,
+                         pass_Real.pass_receiver_x, pass_Real.pass_receiver_y, lw = 5,
+                         color = 'white', zorder = 1, ax = ax)
+nodes = pitch.scatter(av_loc_Real.pass_maker_x, av_loc_Real.pass_maker_y,
+                           s=350, color='red', edgecolors='black', linewidth=1, alpha = 1, ax = ax)
+plt.show()
+```
+
+<img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-1.png" width="672" />
+
+
+```python
+pitch = Pitch(pitch_color='black', goal_type = 'box', line_color='white', constrained_layout=True, tight_layout=False)
+fig, ax = pitch.draw()
+arrows = pitch.arrows(pass_Liv.pass_maker_x, pass_Liv.pass_maker_y,
+                         pass_Liv.pass_receiver_x, pass_Liv.pass_receiver_y, lw = 5,
+                         color = 'white', zorder = 1, ax = ax)
+nodes = pitch.scatter(av_loc_Liv.pass_maker_x, av_loc_Liv.pass_maker_y,
+                           s=350, color='red', edgecolors='black', linewidth=1, alpha = 1, ax = ax)
+plt.show()
+```
+
+<img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-3.png" width="672" />
+
+**This post is still under construction**

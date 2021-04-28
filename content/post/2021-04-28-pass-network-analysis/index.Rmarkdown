@@ -221,7 +221,7 @@ print(events_pn_Real.head(10).to_markdown())
 print(events_pn_Liv.head(10).to_markdown())
 ```
 
-So it seems we have been able to logically clean and modify the datasets. Now we are only focused on building the pass netwrok among the players who were in the starting 11 from both the teams. So we will discard out the rows which consist of pass events that took place after the first substitution for either of the teams. Let us find the `minute` and `second` of the first substitution for both `Real Madrid` and `Barcelona`.
+So it seems we have been able to logically clean and modify the datasets. Now we are only focused on building the pass netwrok among the players who were in the starting 11 from both the teams. So we will discard out the rows which consist of pass events that took place after the first substitution for either of the teams. Let us find the `minute` and `second` of the first substitution for both `Real Madrid` and `Liverpool`.
 
 So let us filter the datasets `events_Real` and `events_Liv` by setting the `type` to be `Substitution`. This will give us the information of when the first substitution had taken place for the teams.
 
@@ -353,3 +353,59 @@ print(pass_Real.head(10).to_markdown())
 pass_Liv.rename(columns = {'index':'number_of_passes'}, inplace = True)
 print(pass_Liv.head(10).to_markdown())
 ```
+
+Now, we will merge the datasets `av_loc_Real` and `pass_Real`, Let us identify the left and the right dataframes for performing the merge. Here, `av_loc_Real` is the left dataframe and `pass_Real` is the right. We will use the `merge()` function from `pandas` to carry out the merging operation. 
+
+```{python}
+pass_Real = pass_Real.merge(av_loc_Real, left_on = 'pass_maker', right_index = True)
+print(pass_Real.head(10).to_markdown())
+```
+
+The `left_on` argument specifies the column names to join our right dataframe on, and the `right_index` argument decides whether to use the index from the right dataframe as the key for joining. Let us do the same operation for the other team:
+
+```{python}
+pass_Liv = pass_Liv.merge(av_loc_Liv, left_on = 'pass_maker', right_index = True)
+print(pass_Liv.head(10).to_markdown())
+```
+
+Finally, we will again perform a merge on these updated datasets for adding the average locations of the pass receivers and the number of times the receiver received the ball. A last touch of data cleaning will fetch us the dataset sufficient to start visualizing the pass networks for both the teams
+
+```{python}
+pass_Real = pass_Real.merge(av_loc_Real, left_on = 'pass_receiver', right_index = True, suffixes = ['', '_receipt'])
+pass_Real.rename(columns = {'pass_maker_x_receipt':'pass_receiver_x', 'pass_maker_y_receipt':'pass_receiver_y', 'count_receipt':'number_of_passes_received'}, inplace = True)
+pass_Real = pass_Real[pass_Real['pass_maker'] != pass_Real['pass_receiver']].reset_index()
+print(pass_Real.to_markdown())
+```
+
+```{python}
+pass_Liv = pass_Liv.merge(av_loc_Liv, left_on = 'pass_receiver', right_index = True, suffixes = ['', '_receipt'])
+pass_Liv.rename(columns = {'pass_maker_x_receipt':'pass_receiver_x', 'pass_maker_y_receipt':'pass_receiver_y', 'count_receipt':'number_of_passes_received'}, inplace = True)
+pass_Liv = pass_Liv[pass_Liv['pass_maker'] != pass_Liv['pass_receiver']].reset_index()
+print(pass_Liv.to_markdown())
+```
+
+We will replace the player names with their jersey numbers and create another pair of new datasets:
+
+```{python}
+pitch = Pitch(pitch_color='black', goal_type = 'box', line_color='white', constrained_layout=True, tight_layout=False)
+fig, ax = pitch.draw()
+arrows = pitch.arrows(pass_Real.pass_maker_x, pass_Real.pass_maker_y,
+                         pass_Real.pass_receiver_x, pass_Real.pass_receiver_y, lw = 5,
+                         color = 'white', zorder = 1, ax = ax)
+nodes = pitch.scatter(av_loc_Real.pass_maker_x, av_loc_Real.pass_maker_y,
+                           s=350, color='red', edgecolors='black', linewidth=1, alpha = 1, ax = ax)
+plt.show()
+```
+
+```{python}
+pitch = Pitch(pitch_color='black', goal_type = 'box', line_color='white', constrained_layout=True, tight_layout=False)
+fig, ax = pitch.draw()
+arrows = pitch.arrows(pass_Liv.pass_maker_x, pass_Liv.pass_maker_y,
+                         pass_Liv.pass_receiver_x, pass_Liv.pass_receiver_y, lw = 5,
+                         color = 'white', zorder = 1, ax = ax)
+nodes = pitch.scatter(av_loc_Liv.pass_maker_x, av_loc_Liv.pass_maker_y,
+                           s=350, color='red', edgecolors='black', linewidth=1, alpha = 1, ax = ax)
+plt.show()
+```
+
+**This post is still under construction**
