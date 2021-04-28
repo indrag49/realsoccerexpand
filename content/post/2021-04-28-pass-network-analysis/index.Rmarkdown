@@ -284,7 +284,7 @@ events_pn_Real['pass_maker_y'] = Loc['pass_maker_y']
 events_pn_Real['pass_receiver_x'] = Loc_end['pass_receiver_x']
 events_pn_Real['pass_receiver_y'] = Loc_end['pass_receiver_y']
 
-events_pn_Real = events_pn_Real[['minute', 'second', 'team', 'type', 'pass_outcome', 'player', 'pass_maker', 'pass_receiver', 'pass_maker_x', 'pass_maker_y', 'pass_receiver_x', 'pass_receiver_y']]
+events_pn_Real = events_pn_Real[['index', 'minute', 'second', 'team', 'type', 'pass_outcome', 'player', 'pass_maker', 'pass_receiver', 'pass_maker_x', 'pass_maker_y', 'pass_receiver_x', 'pass_receiver_y']]
 
 print(events_pn_Real.head(10).to_markdown())
 ```
@@ -303,7 +303,7 @@ events_pn_Liv['pass_maker_y'] = Loc['pass_maker_y']
 events_pn_Liv['pass_receiver_x'] = Loc_end['pass_receiver_x']
 events_pn_Liv['pass_receiver_y'] = Loc_end['pass_receiver_y']
 
-events_pn_Liv = events_pn_Liv[['minute', 'second', 'team', 'type', 'pass_outcome', 'player', 'pass_maker', 'pass_receiver', 'pass_maker_x', 'pass_maker_y', 'pass_receiver_x', 'pass_receiver_y']]
+events_pn_Liv = events_pn_Liv[['index', 'minute', 'second', 'team', 'type', 'pass_outcome', 'player', 'pass_maker', 'pass_receiver', 'pass_maker_x', 'pass_maker_y', 'pass_receiver_x', 'pass_receiver_y']]
 
 print(events_pn_Liv.head(10).to_markdown())
 ```
@@ -318,7 +318,7 @@ print(av_loc_Real.to_markdown())
 As we see the `groupby()` function from `pandas` splits `events_pn_Real` into groups indexed by the player names. Whereas, the `agg()` function aggregates the data into the averages of the pass makers' locations and also counts the number of passes made by these players. Now refine the column names of `av_loc_Real`:
 
 ```{python}
-av_loc_Real.columns = ['passer_x', 'passer_y', 'count']
+av_loc_Real.columns = ['pass_maker_x', 'pass_maker_y', 'count']
 print(av_loc_Real.to_markdown())
 ```
 
@@ -326,6 +326,30 @@ Now do the same operations for `Liverpool`:
 
 ```{python}
 av_loc_Liv = events_pn_Liv.groupby('pass_maker').agg({'pass_maker_x':['mean'], 'pass_maker_y':['mean', 'count']})
-av_loc_Liv.columns = ['passer_x', 'passer_y', 'count']
+av_loc_Liv.columns = ['pass_maker_x', 'pass_maker_y', 'count']
 print(av_loc_Liv.to_markdown())
+```
+
+Once we sort out the starting 11 pass makers' average locations in a game, we will try to figure out the number of times a particular pass maker passed the ball to a particular pass receiver (be cautious to keep the direction of pass in mind, i.e, a pass from a player `A` to a player `B` is not identical to a pass from player `B` to player `A`). We will use the `groupby()` and the `count()` function to count the number of rows where a unique player `A` passed the ball to another unique player `B`.
+
+```{python}
+pass_Real = events_pn_Real.groupby(['pass_maker', 'pass_receiver']).index.count().reset_index()
+print(pass_Real.head(10).to_markdown())
+```
+
+```{python}
+pass_Liv = events_pn_Liv.groupby(['pass_maker', 'pass_receiver']).index.count().reset_index()
+print(pass_Liv.head(10).to_markdown())
+```
+
+Let's rename the `index` column to `number_of_passes`:
+
+```{python}
+pass_Real.rename(columns = {'index':'number_of_passes'}, inplace = True)
+print(pass_Real.head(10).to_markdown())
+```
+
+```{python}
+pass_Liv.rename(columns = {'index':'number_of_passes'}, inplace = True)
+print(pass_Liv.head(10).to_markdown())
 ```

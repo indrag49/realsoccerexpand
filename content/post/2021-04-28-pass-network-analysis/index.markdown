@@ -721,24 +721,24 @@ events_pn_Real['pass_maker_y'] = Loc['pass_maker_y']
 events_pn_Real['pass_receiver_x'] = Loc_end['pass_receiver_x']
 events_pn_Real['pass_receiver_y'] = Loc_end['pass_receiver_y']
 
-events_pn_Real = events_pn_Real[['minute', 'second', 'team', 'type', 'pass_outcome', 'player', 'pass_maker', 'pass_receiver', 'pass_maker_x', 'pass_maker_y', 'pass_receiver_x', 'pass_receiver_y']]
+events_pn_Real = events_pn_Real[['index', 'minute', 'second', 'team', 'type', 'pass_outcome', 'player', 'pass_maker', 'pass_receiver', 'pass_maker_x', 'pass_maker_y', 'pass_receiver_x', 'pass_receiver_y']]
 
 print(events_pn_Real.head(10).to_markdown())
 ```
 
 ```
-## |    |   minute |   second | team        | type   |   pass_outcome | player                              | pass_maker                          | pass_receiver                       |   pass_maker_x |   pass_maker_y |   pass_receiver_x |   pass_receiver_y |
-## |---:|---------:|---------:|:------------|:-------|---------------:|:------------------------------------|:------------------------------------|:------------------------------------|---------------:|---------------:|------------------:|------------------:|
-## |  0 |        0 |        8 | Real Madrid | Pass   |            nan | Raphaël Varane                      | Raphaël Varane                      | Luka Modrić                         |           27.4 |           60.2 |              36.1 |              71.6 |
-## |  1 |        0 |       10 | Real Madrid | Pass   |            nan | Luka Modrić                         | Luka Modrić                         | Daniel Carvajal Ramos               |           35.3 |           75.4 |              22.4 |              76.6 |
-## |  2 |        0 |       11 | Real Madrid | Pass   |            nan | Daniel Carvajal Ramos               | Daniel Carvajal Ramos               | Carlos Henrique Casimiro            |           22.3 |           76.6 |              33.4 |              68   |
-## |  3 |        0 |       40 | Real Madrid | Pass   |            nan | Marcelo Vieira da Silva Júnior      | Marcelo Vieira da Silva Júnior      | Carlos Henrique Casimiro            |           57.5 |            4.6 |              49.2 |              15.6 |
-## |  4 |        0 |       43 | Real Madrid | Pass   |            nan | Carlos Henrique Casimiro            | Carlos Henrique Casimiro            | Toni Kroos                          |           48.8 |           18.4 |              49.8 |              12.5 |
-## |  5 |        0 |       46 | Real Madrid | Pass   |            nan | Toni Kroos                          | Toni Kroos                          | Raphaël Varane                      |           48.8 |           13.9 |              36.1 |              56.3 |
-## |  6 |        0 |       52 | Real Madrid | Pass   |            nan | Raphaël Varane                      | Raphaël Varane                      | Sergio Ramos García                 |           41.3 |           54.8 |              34.4 |              40.2 |
-## |  7 |        0 |       55 | Real Madrid | Pass   |            nan | Sergio Ramos García                 | Sergio Ramos García                 | Cristiano Ronaldo dos Santos Aveiro |           39.1 |           36.5 |              65.4 |              13.1 |
-## |  8 |        0 |       58 | Real Madrid | Pass   |            nan | Cristiano Ronaldo dos Santos Aveiro | Cristiano Ronaldo dos Santos Aveiro | Marcelo Vieira da Silva Júnior      |           64.5 |           11.1 |              54.2 |               5.6 |
-## |  9 |        0 |       59 | Real Madrid | Pass   |            nan | Marcelo Vieira da Silva Júnior      | Marcelo Vieira da Silva Júnior      | Karim Benzema                       |           55.3 |            5.5 |              83.9 |               4.3 |
+## |    |   index |   minute |   second | team        | type   |   pass_outcome | player                              | pass_maker                          | pass_receiver                       |   pass_maker_x |   pass_maker_y |   pass_receiver_x |   pass_receiver_y |
+## |---:|--------:|---------:|---------:|:------------|:-------|---------------:|:------------------------------------|:------------------------------------|:------------------------------------|---------------:|---------------:|------------------:|------------------:|
+## |  0 |       8 |        0 |        8 | Real Madrid | Pass   |            nan | Raphaël Varane                      | Raphaël Varane                      | Luka Modrić                         |           27.4 |           60.2 |              36.1 |              71.6 |
+## |  1 |       9 |        0 |       10 | Real Madrid | Pass   |            nan | Luka Modrić                         | Luka Modrić                         | Daniel Carvajal Ramos               |           35.3 |           75.4 |              22.4 |              76.6 |
+## |  2 |      10 |        0 |       11 | Real Madrid | Pass   |            nan | Daniel Carvajal Ramos               | Daniel Carvajal Ramos               | Carlos Henrique Casimiro            |           22.3 |           76.6 |              33.4 |              68   |
+## |  3 |      17 |        0 |       40 | Real Madrid | Pass   |            nan | Marcelo Vieira da Silva Júnior      | Marcelo Vieira da Silva Júnior      | Carlos Henrique Casimiro            |           57.5 |            4.6 |              49.2 |              15.6 |
+## |  4 |      18 |        0 |       43 | Real Madrid | Pass   |            nan | Carlos Henrique Casimiro            | Carlos Henrique Casimiro            | Toni Kroos                          |           48.8 |           18.4 |              49.8 |              12.5 |
+## |  5 |      19 |        0 |       46 | Real Madrid | Pass   |            nan | Toni Kroos                          | Toni Kroos                          | Raphaël Varane                      |           48.8 |           13.9 |              36.1 |              56.3 |
+## |  6 |      20 |        0 |       52 | Real Madrid | Pass   |            nan | Raphaël Varane                      | Raphaël Varane                      | Sergio Ramos García                 |           41.3 |           54.8 |              34.4 |              40.2 |
+## |  7 |      21 |        0 |       55 | Real Madrid | Pass   |            nan | Sergio Ramos García                 | Sergio Ramos García                 | Cristiano Ronaldo dos Santos Aveiro |           39.1 |           36.5 |              65.4 |              13.1 |
+## |  8 |      22 |        0 |       58 | Real Madrid | Pass   |            nan | Cristiano Ronaldo dos Santos Aveiro | Cristiano Ronaldo dos Santos Aveiro | Marcelo Vieira da Silva Júnior      |           64.5 |           11.1 |              54.2 |               5.6 |
+## |  9 |      23 |        0 |       59 | Real Madrid | Pass   |            nan | Marcelo Vieira da Silva Júnior      | Marcelo Vieira da Silva Júnior      | Karim Benzema                       |           55.3 |            5.5 |              83.9 |               4.3 |
 ```
 
 Same manipulation for Liverpool:
@@ -756,24 +756,24 @@ events_pn_Liv['pass_maker_y'] = Loc['pass_maker_y']
 events_pn_Liv['pass_receiver_x'] = Loc_end['pass_receiver_x']
 events_pn_Liv['pass_receiver_y'] = Loc_end['pass_receiver_y']
 
-events_pn_Liv = events_pn_Liv[['minute', 'second', 'team', 'type', 'pass_outcome', 'player', 'pass_maker', 'pass_receiver', 'pass_maker_x', 'pass_maker_y', 'pass_receiver_x', 'pass_receiver_y']]
+events_pn_Liv = events_pn_Liv[['index', 'minute', 'second', 'team', 'type', 'pass_outcome', 'player', 'pass_maker', 'pass_receiver', 'pass_maker_x', 'pass_maker_y', 'pass_receiver_x', 'pass_receiver_y']]
 
 print(events_pn_Liv.head(10).to_markdown())
 ```
 
 ```
-## |    |   minute |   second | team      | type   |   pass_outcome | player                              | pass_maker                          | pass_receiver                       |   pass_maker_x |   pass_maker_y |   pass_receiver_x |   pass_receiver_y |
-## |---:|---------:|---------:|:----------|:-------|---------------:|:------------------------------------|:------------------------------------|:------------------------------------|---------------:|---------------:|------------------:|------------------:|
-## |  0 |        0 |        0 | Liverpool | Pass   |            nan | James Philip Milner                 | James Philip Milner                 | Dejan Lovren                        |           60   |           40   |              32.1 |              41.2 |
-## |  1 |        0 |       16 | Liverpool | Pass   |            nan | Jordan Brian Henderson              | Jordan Brian Henderson              | Sadio Mané                          |           76.5 |           18.1 |              84.8 |               9.5 |
-## |  2 |        0 |       18 | Liverpool | Pass   |            nan | Sadio Mané                          | Sadio Mané                          | Roberto Firmino Barbosa de Oliveira |           84.4 |           10   |              92.5 |              19.1 |
-## |  3 |        0 |       19 | Liverpool | Pass   |            nan | Roberto Firmino Barbosa de Oliveira | Roberto Firmino Barbosa de Oliveira | Mohamed Salah                       |           91.6 |           21.3 |              90.6 |              50.7 |
-## |  4 |        2 |        0 | Liverpool | Pass   |            nan | Virgil van Dijk                     | Virgil van Dijk                     | Andrew Robertson                    |            9.9 |           39.1 |              28.1 |               4.2 |
-## |  5 |        2 |        7 | Liverpool | Pass   |            nan | Andrew Robertson                    | Andrew Robertson                    | James Philip Milner                 |           53.2 |            0.1 |              50   |               4   |
-## |  6 |        2 |       10 | Liverpool | Pass   |            nan | James Philip Milner                 | James Philip Milner                 | Virgil van Dijk                     |           45.5 |            4   |              27.4 |              16.8 |
-## |  7 |        2 |       13 | Liverpool | Pass   |            nan | Virgil van Dijk                     | Virgil van Dijk                     | Dejan Lovren                        |           26.7 |           19.6 |              27.8 |              47.3 |
-## |  8 |        2 |       16 | Liverpool | Pass   |            nan | Dejan Lovren                        | Dejan Lovren                        | Virgil van Dijk                     |           28   |           45.4 |              28.4 |              21.4 |
-## |  9 |        2 |       19 | Liverpool | Pass   |            nan | Virgil van Dijk                     | Virgil van Dijk                     | Dejan Lovren                        |           30.4 |           25.7 |              30.7 |              52.9 |
+## |    |   index |   minute |   second | team      | type   |   pass_outcome | player                              | pass_maker                          | pass_receiver                       |   pass_maker_x |   pass_maker_y |   pass_receiver_x |   pass_receiver_y |
+## |---:|--------:|---------:|---------:|:----------|:-------|---------------:|:------------------------------------|:------------------------------------|:------------------------------------|---------------:|---------------:|------------------:|------------------:|
+## |  0 |       6 |        0 |        0 | Liverpool | Pass   |            nan | James Philip Milner                 | James Philip Milner                 | Dejan Lovren                        |           60   |           40   |              32.1 |              41.2 |
+## |  1 |      12 |        0 |       16 | Liverpool | Pass   |            nan | Jordan Brian Henderson              | Jordan Brian Henderson              | Sadio Mané                          |           76.5 |           18.1 |              84.8 |               9.5 |
+## |  2 |      13 |        0 |       18 | Liverpool | Pass   |            nan | Sadio Mané                          | Sadio Mané                          | Roberto Firmino Barbosa de Oliveira |           84.4 |           10   |              92.5 |              19.1 |
+## |  3 |      14 |        0 |       19 | Liverpool | Pass   |            nan | Roberto Firmino Barbosa de Oliveira | Roberto Firmino Barbosa de Oliveira | Mohamed Salah                       |           91.6 |           21.3 |              90.6 |              50.7 |
+## |  4 |      37 |        2 |        0 | Liverpool | Pass   |            nan | Virgil van Dijk                     | Virgil van Dijk                     | Andrew Robertson                    |            9.9 |           39.1 |              28.1 |               4.2 |
+## |  5 |      39 |        2 |        7 | Liverpool | Pass   |            nan | Andrew Robertson                    | Andrew Robertson                    | James Philip Milner                 |           53.2 |            0.1 |              50   |               4   |
+## |  6 |      40 |        2 |       10 | Liverpool | Pass   |            nan | James Philip Milner                 | James Philip Milner                 | Virgil van Dijk                     |           45.5 |            4   |              27.4 |              16.8 |
+## |  7 |      41 |        2 |       13 | Liverpool | Pass   |            nan | Virgil van Dijk                     | Virgil van Dijk                     | Dejan Lovren                        |           26.7 |           19.6 |              27.8 |              47.3 |
+## |  8 |      42 |        2 |       16 | Liverpool | Pass   |            nan | Dejan Lovren                        | Dejan Lovren                        | Virgil van Dijk                     |           28   |           45.4 |              28.4 |              21.4 |
+## |  9 |      43 |        2 |       19 | Liverpool | Pass   |            nan | Virgil van Dijk                     | Virgil van Dijk                     | Dejan Lovren                        |           30.4 |           25.7 |              30.7 |              52.9 |
 ```
 
 Inspired by the way given [here](https://mplsoccer.readthedocs.io/en/latest/gallery/pitch_plots/plot_pass_network.html), we will take the average locations of the starting 11 players on the field for a unified construction of the pass network, and also will count the number of passes created by these player:
@@ -804,24 +804,24 @@ As we see the `groupby()` function from `pandas` splits `events_pn_Real` into gr
 
 
 ```python
-av_loc_Real.columns = ['passer_x', 'passer_y', 'count']
+av_loc_Real.columns = ['pass_maker_x', 'pass_maker_y', 'count']
 print(av_loc_Real.to_markdown())
 ```
 
 ```
-## | pass_maker                          |   passer_x |   passer_y |   count |
-## |:------------------------------------|-----------:|-----------:|--------:|
-## | Carlos Henrique Casimiro            |    60.8455 |    31.8364 |      11 |
-## | Cristiano Ronaldo dos Santos Aveiro |    81.58   |    29.16   |      10 |
-## | Daniel Carvajal Ramos               |    64.3417 |    73.875  |      24 |
-## | Francisco Román Alarcón Suárez      |    62.3235 |    27.0824 |      17 |
-## | Karim Benzema                       |    65.0818 |    27.9364 |      11 |
-## | Keylor Navas Gamboa                 |    10.87   |    41.81   |      10 |
-## | Luka Modrić                         |    60.6048 |    55.0286 |      21 |
-## | Marcelo Vieira da Silva Júnior      |    59.8652 |    11.1304 |      23 |
-## | Raphaël Varane                      |    37.4364 |    58.3545 |      22 |
-## | Sergio Ramos García                 |    41.2824 |    24.5147 |      34 |
-## | Toni Kroos                          |    51.19   |    24.275  |      40 |
+## | pass_maker                          |   pass_maker_x |   pass_maker_y |   count |
+## |:------------------------------------|---------------:|---------------:|--------:|
+## | Carlos Henrique Casimiro            |        60.8455 |        31.8364 |      11 |
+## | Cristiano Ronaldo dos Santos Aveiro |        81.58   |        29.16   |      10 |
+## | Daniel Carvajal Ramos               |        64.3417 |        73.875  |      24 |
+## | Francisco Román Alarcón Suárez      |        62.3235 |        27.0824 |      17 |
+## | Karim Benzema                       |        65.0818 |        27.9364 |      11 |
+## | Keylor Navas Gamboa                 |        10.87   |        41.81   |      10 |
+## | Luka Modrić                         |        60.6048 |        55.0286 |      21 |
+## | Marcelo Vieira da Silva Júnior      |        59.8652 |        11.1304 |      23 |
+## | Raphaël Varane                      |        37.4364 |        58.3545 |      22 |
+## | Sergio Ramos García                 |        41.2824 |        24.5147 |      34 |
+## | Toni Kroos                          |        51.19   |        24.275  |      40 |
 ```
 
 Now do the same operations for `Liverpool`:
@@ -829,22 +829,110 @@ Now do the same operations for `Liverpool`:
 
 ```python
 av_loc_Liv = events_pn_Liv.groupby('pass_maker').agg({'pass_maker_x':['mean'], 'pass_maker_y':['mean', 'count']})
-av_loc_Liv.columns = ['passer_x', 'passer_y', 'count']
+av_loc_Liv.columns = ['pass_maker_x', 'pass_maker_y', 'count']
 print(av_loc_Liv.to_markdown())
 ```
 
 ```
-## | pass_maker                          |   passer_x |   passer_y |   count |
-## |:------------------------------------|-----------:|-----------:|--------:|
-## | Andrew Robertson                    |    59.8154 |    6.83077 |      13 |
-## | Dejan Lovren                        |    41.6909 |   60.1727  |      11 |
-## | Georginio Wijnaldum                 |    76.3909 |   28.5182  |      11 |
-## | James Philip Milner                 |    72.3533 |   36.1533  |      15 |
-## | Jordan Brian Henderson              |    61.0353 |   37.1529  |      17 |
-## | Loris Karius                        |    12.9143 |   40.3857  |       7 |
-## | Mohamed Salah                       |    77.55   |   64.71    |      10 |
-## | Roberto Firmino Barbosa de Oliveira |    78.25   |   43.57    |      10 |
-## | Sadio Mané                          |    86.275  |   22.075   |       4 |
-## | Trent Alexander-Arnold              |    64.6667 |   72.55    |      12 |
-## | Virgil van Dijk                     |    43.3667 |   25.4333  |       9 |
+## | pass_maker                          |   pass_maker_x |   pass_maker_y |   count |
+## |:------------------------------------|---------------:|---------------:|--------:|
+## | Andrew Robertson                    |        59.8154 |        6.83077 |      13 |
+## | Dejan Lovren                        |        41.6909 |       60.1727  |      11 |
+## | Georginio Wijnaldum                 |        76.3909 |       28.5182  |      11 |
+## | James Philip Milner                 |        72.3533 |       36.1533  |      15 |
+## | Jordan Brian Henderson              |        61.0353 |       37.1529  |      17 |
+## | Loris Karius                        |        12.9143 |       40.3857  |       7 |
+## | Mohamed Salah                       |        77.55   |       64.71    |      10 |
+## | Roberto Firmino Barbosa de Oliveira |        78.25   |       43.57    |      10 |
+## | Sadio Mané                          |        86.275  |       22.075   |       4 |
+## | Trent Alexander-Arnold              |        64.6667 |       72.55    |      12 |
+## | Virgil van Dijk                     |        43.3667 |       25.4333  |       9 |
+```
+
+Once we sort out the starting 11 pass makers' average locations in a game, we will try to figure out the number of times a particular pass maker passed the ball to a particular pass receiver (be cautious to keep the direction of pass in mind, i.e, a pass from a player `A` to a player `B` is not identical to a pass from player `B` to player `A`). We will use the `groupby()` and the `count()` function to count the number of rows where a unique player `A` passed the ball to another unique player `B`.
+
+
+```python
+pass_Real = events_pn_Real.groupby(['pass_maker', 'pass_receiver']).index.count().reset_index()
+print(pass_Real.head(10).to_markdown())
+```
+
+```
+## |    | pass_maker                          | pass_receiver                  |   index |
+## |---:|:------------------------------------|:-------------------------------|--------:|
+## |  0 | Carlos Henrique Casimiro            | Daniel Carvajal Ramos          |       1 |
+## |  1 | Carlos Henrique Casimiro            | Luka Modrić                    |       1 |
+## |  2 | Carlos Henrique Casimiro            | Marcelo Vieira da Silva Júnior |       1 |
+## |  3 | Carlos Henrique Casimiro            | Raphaël Varane                 |       1 |
+## |  4 | Carlos Henrique Casimiro            | Sergio Ramos García            |       1 |
+## |  5 | Carlos Henrique Casimiro            | Toni Kroos                     |       6 |
+## |  6 | Cristiano Ronaldo dos Santos Aveiro | Daniel Carvajal Ramos          |       3 |
+## |  7 | Cristiano Ronaldo dos Santos Aveiro | Karim Benzema                  |       1 |
+## |  8 | Cristiano Ronaldo dos Santos Aveiro | Luka Modrić                    |       1 |
+## |  9 | Cristiano Ronaldo dos Santos Aveiro | Marcelo Vieira da Silva Júnior |       4 |
+```
+
+
+```python
+pass_Liv = events_pn_Liv.groupby(['pass_maker', 'pass_receiver']).index.count().reset_index()
+print(pass_Liv.head(10).to_markdown())
+```
+
+```
+## |    | pass_maker       | pass_receiver                       |   index |
+## |---:|:-----------------|:------------------------------------|--------:|
+## |  0 | Andrew Robertson | Andrew Robertson                    |       1 |
+## |  1 | Andrew Robertson | Georginio Wijnaldum                 |       3 |
+## |  2 | Andrew Robertson | James Philip Milner                 |       3 |
+## |  3 | Andrew Robertson | Jordan Brian Henderson              |       2 |
+## |  4 | Andrew Robertson | Roberto Firmino Barbosa de Oliveira |       2 |
+## |  5 | Andrew Robertson | Virgil van Dijk                     |       2 |
+## |  6 | Dejan Lovren     | James Philip Milner                 |       1 |
+## |  7 | Dejan Lovren     | Jordan Brian Henderson              |       1 |
+## |  8 | Dejan Lovren     | Loris Karius                        |       2 |
+## |  9 | Dejan Lovren     | Mohamed Salah                       |       1 |
+```
+
+Let's rename the `index` column to `number_of_passes`:
+
+
+```python
+pass_Real.rename(columns = {'index':'number_of_passes'}, inplace = True)
+print(pass_Real.head(10).to_markdown())
+```
+
+```
+## |    | pass_maker                          | pass_receiver                  |   number_of_passes |
+## |---:|:------------------------------------|:-------------------------------|-------------------:|
+## |  0 | Carlos Henrique Casimiro            | Daniel Carvajal Ramos          |                  1 |
+## |  1 | Carlos Henrique Casimiro            | Luka Modrić                    |                  1 |
+## |  2 | Carlos Henrique Casimiro            | Marcelo Vieira da Silva Júnior |                  1 |
+## |  3 | Carlos Henrique Casimiro            | Raphaël Varane                 |                  1 |
+## |  4 | Carlos Henrique Casimiro            | Sergio Ramos García            |                  1 |
+## |  5 | Carlos Henrique Casimiro            | Toni Kroos                     |                  6 |
+## |  6 | Cristiano Ronaldo dos Santos Aveiro | Daniel Carvajal Ramos          |                  3 |
+## |  7 | Cristiano Ronaldo dos Santos Aveiro | Karim Benzema                  |                  1 |
+## |  8 | Cristiano Ronaldo dos Santos Aveiro | Luka Modrić                    |                  1 |
+## |  9 | Cristiano Ronaldo dos Santos Aveiro | Marcelo Vieira da Silva Júnior |                  4 |
+```
+
+
+```python
+pass_Liv.rename(columns = {'index':'number_of_passes'}, inplace = True)
+print(pass_Liv.head(10).to_markdown())
+```
+
+```
+## |    | pass_maker       | pass_receiver                       |   number_of_passes |
+## |---:|:-----------------|:------------------------------------|-------------------:|
+## |  0 | Andrew Robertson | Andrew Robertson                    |                  1 |
+## |  1 | Andrew Robertson | Georginio Wijnaldum                 |                  3 |
+## |  2 | Andrew Robertson | James Philip Milner                 |                  3 |
+## |  3 | Andrew Robertson | Jordan Brian Henderson              |                  2 |
+## |  4 | Andrew Robertson | Roberto Firmino Barbosa de Oliveira |                  2 |
+## |  5 | Andrew Robertson | Virgil van Dijk                     |                  2 |
+## |  6 | Dejan Lovren     | James Philip Milner                 |                  1 |
+## |  7 | Dejan Lovren     | Jordan Brian Henderson              |                  1 |
+## |  8 | Dejan Lovren     | Loris Karius                        |                  2 |
+## |  9 | Dejan Lovren     | Mohamed Salah                       |                  1 |
 ```
