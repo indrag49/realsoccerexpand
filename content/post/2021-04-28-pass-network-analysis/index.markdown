@@ -1917,7 +1917,7 @@ print(r_Real, r_Liv)
 ```
 
 ```
-## -0.1798383643286018 -0.2412372196699064
+## -0.17983836432860179 -0.2412372196699064
 ```
 
 Now we work on a metric that focuses on the geodesic distance between two player nodes in a graph. One way to implement this is to divide 1 by the `'weight'` column in the pass network. Let us create a new graph for `Real Madrid`:
@@ -2050,4 +2050,127 @@ print(dis_Liv['1']['9'])
 ## ['1', '6', '66', '9']
 ```
 
-**This post is still under construction**
+Now we will calculate another important metric called *eccentricity*, which is based on shortest distance. *Eccentricity*  of a player node `p` tells us how far the furthest player node from `p` is positioned in the pass network. Let us calculate the eccentricities for all the 11 nodes for `Real Madrid`.
+
+
+```python
+E_Real = nx.eccentricity(G_Real_mod)
+print(E_Real)
+```
+
+```
+## {'14': 2, '2': 2, '7': 2, '22': 2, '9': 2, '10': 2, '12': 2, '5': 2, '4': 2, '8': 1, '1': 2}
+```
+
+We can calculate the average eccentricity:
+
+
+```python
+av_E_Real = sum(list(E_Real.values()))/len(E_Real)
+print(av_E_Real)
+```
+
+```
+## 1.9090909090909092
+```
+
+For `Liverpool`:
+
+
+```python
+E_Liv = nx.eccentricity(G_Liv_mod)
+print(E_Liv)
+```
+
+```
+## {'5': 2, '26': 2, '7': 1, '14': 2, '1': 2, '66': 2, '4': 2, '11': 2, '6': 2, '9': 2, '19': 2}
+```
+
+We can calculate the *average eccentricity*:
+
+
+```python
+av_E_Liv = sum(list(E_Liv.values()))/len(E_Liv)
+print(av_E_Liv)
+```
+
+```
+## 1.9090909090909092
+```
+
+We can also calculate the *average clustering coefficient* of a graph. Let us first compute this metric for `G_Real` (note that this graph should not be the modified version)
+
+
+```python
+cc_Real = nx.average_clustering(G_Real, weight = 'weight')
+print(cc_Real)
+```
+
+```
+## 0.182334851979709
+```
+
+for `Liverpool`:
+
+
+```python
+cc_Liv = nx.average_clustering(G_Liv, weight = 'weight')
+print(cc_Liv)
+```
+
+```
+## 0.2766427842450553
+```
+
+The *average clustering coefficient* lies in the range [0, 1] where, a value of 0 denotes the fact that none of the nodes are connected to each other and a value of 1 denotes that the network is a clique, that is each node is connected to all the other nodes of the network. We see that interestingly the *average clustering coefficient* is lesser for `Real Madrid`'s pass network stating the fact that a lesser number of players passed the ball among each other, compared to that of `Liverpool`.
+
+Finally, we can compute the `centrality` (especially the `betweenness centrality`) for each node in either team's pass network and understand which player was the most important in their pass network. For `Real Madrid`:
+
+
+```python
+bc_Real = nx.betweenness_centrality(G_Real, weight = 'weight')
+print(bc_Real)
+```
+
+```
+## {'14': 0.15222222222222223, '2': 0.10685185185185186, '7': 0.05592592592592593, '22': 0.0, '9': 0.14462962962962964, '10': 0.12407407407407407, '12': 0.009259259259259259, '5': 0.007407407407407408, '4': 0.06851851851851852, '8': 0.031481481481481485, '1': 0.11703703703703704}
+```
+
+we can find the node which has the maximum *betweenness centrality* measure.
+
+
+```python
+max_bc_Real = max(bc_Real, key = bc_Real.get)
+print(max_bc_Real)
+```
+
+```
+## 14
+```
+
+
+For `Liverpool`:
+
+
+```python
+bc_Liv = nx.betweenness_centrality(G_Liv, weight = 'weight')
+print(bc_Liv)
+```
+
+```
+## {'5': 0.06296296296296296, '26': 0.016666666666666666, '7': 0.2453703703703704, '14': 0.12407407407407407, '1': 0.002777777777777778, '66': 0.075, '4': 0.07222222222222222, '11': 0.05555555555555556, '6': 0.1259259259259259, '9': 0.021296296296296296, '19': 0.03888888888888889}
+```
+
+```python
+max_bc_Liv = max(bc_Liv, key = bc_Liv.get)
+print(max_bc_Liv)
+```
+
+```
+## 7
+```
+
+So we see that the *betweenness centrality* measure is max for `'Carlos Henrique Casimiro'` (jersey: `4`) from `Real Madrid` and `'James Philip Milner'` (jersey: 7) from `Liverpool`. We have been able to compute some interesting results using complex network analysis on our pass networks. This completes the current tutorial.😌😌😌😌😌😌😌😌😌
+
+In the next tutorial, I will introduce how to implement ideas from *computational geometry* on football data and generate some intuitive visualizations. 
+

@@ -715,4 +715,75 @@ print(dis_Liv)
 print(dis_Liv['1']['9'])
 ```
 
-**This post is still under construction**
+Now we will calculate another important metric called *eccentricity*, which is based on shortest distance. *Eccentricity*  of a player node `p` tells us how far the furthest player node from `p` is positioned in the pass network. Let us calculate the eccentricities for all the 11 nodes for `Real Madrid`.
+
+```{python}
+E_Real = nx.eccentricity(G_Real_mod)
+print(E_Real)
+```
+
+We can calculate the average eccentricity:
+
+```{python}
+av_E_Real = sum(list(E_Real.values()))/len(E_Real)
+print(av_E_Real)
+```
+
+For `Liverpool`:
+
+```{python}
+E_Liv = nx.eccentricity(G_Liv_mod)
+print(E_Liv)
+```
+
+We can calculate the *average eccentricity*:
+
+```{python}
+av_E_Liv = sum(list(E_Liv.values()))/len(E_Liv)
+print(av_E_Liv)
+```
+
+We can also calculate the *average clustering coefficient* of a graph. Let us first compute this metric for `G_Real` (note that this graph should not be the modified version)
+
+```{python}
+cc_Real = nx.average_clustering(G_Real, weight = 'weight')
+print(cc_Real)
+```
+
+for `Liverpool`:
+
+```{python}
+cc_Liv = nx.average_clustering(G_Liv, weight = 'weight')
+print(cc_Liv)
+```
+
+The *average clustering coefficient* lies in the range [0, 1] where, a value of 0 denotes the fact that none of the nodes are connected to each other and a value of 1 denotes that the network is a clique, that is each node is connected to all the other nodes of the network. We see that interestingly the *average clustering coefficient* is lesser for `Real Madrid`'s pass network stating the fact that a lesser number of players passed the ball among each other, compared to that of `Liverpool`.
+
+Finally, we can compute the `centrality` (especially the `betweenness centrality`) for each node in either team's pass network and understand which player was the most important in their pass network. For `Real Madrid`:
+
+```{python}
+bc_Real = nx.betweenness_centrality(G_Real, weight = 'weight')
+print(bc_Real)
+```
+
+we can find the node which has the maximum *betweenness centrality* measure.
+
+```{python}
+max_bc_Real = max(bc_Real, key = bc_Real.get)
+print(max_bc_Real)
+```
+
+
+For `Liverpool`:
+
+```{python}
+bc_Liv = nx.betweenness_centrality(G_Liv, weight = 'weight')
+print(bc_Liv)
+max_bc_Liv = max(bc_Liv, key = bc_Liv.get)
+print(max_bc_Liv)
+```
+
+So we see that the *betweenness centrality* measure is max for `'Carlos Henrique Casimiro'` (jersey: `4`) from `Real Madrid` and `'James Philip Milner'` (jersey: 7) from `Liverpool`. We have been able to compute some interesting results using complex network analysis on our pass networks. This completes the current tutorial.😌😌😌😌😌😌😌😌😌
+
+In the next tutorial, I will introduce how to implement ideas from *computational geometry* on football data and generate some intuitive visualizations. 
+
