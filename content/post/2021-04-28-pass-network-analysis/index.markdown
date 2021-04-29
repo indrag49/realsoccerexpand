@@ -69,8 +69,8 @@ print(comp.to_markdown())
 ## | 12 |               16 |          37 | Europe                   | Champions League        | male                 | 2004/2005     | 2021-04-01T06:18:57.459032 | 2021-04-01T06:18:57.459032 |
 ## | 13 |               16 |          44 | Europe                   | Champions League        | male                 | 2003/2004     | 2021-04-01T00:34:59.472485 | 2021-04-01T00:34:59.472485 |
 ## | 14 |               16 |          76 | Europe                   | Champions League        | male                 | 1999/2000     | 2020-07-29T05:00           | 2020-07-29T05:00           |
-## | 15 |               37 |          42 | England                  | FA Women's Super League | female               | 2019/2020     | 2021-04-28T11:39:57.090    | 2021-04-27T06:27:03.599355 |
-## | 16 |               37 |           4 | England                  | FA Women's Super League | female               | 2018/2019     | 2021-04-28T11:09:58.484    | 2021-04-28T07:08:31.988445 |
+## | 15 |               37 |          42 | England                  | FA Women's Super League | female               | 2019/2020     | 2021-04-28T19:48:01.172671 | 2021-04-28T19:48:01.172671 |
+## | 16 |               37 |           4 | England                  | FA Women's Super League | female               | 2018/2019     | 2021-04-28T19:48:01.166958 | 2021-04-28T19:48:01.166958 |
 ## | 17 |               43 |           3 | International            | FIFA World Cup          | male                 | 2018          | 2020-10-25T14:03:50.263266 | 2020-10-25T14:03:50.263266 |
 ## | 18 |               11 |          42 | Spain                    | La Liga                 | male                 | 2019/2020     | 2020-12-18T12:10:38.985394 | 2020-12-18T12:10:38.985394 |
 ## | 19 |               11 |           4 | Spain                    | La Liga                 | male                 | 2018/2019     | 2021-04-20T03:24:51.029365 | 2021-04-20T03:24:51.029365 |
@@ -1862,5 +1862,192 @@ plt.show()
 ```
 
 <img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-19.png" width="672" />
+
+Now, let us generate the adjacency matrices fr both `G_Real` and `G_Liv` graphs:
+
+
+```python
+A_Real = nx.adjacency_matrix(G_Real)
+A_Liv = nx.adjacency_matrix(G_Liv)
+A_Real = A_Real.todense()
+A_Liv = A_Liv.todense()
+```
+
+We can visualize the matrices as heatmaps:
+
+
+```python
+sns.heatmap(A_Real, annot = True, cmap ='gnuplot')
+```
+
+```python
+plt.title("Adjacency matrix for Real Madrid's pass network")
+```
+
+```python
+plt.show()
+```
+
+<img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-21.png" width="672" />
+
+
+```python
+sns.heatmap(A_Liv, annot = True, cmap ='gnuplot')
+```
+
+```python
+plt.title("Adjacency matrix for Liverpool's pass network")
+```
+
+```python
+plt.show()
+```
+
+<img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-23.png" width="672" />
+
+If we look into the diagonal of the adjacency matrices, we notice that all the values in the diagonals are 0. This depicts that their isn't any self loops in any nodes, indicating a player cannot pass to themselves. 
+
+The next step is to calculate the degree correlation coefficient of a graph. More specifically, we will calculate *Pearson's degree correlation coefficient* value. A positive value of the metric shows an overall positive relationship between the degrees (number of successful passes) of two adjacent nodes (players). Whereas a negative value shows an overall negative relationship. If it is 0, there is no relationship. Also the metric lies in [-1, 1], indicating -1 as the prefect negative relationship and 1 as the perfect positive relationship.
+
+
+```python
+r_Real = nx.degree_pearson_correlation_coefficient(G_Real, weight = 'weight')
+r_Liv = nx.degree_pearson_correlation_coefficient(G_Liv, weight = 'weight')
+print(r_Real, r_Liv)
+```
+
+```
+## -0.1798383643286018 -0.2412372196699064
+```
+
+Now we work on a metric that focuses on the geodesic distance between two player nodes in a graph. One way to implement this is to divide 1 by the `'weight'` column in the pass network. Let us create a new graph for `Real Madrid`:
+
+
+```python
+pass_Real_mod = pass_Real_new[['pass_maker', 'pass_receiver']]
+pass_Real_mod['1/nop'] = 1/pass_Real_new['number_of_passes']
+print(pass_Real_mod.head(5).to_markdown())
+```
+
+```
+## |    |   pass_maker |   pass_receiver |    1/nop |
+## |---:|-------------:|----------------:|---------:|
+## |  0 |           14 |               2 | 1        |
+## |  1 |            7 |               2 | 0.333333 |
+## |  2 |           22 |               2 | 0.5      |
+## |  3 |            9 |               2 | 0.5      |
+## |  4 |           10 |               2 | 0.1      |
+```
+
+
+```python
+L_Real_mod = pass_Real_mod.apply(tuple, axis=1).tolist()
+
+G_Real_mod = nx.DiGraph()
+
+for i in range(len(L_Real_mod)):
+    G_Real_mod.add_edge(L_Real_mod[i][0], L_Real_mod[i][1], weight = L_Real_mod[i][2])
+
+edges_Real_mod = G_Real_mod.edges()
+weights_Real_mod = [G_Real_mod[u][v]['weight'] for u, v in edges_Real_mod]
+
+nx.draw(G_Real_mod, node_size=800, with_labels=True, node_color='white', width = weights_Real_mod)
+plt.gca().collections[0].set_edgecolor('black')
+plt.title("Modified pass network for Real Madrid vs Liverpool", size = 20)
+```
+
+```python
+plt.show()
+```
+
+<img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-25.png" width="672" />
+
+We will perform the same operations to create a modified graph for `Liverpool` too:
+
+
+```python
+pass_Liv_mod = pass_Liv_new[['pass_maker', 'pass_receiver']]
+pass_Liv_mod['1/nop'] = 1/pass_Liv_new['number_of_passes']
+print(pass_Liv_mod.head(5).to_markdown())
+```
+
+```
+## |    |   pass_maker |   pass_receiver |   1/nop |
+## |---:|-------------:|----------------:|--------:|
+## |  0 |            5 |              26 |    0.25 |
+## |  1 |            7 |              26 |    1    |
+## |  2 |           14 |              26 |    1    |
+## |  3 |            1 |              26 |    1    |
+## |  4 |           66 |              26 |    1    |
+```
+
+
+```python
+L_Liv_mod = pass_Liv_mod.apply(tuple, axis=1).tolist()
+
+G_Liv_mod = nx.DiGraph()
+
+for i in range(len(L_Liv_mod)):
+    G_Liv_mod.add_edge(L_Liv_mod[i][0], L_Liv_mod[i][1], weight = L_Liv_mod[i][2])
+
+edges_Liv_mod = G_Liv_mod.edges()
+weights_Liv_mod = [G_Liv_mod[u][v]['weight'] for u, v in edges_Liv_mod]
+
+nx.draw(G_Liv_mod, node_size=800, with_labels=True, node_color='red', width = weights_Liv_mod)
+plt.gca().collections[0].set_edgecolor('black')
+plt.title("Modified pass network for Liverpool vs Real Madrid", size = 20)
+```
+
+```python
+plt.show()
+```
+
+<img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-27.png" width="672" />
+
+Now using these modified graphs we can calculate the all pair shortest paths between the nodes (players) for both the teams. Let us compute first for `Real Madrid`:
+
+
+```python
+dis_Real = nx.shortest_path(G_Real_mod, weight = 'weight')
+print(dis_Real)
+```
+
+```
+## {'14': {'14': ['14'], '2': ['14', '8', '10', '2'], '10': ['14', '8', '10'], '12': ['14', '8', '4', '12'], '5': ['14', '8', '5'], '4': ['14', '8', '4'], '8': ['14', '8'], '9': ['14', '8', '9'], '7': ['14', '8', '7'], '22': ['14', '8', '22'], '1': ['14', '8', '5', '1']}, '2': {'2': ['2'], '10': ['2', '10'], '5': ['2', '5'], '8': ['2', '10', '8'], '9': ['2', '5', '4', '12', '9'], '14': ['2', '14'], '7': ['2', '7'], '22': ['2', '22'], '1': ['2', '5', '1'], '12': ['2', '5', '4', '12'], '4': ['2', '5', '4']}, '7': {'7': ['7'], '2': ['7', '2'], '10': ['7', '2', '10'], '12': ['7', '12'], '4': ['7', '12', '8', '4'], '9': ['7', '12', '9'], '5': ['7', '2', '5'], '8': ['7', '12', '8'], '14': ['7', '12', '14'], '22': ['7', '12', '22'], '1': ['7', '2', '5', '1']}, '22': {'22': ['22'], '2': ['22', '2'], '10': ['22', '8', '10'], '12': ['22', '4', '12'], '4': ['22', '4'], '8': ['22', '8'], '9': ['22', '4', '12', '9'], '7': ['22', '7'], '5': ['22', '4', '5'], '1': ['22', '4', '5', '1'], '14': ['22', '8', '14']}, '9': {'9': ['9'], '2': ['9', '2'], '4': ['9', '8', '4'], '8': ['9', '8'], '14': ['9', '14'], '7': ['9', '8', '7'], '1': ['9', '1'], '10': ['9', '8', '10'], '12': ['9', '8', '4', '12'], '5': ['9', '8', '5'], '22': ['9', '8', '22']}, '10': {'10': ['10'], '2': ['10', '2'], '12': ['10', '8', '4', '12'], '5': ['10', '2', '5'], '4': ['10', '8', '4'], '8': ['10', '8'], '9': ['10', '8', '9'], '14': ['10', '2', '14'], '7': ['10', '2', '7'], '22': ['10', '8', '22'], '1': ['10', '2', '5', '1']}, '12': {'12': ['12'], '2': ['12', '2'], '10': ['12', '8', '10'], '5': ['12', '8', '5'], '4': ['12', '8', '4'], '8': ['12', '8'], '9': ['12', '9'], '14': ['12', '14'], '7': ['12', '7'], '22': ['12', '22'], '1': ['12', '8', '5', '1']}, '5': {'5': ['5'], '2': ['5', '10', '2'], '10': ['5', '10'], '4': ['5', '4'], '8': ['5', '8'], '9': ['5', '4', '12', '9'], '14': ['5', '8', '14'], '1': ['5', '1'], '12': ['5', '4', '12'], '7': ['5', '8', '7'], '22': ['5', '8', '22']}, '4': {'4': ['4'], '2': ['4', '2'], '10': ['4', '8', '10'], '12': ['4', '12'], '5': ['4', '5'], '8': ['4', '8'], '7': ['4', '12', '7'], '22': ['4', '8', '22'], '1': ['4', '5', '1'], '9': ['4', '12', '9'], '14': ['4', '12', '14']}, '8': {'8': ['8'], '2': ['8', '10', '2'], '10': ['8', '10'], '12': ['8', '4', '12'], '5': ['8', '5'], '4': ['8', '4'], '9': ['8', '9'], '14': ['8', '14'], '7': ['8', '7'], '22': ['8', '22'], '1': ['8', '5', '1']}, '1': {'1': ['1'], '12': ['1', '4', '12'], '5': ['1', '4', '5'], '4': ['1', '4'], '8': ['1', '4', '8'], '9': ['1', '4', '12', '9'], '2': ['1', '4', '2'], '10': ['1', '4', '8', '10'], '7': ['1', '4', '12', '7'], '22': ['1', '4', '8', '22'], '14': ['1', '4', '12', '14']}}
+```
+
+Suppose we want to calculate the shortest path from `'Keylor Navas Gamboa'` (jersey number `1`) to `'Cristiano Ronaldo dos Santos Aveiro'` (jersey number `7`). We will type the following:
+
+
+```python
+print(dis_Real['1']['7'])
+```
+
+```
+## ['1', '4', '12', '7']
+```
+
+So, we see that the fastest way possible to pass the ball from `'Keylor Navas Gamboa'` (jersey: `1`), to  `'Cristiano Ronaldo dos Santos Aveiro'` (jersey: `7`) was to pass the ball first to `'Sergio Ramos García'` (jersey: `4`) who would pass to `'Marcelo Vieira da Silva Júnior'` (jersey: `12`) with him ultimately passing to `'Cristiano Ronaldo dos Santos Aveiro'`. This seems like a good post-match analysis tool. I got this idea after discussing with [Sarath Babu](https://4sarathbabu.github.io/). 
+
+Let us do the same analysis for `Liverpool`:
+
+
+```python
+dis_Liv = nx.shortest_path(G_Liv_mod, weight = 'weight')
+print(dis_Liv)
+```
+
+```
+## {'5': {'5': ['5'], '26': ['5', '26'], '7': ['5', '26', '7'], '14': ['5', '14'], '4': ['5', '4'], '11': ['5', '11'], '66': ['5', '26', '7', '66'], '9': ['5', '26', '9'], '1': ['5', '14', '1'], '6': ['5', '14', '6'], '19': ['5', '26', '7', '19']}, '26': {'26': ['26'], '5': ['26', '5'], '7': ['26', '7'], '14': ['26', '14'], '9': ['26', '9'], '4': ['26', '4'], '11': ['26', '9', '11'], '66': ['26', '7', '66'], '1': ['26', '14', '1'], '6': ['26', '14', '6'], '19': ['26', '7', '19']}, '7': {'7': ['7'], '26': ['7', '66', '5', '26'], '5': ['7', '66', '5'], '14': ['7', '14'], '9': ['7', '66', '9'], '4': ['7', '4'], '1': ['7', '1'], '11': ['7', '66', '11'], '66': ['7', '66'], '6': ['7', '14', '6'], '19': ['7', '19']}, '14': {'14': ['14'], '26': ['14', '5', '26'], '5': ['14', '5'], '7': ['14', '7'], '4': ['14', '4'], '1': ['14', '1'], '66': ['14', '7', '66'], '6': ['14', '6'], '19': ['14', '7', '19'], '11': ['14', '7', '66', '11'], '9': ['14', '5', '26', '9']}, '1': {'1': ['1'], '26': ['1', '26'], '14': ['1', '14'], '4': ['1', '6', '4'], '6': ['1', '6'], '7': ['1', '6', '7'], '11': ['1', '6', '66', '11'], '66': ['1', '6', '66'], '5': ['1', '6', '66', '5'], '9': ['1', '6', '66', '9'], '19': ['1', '6', '7', '19']}, '66': {'66': ['66'], '26': ['66', '5', '26'], '5': ['66', '5'], '14': ['66', '14'], '9': ['66', '9'], '11': ['66', '11'], '6': ['66', '14', '6'], '7': ['66', '14', '7'], '4': ['66', '5', '4'], '19': ['66', '11', '19'], '1': ['66', '14', '1']}, '4': {'4': ['4'], '26': ['4', '26'], '5': ['4', '26', '5'], '14': ['4', '26', '14'], '66': ['4', '6', '66'], '6': ['4', '6'], '7': ['4', '26', '7'], '9': ['4', '26', '9'], '1': ['4', '6', '1'], '11': ['4', '6', '66', '11'], '19': ['4', '26', '7', '19']}, '11': {'11': ['11'], '5': ['11', '66', '5'], '7': ['11', '9', '7'], '9': ['11', '9'], '4': ['11', '4'], '66': ['11', '66'], '19': ['11', '19'], '14': ['11', '9', '14'], '6': ['11', '9', '14', '6'], '26': ['11', '66', '5', '26'], '1': ['11', '9', '14', '1']}, '6': {'6': ['6'], '7': ['6', '7'], '14': ['6', '66', '14'], '4': ['6', '4'], '1': ['6', '1'], '11': ['6', '66', '11'], '66': ['6', '66'], '26': ['6', '4', '26'], '5': ['6', '66', '5'], '9': ['6', '66', '9'], '19': ['6', '7', '19']}, '9': {'9': ['9'], '7': ['9', '7'], '14': ['9', '14'], '11': ['9', '11'], '66': ['9', '11', '66'], '6': ['9', '14', '6'], '5': ['9', '14', '5'], '4': ['9', '14', '4'], '19': ['9', '7', '19'], '26': ['9', '14', '5', '26'], '1': ['9', '14', '1']}, '19': {'19': ['19'], '7': ['19', '7'], '14': ['19', '14'], '9': ['19', '9'], '11': ['19', '9', '11'], '66': ['19', '9', '11', '66'], '6': ['19', '14', '6'], '5': ['19', '14', '5'], '4': ['19', '14', '4'], '26': ['19', '14', '5', '26'], '1': ['19', '14', '1']}}
+```
+
+
+```python
+print(dis_Liv['1']['9'])
+```
+
+```
+## ['1', '6', '66', '9']
+```
 
 **This post is still under construction**

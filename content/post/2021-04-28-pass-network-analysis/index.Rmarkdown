@@ -604,4 +604,115 @@ plt.title("Player pass outdegrees for Liverpool vs Real Madrid", size = 16)
 plt.show()
 ```
 
+Now, let us generate the adjacency matrices fr both `G_Real` and `G_Liv` graphs:
+
+```{python results=FALSE}
+A_Real = nx.adjacency_matrix(G_Real)
+A_Liv = nx.adjacency_matrix(G_Liv)
+A_Real = A_Real.todense()
+A_Liv = A_Liv.todense()
+```
+
+We can visualize the matrices as heatmaps:
+
+```{python results=FALSE}
+sns.heatmap(A_Real, annot = True, cmap ='gnuplot')
+plt.title("Adjacency matrix for Real Madrid's pass network")
+plt.show()
+```
+
+```{python results=FALSE}
+sns.heatmap(A_Liv, annot = True, cmap ='gnuplot')
+plt.title("Adjacency matrix for Liverpool's pass network")
+plt.show()
+```
+
+If we look into the diagonal of the adjacency matrices, we notice that all the values in the diagonals are 0. This depicts that their isn't any self loops in any nodes, indicating a player cannot pass to themselves. 
+
+The next step is to calculate the degree correlation coefficient of a graph. More specifically, we will calculate *Pearson's degree correlation coefficient* value. A positive value of the metric shows an overall positive relationship between the degrees (number of successful passes) of two adjacent nodes (players). Whereas a negative value shows an overall negative relationship. If it is 0, there is no relationship. Also the metric lies in [-1, 1], indicating -1 as the prefect negative relationship and 1 as the perfect positive relationship.
+
+```{python}
+r_Real = nx.degree_pearson_correlation_coefficient(G_Real, weight = 'weight')
+r_Liv = nx.degree_pearson_correlation_coefficient(G_Liv, weight = 'weight')
+print(r_Real, r_Liv)
+```
+
+Now we work on a metric that focuses on the geodesic distance between two player nodes in a graph. One way to implement this is to divide 1 by the `'weight'` column in the pass network. Let us create a new graph for `Real Madrid`:
+
+```{python}
+pass_Real_mod = pass_Real_new[['pass_maker', 'pass_receiver']]
+pass_Real_mod['1/nop'] = 1/pass_Real_new['number_of_passes']
+print(pass_Real_mod.head(5).to_markdown())
+```
+
+```{python results=FALSE}
+L_Real_mod = pass_Real_mod.apply(tuple, axis=1).tolist()
+
+G_Real_mod = nx.DiGraph()
+
+for i in range(len(L_Real_mod)):
+    G_Real_mod.add_edge(L_Real_mod[i][0], L_Real_mod[i][1], weight = L_Real_mod[i][2])
+
+edges_Real_mod = G_Real_mod.edges()
+weights_Real_mod = [G_Real_mod[u][v]['weight'] for u, v in edges_Real_mod]
+
+nx.draw(G_Real_mod, node_size=800, with_labels=True, node_color='white', width = weights_Real_mod)
+plt.gca().collections[0].set_edgecolor('black')
+plt.title("Modified pass network for Real Madrid vs Liverpool", size = 20)
+
+plt.show()
+```
+
+We will perform the same operations to create a modified graph for `Liverpool` too:
+
+```{python}
+pass_Liv_mod = pass_Liv_new[['pass_maker', 'pass_receiver']]
+pass_Liv_mod['1/nop'] = 1/pass_Liv_new['number_of_passes']
+print(pass_Liv_mod.head(5).to_markdown())
+```
+
+```{python results=FALSE}
+L_Liv_mod = pass_Liv_mod.apply(tuple, axis=1).tolist()
+
+G_Liv_mod = nx.DiGraph()
+
+for i in range(len(L_Liv_mod)):
+    G_Liv_mod.add_edge(L_Liv_mod[i][0], L_Liv_mod[i][1], weight = L_Liv_mod[i][2])
+
+edges_Liv_mod = G_Liv_mod.edges()
+weights_Liv_mod = [G_Liv_mod[u][v]['weight'] for u, v in edges_Liv_mod]
+
+nx.draw(G_Liv_mod, node_size=800, with_labels=True, node_color='red', width = weights_Liv_mod)
+plt.gca().collections[0].set_edgecolor('black')
+plt.title("Modified pass network for Liverpool vs Real Madrid", size = 20)
+
+plt.show()
+```
+
+Now using these modified graphs we can calculate the all pair shortest paths between the nodes (players) for both the teams. Let us compute first for `Real Madrid`:
+
+```{python}
+dis_Real = nx.shortest_path(G_Real_mod, weight = 'weight')
+print(dis_Real)
+```
+
+Suppose we want to calculate the shortest path from `'Keylor Navas Gamboa'` (jersey number `1`) to `'Cristiano Ronaldo dos Santos Aveiro'` (jersey number `7`). We will type the following:
+
+```{python}
+print(dis_Real['1']['7'])
+```
+
+So, we see that the fastest way possible to pass the ball from `'Keylor Navas Gamboa'` (jersey: `1`), to  `'Cristiano Ronaldo dos Santos Aveiro'` (jersey: `7`) was to pass the ball first to `'Sergio Ramos García'` (jersey: `4`) who would pass to `'Marcelo Vieira da Silva Júnior'` (jersey: `12`) with him ultimately passing to `'Cristiano Ronaldo dos Santos Aveiro'`. This seems like a good post-match analysis tool. I got this idea after discussing with [Sarath Babu](https://4sarathbabu.github.io/). 
+
+Let us do the same analysis for `Liverpool`:
+
+```{python}
+dis_Liv = nx.shortest_path(G_Liv_mod, weight = 'weight')
+print(dis_Liv)
+```
+
+```{python}
+print(dis_Liv['1']['9'])
+```
+
 **This post is still under construction**
