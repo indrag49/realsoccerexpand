@@ -1359,26 +1359,8 @@ for index, row in av_loc_Liv.iterrows():
     pitch.annotate(players_Liv[row.name], xy=(120 - row.pass_maker_x, row.pass_maker_y), c ='black', va = 'center', ha = 'center', size = 10, ax = ax)
 ```
 
-```
-## Text(60.184615384615384, 6.8307692307692305, '26')
-## Text(78.30909090909091, 60.17272727272726, '6')
-## Text(43.60909090909091, 28.518181818181816, '5')
-## Text(47.64666666666666, 36.15333333333333, '7')
-## Text(58.96470588235293, 37.152941176470584, '14')
-## Text(107.08571428571429, 40.385714285714286, '1')
-## Text(42.44999999999999, 64.71, '11')
-## Text(41.749999999999986, 43.57000000000001, '9')
-## Text(33.724999999999994, 22.075, '19')
-## Text(55.33333333333333, 72.55, '66')
-## Text(76.63333333333333, 25.43333333333333, '4')
-```
-
 ```python
 plt.title("Pass network for Liverpool against Real Madrid", size = 20)
-```
-
-```
-## Text(0.5, 1.0, 'Pass network for Liverpool against Real Madrid')
 ```
 
 ```python
@@ -1606,12 +1588,279 @@ for i in range(len(L_Liv)):
 edges_Liv = G_Liv.edges()
 weights_Liv = [G_Liv[u][v]['weight'] for u, v in edges_Liv]
 
-nx.draw(G_Liv, node_size=800, with_labels=True, node_color='red', width = weights_Liv)
+nx.draw(G_Liv, node_size = 800, with_labels = True, node_color = 'red', width = weights_Liv)
 plt.gca().collections[0].set_edgecolor('black') # sets the edge color of the nodes to black
 plt.show()
 ```
 
 <img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-7.png" width="672" />
 
+Let us discuss some of the important functions from the `networkx` package that we have employed for drawing graphs:
+
+* `DiGraph()` function sets the base class for generating directed graphs,
+* `add_edge()` function adds an edge between two nodes given by the first two arguments and the `weight` parameter sets the weight for this edge
+* `draw()` function visualizes a `networkx` graph and its parameters are self-explanatory
+
+Let us now understand the *degree*, *indegree* and *outdegree* of a node from a directed weighted graph. *Indegree* of a node is the total number of edges that are directed towards the node, i.e, for our case, the total number of passes received by a player (node). Similarly, *outdegree* means the total number of edges that are directed outwards from the node, i.e, the total number of passes given by a player. Finally, the *degree* of a node is the total number of edges connected to a node (ignoring the directions of the edges), i.e, sum of the total number of passes given and the total number of passes received by a player. It is evident that the *degree* of a node is the sum of its *indegree* and *outdegree*.
+
+We will use `networkx` to find out the node degrees from the pass network of `Real Madrid`.
+
+
+```python
+deg_Real = dict(nx.degree(G_Real)) # prepares a dictionary with jersey numbers as the node ids, i.e, the dictionary keys and degrees as the dictionary values
+degree_Real = pd.DataFrame.from_dict(list(deg_Real.items())) # convert a dictionary to a pandas dataframe
+degree_Real.rename(columns = {0:'jersey_number', 1: 'node_degree'}, inplace = True)
+print(degree_Real.to_markdown())
+```
+
+```
+## |    |   jersey_number |   node_degree |
+## |---:|----------------:|--------------:|
+## |  0 |              14 |            12 |
+## |  1 |               2 |            17 |
+## |  2 |               7 |            11 |
+## |  3 |              22 |            11 |
+## |  4 |               9 |            14 |
+## |  5 |              10 |            15 |
+## |  6 |              12 |            16 |
+## |  7 |               5 |            14 |
+## |  8 |               4 |            17 |
+## |  9 |               8 |            19 |
+## | 10 |               1 |            10 |
+```
+
+Out of the 11 starting players for `Real Madrid` in that game, we notice that the player with jersey number `8` (i.e, `Toni Kroos`) had the highest *degree* value of 19. On second are ranked the players with jersey number `2` and `4` with degree value 17, i.e, our favorite Spanish defenders `'Daniel Carvajal Ramos'` and `'Sergio Ramos García'` respectively. Tremendous! Let us use `seaborn` to visualize the `deg_Real` dictionary via histogram plot:
+
+
+```python
+X = list(deg_Real.keys())
+Y = list(deg_Real.values())
+sns.barplot(x = Y, y = X, palette = "magma")
+```
+
+```python
+plt.xticks(range(0, max(Y)+5, 2))
+```
+
+```python
+plt.ylabel("Player Jersey number")
+```
+
+```python
+plt.xlabel("degree")
+```
+
+```python
+plt.title("Player pass degrees for Real Madrid vs Liverpool", size = 16)
+```
+
+```python
+plt.show()
+```
+
+<img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-9.png" width="672" />
+
+Let us build the dataframe for `Liverpool` too:
+
+
+```python
+deg_Liv = dict(nx.degree(G_Liv)) # prepares a dictionary with jersey numbers as the node ids, i.e, the dictionary keys and degrees as the dictionary values
+degree_Liv = pd.DataFrame.from_dict(list(deg_Liv.items())) # convert a dictionary to a pandas dataframe
+degree_Liv.rename(columns = {0:'jersey_number', 1: 'node_degree'}, inplace = True)
+print(degree_Liv.to_markdown())
+```
+
+```
+## |    |   jersey_number |   node_degree |
+## |---:|----------------:|--------------:|
+## |  0 |               5 |            12 |
+## |  1 |              26 |            11 |
+## |  2 |               7 |            17 |
+## |  3 |              14 |            17 |
+## |  4 |               1 |             7 |
+## |  5 |              66 |            13 |
+## |  6 |               4 |            12 |
+## |  7 |              11 |            11 |
+## |  8 |               6 |            12 |
+## |  9 |               9 |            10 |
+## | 10 |              19 |             6 |
+```
+
+We see that for Liverpool the degree value is highest (17) for players having jersey number `14` and `7`, i,e `'Jordan Brian Henderson'` and `'James Philip Milner'` respectively. We will visualize the `deg_Liv` dictionary via histogram plot:
+
+
+```python
+X = list(deg_Liv.keys())
+Y = list(deg_Liv.values())
+sns.barplot(x = Y, y = X, palette = "magma")
+```
+
+```python
+plt.xticks(range(0, max(Y)+5, 2))
+```
+
+```python
+plt.ylabel("Player Jersey number")
+```
+
+```python
+plt.xlabel("degree")
+```
+
+```python
+plt.title("Player pass degrees for Liverpool vs Real Madrid", size = 16)
+```
+
+```python
+plt.show()
+```
+
+<img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-11.png" width="672" />
+
+We will visualize similar histogram plots for the *indegrees* and the *outdegrees* too:
+
+
+```python
+indeg_Real = dict(G_Real.in_degree()) 
+indegree_Real = pd.DataFrame.from_dict(list(indeg_Real.items())) 
+indegree_Real.rename(columns = {0:'jersey_number', 1: 'node_indegree'}, inplace = True)
+print(indegree_Real.to_markdown())
+```
+
+```python
+X = list(indeg_Real.keys())
+Y = list(indeg_Real.values())
+sns.barplot(x = Y, y = X, palette = "hls")
+```
+
+```python
+plt.xticks(range(0, max(Y)+5, 2))
+```
+
+```python
+plt.ylabel("Player Jersey number")
+```
+
+```python
+plt.xlabel("indegree")
+```
+
+```python
+plt.title("Player pass indegrees for Real Madrid vs Liverpool", size = 16)
+```
+
+```python
+plt.show()
+```
+
+<img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-13.png" width="672" />
+
+
+```python
+indeg_Liv = dict(G_Liv.in_degree()) 
+indegree_Liv = pd.DataFrame.from_dict(list(indeg_Liv.items())) 
+indegree_Liv.rename(columns = {0:'jersey_number', 1: 'node_indegree'}, inplace = True)
+print(indegree_Liv.to_markdown())
+```
+
+```python
+X = list(indeg_Liv.keys())
+Y = list(indeg_Liv.values())
+sns.barplot(x = Y, y = X, palette = "hls")
+```
+
+```python
+plt.xticks(range(0, max(Y)+5, 2))
+```
+
+```python
+plt.ylabel("Player Jersey number")
+```
+
+```python
+plt.xlabel("indegree")
+```
+
+```python
+plt.title("Player pass indegrees for Liverpool vs Real Madrid", size = 16)
+```
+
+```python
+plt.show()
+```
+
+<img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-15.png" width="672" />
+
+
+```python
+outdeg_Real = dict(G_Real.out_degree()) 
+outdegree_Real = pd.DataFrame.from_dict(list(outdeg_Real.items())) 
+outdegree_Real.rename(columns = {0:'jersey_number', 1: 'node_outdegree'}, inplace = True)
+print(outdegree_Real.to_markdown())
+```
+
+```python
+X = list(outdeg_Real.keys())
+Y = list(outdeg_Real.values())
+sns.barplot(x = Y, y = X, palette = "hls")
+```
+
+```python
+plt.xticks(range(0, max(Y)+5, 2))
+```
+
+```python
+plt.ylabel("Player Jersey number")
+```
+
+```python
+plt.xlabel("outdegree")
+```
+
+```python
+plt.title("Player pass outdegrees for Real Madrid vs Liverpool", size = 16)
+```
+
+```python
+plt.show()
+```
+
+<img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-17.png" width="672" />
+
+
+```python
+outdeg_Liv = dict(G_Liv.out_degree()) 
+outdegree_Liv = pd.DataFrame.from_dict(list(outdeg_Liv.items())) 
+outdegree_Liv.rename(columns = {0:'jersey_number', 1: 'node_outdegree'}, inplace = True)
+print(outdegree_Liv.to_markdown())
+```
+
+```python
+X = list(outdeg_Liv.keys())
+Y = list(outdeg_Liv.values())
+sns.barplot(x = Y, y = X, palette = "hls")
+```
+
+```python
+plt.xticks(range(0, max(Y)+5, 2))
+```
+
+```python
+plt.ylabel("Player Jersey number")
+```
+
+```python
+plt.xlabel("outdegree")
+```
+
+```python
+plt.title("Player pass outdegrees for Liverpool vs Real Madrid", size = 16)
+```
+
+```python
+plt.show()
+```
+
+<img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-19.png" width="672" />
 
 **This post is still under construction**
