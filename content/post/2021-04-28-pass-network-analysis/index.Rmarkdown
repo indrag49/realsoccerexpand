@@ -133,7 +133,7 @@ players_Real = {}
 for i in range(len(lineup_Real)):
     key = lineup_Real.player[i]['name']
     val = lineup_Real.jersey_number[i]
-    players_Real[key] = val
+    players_Real[key] = str(val)
 print(players_Real)
 ```
 
@@ -142,7 +142,7 @@ players_Liv = {}
 for i in range(len(lineup_Liv)):
     key = lineup_Liv.player[i]['name']
     val = lineup_Liv.jersey_number[i]
-    players_Liv[key] = val
+    players_Liv[key] = str(val)
 print(players_Liv)
 ```
 
@@ -387,25 +387,104 @@ print(pass_Liv.to_markdown())
 We will replace the player names with their jersey numbers and create another pair of new datasets:
 
 ```{python}
-pitch = Pitch(pitch_color='black', goal_type = 'box', line_color='white', constrained_layout=True, tight_layout=False)
+pass_Real_new = pass_Real.replace({"pass_maker": players_Real, "pass_receiver": players_Real})
+print(pass_Real_new.to_markdown())
+```
+
+```{python}
+pass_Liv_new = pass_Liv.replace({"pass_maker": players_Liv, "pass_receiver": players_Liv})
+print(pass_Liv_new.to_markdown())
+```
+
+Now let us visualize the pass networks for both the teams.
+
+```{python results=FALSE}
+pitch = Pitch(pitch_color='grass', goal_type = 'box', line_color='white', stripe = True, constrained_layout=True, tight_layout=False)
 fig, ax = pitch.draw()
 arrows = pitch.arrows(pass_Real.pass_maker_x, pass_Real.pass_maker_y,
                          pass_Real.pass_receiver_x, pass_Real.pass_receiver_y, lw = 5,
-                         color = 'white', zorder = 1, ax = ax)
+                         color = 'black', zorder = 1, ax = ax)
 nodes = pitch.scatter(av_loc_Real.pass_maker_x, av_loc_Real.pass_maker_y,
-                           s=350, color='red', edgecolors='black', linewidth=1, alpha = 1, ax = ax)
+                           s=350, color = 'white', edgecolors='black', linewidth=1, alpha = 1, ax = ax)
+                          
+for index, row in av_loc_Real.iterrows():
+    pitch.annotate(players_Real[row.name], xy=(row.pass_maker_x, row.pass_maker_y), c ='black', va = 'center', ha = 'center', size = 10, ax = ax)
+plt.title("Pass network for Real Madrid against Liverpool", size = 20)                   
 plt.show()
 ```
 
 ```{python}
-pitch = Pitch(pitch_color='black', goal_type = 'box', line_color='white', constrained_layout=True, tight_layout=False)
+pitch = Pitch(pitch_color='grass', goal_type = 'box', stripe = True, line_color='white', constrained_layout=True, tight_layout=False)
 fig, ax = pitch.draw()
-arrows = pitch.arrows(pass_Liv.pass_maker_x, pass_Liv.pass_maker_y,
-                         pass_Liv.pass_receiver_x, pass_Liv.pass_receiver_y, lw = 5,
-                         color = 'white', zorder = 1, ax = ax)
-nodes = pitch.scatter(av_loc_Liv.pass_maker_x, av_loc_Liv.pass_maker_y,
-                           s=350, color='red', edgecolors='black', linewidth=1, alpha = 1, ax = ax)
+arrows = pitch.arrows(120 - pass_Liv.pass_maker_x, pass_Liv.pass_maker_y,
+                         120 - pass_Liv.pass_receiver_x, pass_Liv.pass_receiver_y, lw = 5,
+                         color = 'black', zorder = 1, ax = ax)
+nodes = pitch.scatter(120 - av_loc_Liv.pass_maker_x, av_loc_Liv.pass_maker_y,
+                           s=350, color = 'red', edgecolors = 'black', linewidth=1, alpha = 1, ax = ax)
+                           
+for index, row in av_loc_Liv.iterrows():
+    pitch.annotate(players_Liv[row.name], xy=(120 - row.pass_maker_x, row.pass_maker_y), c ='black', va = 'center', ha = 'center', size = 10, ax = ax)
+plt.title("Pass network for Liverpool against Real Madrid", size = 20)
 plt.show()
 ```
+
+In case of `Liverpool`'s pass network visualization, we subtract the x coordinates from 120 just to reverse the x-axis. Now that we have been successful in correctly visualizing the pass networks of the teams involved in the game, we will now start analyzing our networks using metrics from the literature of *complex network analysis*.
+
+Note that both of our networks are directed weighted graphs, with number of passes as the weight for a directed edge.
+
+Let us first develop the isomorphic graph to the one we just visualized for `Real Madrid`, but this time using the `networkx` package. First we will use the relevant columns from the `pass_Real_new` dataset:
+
+```{python}
+pass_Real_new = pass_Real_new[['pass_maker', 'pass_receiver', 'number_of_passes']]
+print(pass_Real_new.to_markdown())
+```
+
+We will next convert `pass_Real_new` to a list of tuples, where each row is converted to a tuple. This is required for drawing a `networkx` graph
+
+```{python}
+L_Real = pass_Real_new.apply(tuple, axis=1).tolist()
+print(L_Real)
+```
+
+Now, we can draw the directed weighted graph:
+
+```{python results=FALSE}
+G_Real = nx.DiGraph()
+
+for i in range(len(L_Real)):
+    G_Real.add_edge(L_Real[i][0], L_Real[i][1], weight = L_Real[i][2])
+
+edges_Real = G_Real.edges()
+weights_Real = [G_Real[u][v]['weight'] for u, v in edges_Real]
+
+nx.draw(G_Real, node_size=800, with_labels=True, node_color='white', width = weights_Real)
+plt.gca().collections[0].set_edgecolor('black') # sets the edge color of the nodes to black
+plt.title("Pass network for Real Madrid vs Liverpool", size = 20)
+plt.show()
+```
+
+Now for `Liverpool` too, let us first clean the `pass_Liv_new` dataset and then draw the isomorphic weighted directed graph:
+
+```{python}
+pass_Liv_new = pass_Liv_new[['pass_maker', 'pass_receiver', 'number_of_passes']]
+print(pass_Liv_new.to_markdown())
+```
+
+
+```{python}
+L_Liv = pass_Liv_new.apply(tuple, axis=1).tolist()
+G_Liv = nx.DiGraph()
+
+for i in range(len(L_Liv)):
+    G_Liv.add_edge(L_Liv[i][0], L_Liv[i][1], weight = L_Liv[i][2])
+
+edges_Liv = G_Liv.edges()
+weights_Liv = [G_Liv[u][v]['weight'] for u, v in edges_Liv]
+
+nx.draw(G_Liv, node_size=800, with_labels=True, node_color='red', width = weights_Liv)
+plt.gca().collections[0].set_edgecolor('black') # sets the edge color of the nodes to black
+plt.show()
+```
+
 
 **This post is still under construction**
