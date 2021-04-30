@@ -19,9 +19,127 @@ projects: []
 
 In our [last tutorial](https://realsoccerexpand.netlify.app/post/pass-network-analysis/), we studied how to visualize a pass network for the teams from a particular match and how to analyse the networks using knowledge from complex network analysis literature. In this tutorial we will learn how to implement ideas from computational geometry on football spatial event or tracking data and generate important visualizations and analyses. This post is highly influenced by the concepts discussed in the second chapter *How Slime Moulds Built Barcelona* from the book [**Soccermatics**](https://www.amazon.in/Soccermatics-Mathematical-Adventures-Beautiful-Bloomsbury-ebook/dp/B01AIB7YKE).
 
-First we will study how to develop a *convex hull* around those points (locations denoted by x- and y- coordinates) from where a player had made a pass in a particular game. Mathematically, if these points are contained in a set `**X**` then the *convex hull* is the smallest convex set that contains `**X**`. This will help us get an idea about the optimal field coverage of a player during the match. Let us see how a convex hull for a set of points looks like:
+First we will study how to develop a *convex hull* around those points (locations denoted by x- and y- coordinates) from where a player had made a pass or had taken a shot in a particular game. Mathematically, if these points are contained in a set **`X`** then the *convex hull* is the smallest convex set that contains **`X`**. This will help us get an idea about the optimal field coverage of a player during the match. Let us see how a convex hull for a set of points looks like:
 
 ![](convexhull.png)
 This figure has been adapted from the [wikipedia article](https://en.wikipedia.org/wiki/Convex_hull#:~:text=In%20mathematics%2C%20the%20convex%20hull%20or%20convex%20envelope,is%20the%20smallest%20convex%20set%20that%20contains%20X.) on *convex hulls*.
 
-Now we will collect the event data from a particular match
+Before we start with our data collection and analysis we need to download the [`scipy`](https://www.scipy.org/) package which provides us with a collection of modules for working on scientific computation with Python.
+Let us `pip` install the package:
+
+```{python eval=FALSE}
+pip install scipy
+```
+
+We will first import all the packages that we need in this tutorial:
+
+```{python}
+from statsbombpy import sb # statsbomb api
+import matplotlib.pyplot as plt # matplotlib for plotting
+from mplsoccer.pitch import Pitch # for drawing the football pitch
+import seaborn as sns # seaborn for plotting useful statistical graphs
+import numpy as np # numerical python package
+import pandas as pd # pandas for manipulating and analysing data
+import networkx as nx # package for complex network analysis
+```
+
+Further, for this post, we need to use the `scipy.spatial` module that allows us to work with spatial algorithms and data structures. As we are going to work with *convex hulls* first, let us import the `ConvexHull` classes from `scipy.spatial`: 
+
+```{python}
+from scipy.spatial import ConvexHull
+```
+
+Next, we will collect the event data from a particular match and filter the data in such a way that the event `type` will be set to `Pass` or `Shot`, fetching us all the data for pass and shot events. 
+
+```{python}
+comp = sb.competitions()
+print(comp.to_markdown())
+```
+
+Next, let us decide on a `competition_id` and a `season_id` to extract matches from a particular season and competition:
+
+```{python}
+mat = sb.matches(competition_id = 11, season_id = 1)
+print(mat.to_markdown())
+```
+
+So, we have extracted the matches from 2017-18 La Liga season. Now let us decide on a particular match to extract the event data from:
+
+```{python}
+events = sb.events(match_id = 9609)
+print(events.head(10).to_markdown())
+print(events.tail(10).to_markdown())
+```
+
+We have extracted the event data from the `Barcelona` vs. `Eibar` match, which `Barcelona` won *6-1* at home (*Camp Nou*). Interesting!
+
+Let us now look into the column names of `events`, such that we can only extract appropriate columns for visualizing and analyzing our convex hulls.
+
+```{python}
+print(events.columns)
+```
+
+Now let us pick the important columns from the `events` dataset:
+
+```{python}
+events_hull = events[['team', 'location', 'type', 'player']]
+print(events_hull.head(10).to_markdown())
+```
+
+Seems like we only need four columns for now. As we are only focusing on pass and shot events, we will first filter the dataset by setting `type` to `Pass` or `Shot`.
+
+```{python}
+events_hull = events_hull[(events_hull['type'] == 'Pass') | (events_hull['type'] == 'Shot')].reset_index()
+print(events_hull.head(10).to_markdown())
+```
+
+Then, we will split the `location` column into `location_x` and `location_y` columns:
+
+```{python}
+Loc = events_hull['location']
+Loc = pd.DataFrame(Loc.to_list(), columns=['location_x', 'location_y'])
+events_hull['location_x'] = Loc['location_x']
+events_hull['location_y'] = Loc['location_y']
+print(events_hull.head(10).to_markdown())
+```
+
+we can discard the `location` column:
+
+```{python}
+events_hull = events_hull[['team', 'type', 'player', 'location_x', 'location_y']]
+```
+
+We will next split the data into two datasets, one for `Barcelona` and the other for `Eibar`:
+
+```{python}
+events_hull_Barca = events_hull[events_hull['team'] == 'Barcelona'].reset_index()
+events_hull_Eibar = events_hull[events_hull['team'] == 'Eibar'].reset_index()
+```
+
+Let us look into the first 10 rows of these datasets:
+
+```{python}
+print(events_hull_Barca.head(10).to_markdown())
+print(events_hull_Eibar.head(10).to_markdown())
+```
+
+Next, we will list down the name of the players from both the teams:
+
+```{python}
+players_Barca = events_hull_Barca.player.unique()
+players_Eibar = events_hull_Eibar.player.unique()
+print(players_Barca)
+print(players_Eibar)
+```
+
+First we will focus on computing and visualizing the convex hull for a particular player. What can be a better way to pay respect 🙌 🙌  to one of the greatest midfielders of all time `'Andrés Iniesta Luján'` than picking him up for the analysis? 
+
+We will now extract the event data for `Iniesta` from `events_hull_Barca`.
+
+```{python}
+events_hull_iniesta = events_hull_Barca[events_hull_Barca['player'] == 'Andrés Iniesta Luján']
+print(events_hull_iniesta.to_markdown())
+```
+
+
+**This post is still under construction**
