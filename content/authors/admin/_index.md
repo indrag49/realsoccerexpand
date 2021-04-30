@@ -6,7 +6,7 @@ role: Maintained by Indranil Ghosh
 social:
 - icon: envelope
   icon_pack: fas
-  link: /#contact
+  link: mailto:I.Ghosh@massey.ac.nz
 - display:
     header: true
   icon: twitter
@@ -15,8 +15,8 @@ social:
   link: https://twitter.com/indraghosh314
 - icon: github
   icon_pack: fab
-  label: github repo to Jupyter notebooks
-  link: https://github.com/indrag49/football-analysis-project
+  label: github 
+  link: https://github.com/indrag49
 - icon: linkedin
   icon_pack: fab
   link: https://www.linkedin.com/in/indranil-ghosh-b999b2135/
