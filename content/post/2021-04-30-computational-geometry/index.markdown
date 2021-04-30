@@ -684,7 +684,7 @@ plt.scatter(events_hull_iniesta.location_x, events_hull_iniesta.location_y, colo
 
 ```python
 for i in convex_hull_iniesta.simplices:
-    plt.plot(points_hull[i, 0], points_hull[i, 1], 'black')
+    plt.plot(points_hull[i, 0], points_hull[i, 1], 'white')
     plt.fill(points_hull[convex_hull_iniesta.vertices, 0], points_hull[convex_hull_iniesta.vertices, 1], c='white', alpha=0.1)
 ```
 
@@ -693,6 +693,137 @@ plt.title("Convex Hull for Iniesta's field coverage against Eibar")
 ```
 
 <img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-3.png" width="672" />
+
+So, we see that `Iniesta` mostly covered the left side of `Barcelona`'s attack on the field. That speaks a lot! Now let us go ahead and compute and visualize the convex hull for all the players in a team
+
+
+```python
+ccodes = ['#FAEBD7', '#66CDAA', '#E3CF57', '#8A2BE2', '#EE3B3B', '#66CD00', '#DC143C', '#FFB90F', '#A9A9A9', '#B23AEE', '#CD1076',
+         '#8B6914', '#BFEFFF', '#EED2EE', '#C6E2FF', '#C67171']
+         
+fig, axes = plt.subplots(6, 3, figsize = (20, 25))
+axes = axes.ravel()
+
+for idx, p in enumerate(players_Barca):
+    pitch = Pitch(pitch_color='black', line_color='white', goal_type='box', 
+              constrained_layout=True, tight_layout=False)
+    pitch.draw(axes[idx])
+    xmin, xmax, ymin, ymax = pitch.extent
+    
+    axes[idx].xaxis.set_ticks([xmin, xmax])
+    axes[idx].yaxis.set_ticks([ymin, ymax])
+    axes[idx].tick_params(labelsize=15)
+    axes[idx].set_title(p, fontsize=20, pad=8)
+    
+    Eh = events_hull_Barca[events_hull_Barca['player'] == p].reset_index()
+    
+    Q1 = np.percentile(Eh['location_x'], 25, interpolation='midpoint')
+    Q3 = np.percentile(Eh['location_x'], 75, interpolation='midpoint')
+    IQR_x = Q3 - Q1
+
+    minimum_x = Q1 - 1.5*IQR_x
+    maximum_x = Q3 + 1.5*IQR_x
+    
+    Q1 = np.percentile(Eh['location_y'], 25, interpolation='midpoint')
+    Q3 = np.percentile(Eh['location_y'], 75, interpolation='midpoint')
+    IQR_y = Q3 - Q1
+
+    minimum_y = Q1 - 1.5*IQR_y
+    maximum_y = Q3 + 1.5*IQR_y
+    
+    upper = np.where((Eh['location_x'] >= maximum_x) & (Eh['location_y'] >= maximum_y))
+    lower = np.where((Eh['location_x'] <= minimum_x) & (Eh['location_y'] <= minimum_y))
+    
+    Eh.drop(upper[0], inplace = True)
+    Eh.drop(lower[0], inplace = True)
+    
+    points_Barca = Eh[['location_x', 'location_y']].values
+    convex_hull_Barca = ConvexHull(Eh[['location_x', 'location_y']])
+    
+    axes[idx].scatter(Eh.location_x, Eh.location_y, color='red')
+    
+    for i in convex_hull_Barca.simplices:
+            axes[idx].plot(points_Barca[i, 0], points_Barca[i, 1], 'white')
+            axes[idx].fill(points_Barca[convex_hull_Barca.vertices, 0], points_Barca[convex_hull_Barca.vertices, 1], c=ccodes[idx], alpha=0.1)
+            
+```
+
+```python
+title = fig.suptitle("Convex Hulls for Barcelona players' field coverage vs Eibar [La Liga 2017-18]", fontsize=33)
+
+for j in range(len(players_Barca)-18, 0):
+    axes[j].remove()
+plt.show()
+```
+
+<img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-5.png" width="1920" />
+
+Now, we will compute for `Eibar`'s team players:
+
+
+```python
+ccodes = ['#FAEBD7', '#66CDAA', '#E3CF57', '#8A2BE2', '#EE3B3B', '#66CD00', '#DC143C', '#FFB90F', '#A9A9A9', '#B23AEE', '#CD1076',
+         '#8B6914', '#BFEFFF', '#EED2EE', '#C6E2FF', '#C67171']
+         
+fig, axes = plt.subplots(6, 3, figsize = (20, 25))
+axes = axes.ravel()
+
+for idx, p in enumerate(players_Eibar):
+    pitch = Pitch(pitch_color='black', line_color='white', goal_type='box', 
+              constrained_layout=True, tight_layout=False)
+    pitch.draw(axes[idx])
+    xmin, xmax, ymin, ymax = pitch.extent
+    
+    axes[idx].xaxis.set_ticks([xmin, xmax])
+    axes[idx].yaxis.set_ticks([ymin, ymax])
+    axes[idx].tick_params(labelsize=15)
+    axes[idx].set_title(p, fontsize=20, pad=8)
+    
+    Eh = events_hull_Eibar[events_hull_Eibar['player'] == p].reset_index()
+    Eh['location_x'] = 120 - Eh['location_x']
+    
+    Q1 = np.percentile(Eh['location_x'], 25, interpolation='midpoint')
+    Q3 = np.percentile(Eh['location_x'], 75, interpolation='midpoint')
+    IQR_x = Q3 - Q1
+
+    minimum_x = Q1 - 1.5*IQR_x
+    maximum_x = Q3 + 1.5*IQR_x
+    
+    Q1 = np.percentile(Eh['location_y'], 25, interpolation='midpoint')
+    Q3 = np.percentile(Eh['location_y'], 75, interpolation='midpoint')
+    IQR_y = Q3 - Q1
+
+    minimum_y = Q1 - 1.5*IQR_y
+    maximum_y = Q3 + 1.5*IQR_y
+    
+    upper = np.where((Eh['location_x'] >= maximum_x) & (Eh['location_y'] >= maximum_y))
+    lower = np.where((Eh['location_x'] <= minimum_x) & (Eh['location_y'] <= minimum_y))
+    
+    Eh.drop(upper[0], inplace = True)
+    Eh.drop(lower[0], inplace = True)
+    
+    points_Eibar = Eh[['location_x', 'location_y']].values
+    convex_hull_Eibar = ConvexHull(Eh[['location_x', 'location_y']])
+    
+    axes[idx].scatter(Eh.location_x, Eh.location_y, color='red')
+    
+    for i in convex_hull_Eibar.simplices:
+            axes[idx].plot(points_Eibar[i, 0], points_Eibar[i, 1], 'white')
+            axes[idx].fill(points_Eibar[convex_hull_Eibar.vertices, 0], points_Eibar[convex_hull_Eibar.vertices, 1], c=ccodes[idx], alpha=0.1)
+            
+```
+
+```python
+title = fig.suptitle("Convex Hulls for Eiber players' field coverage vs Barcelona [La Liga 2017-18]", fontsize=33)
+
+for j in range(len(players_Eibar)-18, 0):
+    axes[j].remove()
+plt.show()
+```
+
+<img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-7.png" width="1920" />
+
+So, we have been able to compute and visualize the convex hulls for players from a particular game. Next, we will try to understand how to get tracking data from a particular game using `statsbomb` api. We need tracking data to compute *Delaunay triangulations* and *Voronoi diagrams*.
 
 
 **This post is still under construction**
