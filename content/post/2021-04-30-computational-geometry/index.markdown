@@ -463,5 +463,236 @@ print(events_hull_iniesta.to_markdown())
 ## | 410 |     701 | Barcelona | Pass   | Andrés Iniesta Luján |           83 |           49 |
 ```
 
+Before computing and visualizing the convex hull, it is a good practice to discard the outliers from the datasets. A common method that researchers use is the [*Inter Quartile Range*](https://en.wikipedia.org/wiki/Interquartile_range). We will find the inter quartile ranges for the columns `location_x` and `location_y` from `events_hull_iniesta` and then compute the upper and lower bounds of the data. Any points lying beyond these bounds, i.e any point lying above the lower bound and any point lying below the upper bound, are decided to be *outliers* and are discarded. We use box plots and whisker plots to visualize the interquartile range for the datapoints:  
+
+
+```python
+e_box = pd.DataFrame(data = events_hull_iniesta, columns = ["location_x", "location_y"])
+boxplot = sns.boxplot(x = "variable", y ="value", data=pd.melt(e_box), order = ["location_x", "location_y"])
+boxplot = sns.stripplot(x = "variable", y = "value", data = pd.melt(e_box), marker="o", color="red", order = ["location_x", "location_y"])
+boxplot.axes.set_title("Boxplot for Iniesta's location conditions")
+```
+
+```python
+plt.show()
+```
+
+<img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-1.png" width="672" />
+
+We will next compute the quartiles, the inter quartile range and the minimum and maximum values:
+
+
+```python
+Q1 = np.percentile(events_hull_iniesta['location_x'], 25, interpolation='midpoint')
+Q3 = np.percentile(events_hull_iniesta['location_x'], 75, interpolation='midpoint')
+IQR_x = Q3 - Q1
+
+minimum_x = Q1 - 1.5*IQR_x
+maximum_x = Q3 + 1.5*IQR_x
+Q1, Q3, IQR_x, minimum_x, maximum_x
+```
+
+```
+## (50.0, 72.0, 22.0, 17.0, 105.0)
+```
+
+
+```python
+Q1 = np.percentile(events_hull_iniesta['location_y'], 25, interpolation='midpoint')
+Q3 = np.percentile(events_hull_iniesta['location_y'], 75, interpolation='midpoint')
+IQR_y = Q3 - Q1
+
+minimum_y = Q1 - 1.5*IQR_y
+maximum_y = Q3 + 1.5*IQR_y
+Q1, Q3, IQR_y, minimum_y, maximum_y
+```
+
+```
+## (12.0, 28.0, 16.0, -12.0, 52.0)
+```
+
+
+```python
+upper = np.where((events_hull_iniesta['location_x'] >= maximum_x) & (events_hull_iniesta['location_y'] >= maximum_y))
+lower = np.where((events_hull_iniesta['location_x'] <= minimum_x) & (events_hull_iniesta['location_y'] <= minimum_y))
+```
+
+Finally, we will drop the outliers if present:
+
+
+```python
+events_hull_iniesta.drop(upper[0], inplace = True)
+```
+
+```python
+events_hull_iniesta.drop(lower[0], inplace = True)
+```
+
+Let us again print the top 10 rows of the `events_hull_iniesta` dataset:
+
+
+```python
+events_hull_iniesta = events_hull_iniesta.reset_index()
+events_hull_iniesta = events_hull_iniesta[['team', 'type', 'player', 'location_x', 'location_y']]
+print(events_hull_iniesta.to_markdown())
+```
+
+```
+## |    | team      | type   | player               |   location_x |   location_y |
+## |---:|:----------|:-------|:---------------------|-------------:|-------------:|
+## |  0 | Barcelona | Pass   | Andrés Iniesta Luján |           56 |           28 |
+## |  1 | Barcelona | Pass   | Andrés Iniesta Luján |           53 |           21 |
+## |  2 | Barcelona | Pass   | Andrés Iniesta Luján |           72 |           19 |
+## |  3 | Barcelona | Pass   | Andrés Iniesta Luján |           84 |           19 |
+## |  4 | Barcelona | Pass   | Andrés Iniesta Luján |           52 |           28 |
+## |  5 | Barcelona | Pass   | Andrés Iniesta Luján |           52 |           31 |
+## |  6 | Barcelona | Pass   | Andrés Iniesta Luján |           64 |           29 |
+## |  7 | Barcelona | Pass   | Andrés Iniesta Luján |           66 |            8 |
+## |  8 | Barcelona | Pass   | Andrés Iniesta Luján |           54 |           28 |
+## |  9 | Barcelona | Pass   | Andrés Iniesta Luján |           70 |            4 |
+## | 10 | Barcelona | Pass   | Andrés Iniesta Luján |           56 |           24 |
+## | 11 | Barcelona | Pass   | Andrés Iniesta Luján |           79 |            2 |
+## | 12 | Barcelona | Pass   | Andrés Iniesta Luján |           40 |           36 |
+## | 13 | Barcelona | Pass   | Andrés Iniesta Luján |           87 |            7 |
+## | 14 | Barcelona | Pass   | Andrés Iniesta Luján |           80 |            8 |
+## | 15 | Barcelona | Pass   | Andrés Iniesta Luján |           37 |           23 |
+## | 16 | Barcelona | Pass   | Andrés Iniesta Luján |           48 |           23 |
+## | 17 | Barcelona | Pass   | Andrés Iniesta Luján |           97 |           50 |
+## | 18 | Barcelona | Pass   | Andrés Iniesta Luján |           42 |           13 |
+## | 19 | Barcelona | Pass   | Andrés Iniesta Luján |           66 |           26 |
+## | 20 | Barcelona | Pass   | Andrés Iniesta Luján |           44 |           25 |
+## | 21 | Barcelona | Pass   | Andrés Iniesta Luján |           90 |           23 |
+## | 22 | Barcelona | Pass   | Andrés Iniesta Luján |           34 |           28 |
+## | 23 | Barcelona | Pass   | Andrés Iniesta Luján |           60 |           10 |
+## | 24 | Barcelona | Pass   | Andrés Iniesta Luján |           54 |            5 |
+## | 25 | Barcelona | Pass   | Andrés Iniesta Luján |           34 |           14 |
+## | 26 | Barcelona | Pass   | Andrés Iniesta Luján |           39 |           21 |
+## | 27 | Barcelona | Pass   | Andrés Iniesta Luján |           69 |           18 |
+## | 28 | Barcelona | Pass   | Andrés Iniesta Luján |           92 |           12 |
+## | 29 | Barcelona | Pass   | Andrés Iniesta Luján |           64 |            4 |
+## | 30 | Barcelona | Pass   | Andrés Iniesta Luján |           44 |            9 |
+## | 31 | Barcelona | Pass   | Andrés Iniesta Luján |           62 |            6 |
+## | 32 | Barcelona | Pass   | Andrés Iniesta Luján |           71 |           26 |
+## | 33 | Barcelona | Pass   | Andrés Iniesta Luján |           68 |           16 |
+## | 34 | Barcelona | Pass   | Andrés Iniesta Luján |           49 |           20 |
+## | 35 | Barcelona | Pass   | Andrés Iniesta Luján |           50 |           14 |
+## | 36 | Barcelona | Pass   | Andrés Iniesta Luján |           51 |           15 |
+## | 37 | Barcelona | Pass   | Andrés Iniesta Luján |           52 |           25 |
+## | 38 | Barcelona | Pass   | Andrés Iniesta Luján |          101 |           36 |
+## | 39 | Barcelona | Pass   | Andrés Iniesta Luján |           81 |           47 |
+## | 40 | Barcelona | Pass   | Andrés Iniesta Luján |           83 |           49 |
+```
+
+First we collect all the points from the two columns as a 2-D matrix. This comes in aid while drawing the convex hull.
+
+
+```python
+points_hull = events_hull_iniesta[['location_x', 'location_y']].values
+print(points_hull)
+```
+
+```
+## [[ 56.  28.]
+##  [ 53.  21.]
+##  [ 72.  19.]
+##  [ 84.  19.]
+##  [ 52.  28.]
+##  [ 52.  31.]
+##  [ 64.  29.]
+##  [ 66.   8.]
+##  [ 54.  28.]
+##  [ 70.   4.]
+##  [ 56.  24.]
+##  [ 79.   2.]
+##  [ 40.  36.]
+##  [ 87.   7.]
+##  [ 80.   8.]
+##  [ 37.  23.]
+##  [ 48.  23.]
+##  [ 97.  50.]
+##  [ 42.  13.]
+##  [ 66.  26.]
+##  [ 44.  25.]
+##  [ 90.  23.]
+##  [ 34.  28.]
+##  [ 60.  10.]
+##  [ 54.   5.]
+##  [ 34.  14.]
+##  [ 39.  21.]
+##  [ 69.  18.]
+##  [ 92.  12.]
+##  [ 64.   4.]
+##  [ 44.   9.]
+##  [ 62.   6.]
+##  [ 71.  26.]
+##  [ 68.  16.]
+##  [ 49.  20.]
+##  [ 50.  14.]
+##  [ 51.  15.]
+##  [ 52.  25.]
+##  [101.  36.]
+##  [ 81.  47.]
+##  [ 83.  49.]]
+```
+
+Now, let us use the `ConvexHull()` function from `scipy.spatial`:
+
+
+```python
+convex_hull_iniesta = ConvexHull(events_hull_iniesta[['location_x', 'location_y']])
+```
+
+This *convex hull* is represented by the *vertices*, i.e the coordinate points that make the vertices of the convex hull and the *simplices*, i.e the stratight line in case of a 2-D plane that connects the *vertices* of the the *convex hull*. The `vertices` attribute consists of the indices of the points in `points_hull` that make up the convex hull, and the `simplices` attribute too consists of the indices of the points in `points_hull`. The `simplices` are a list of 1-D simplices of a particular length, representing line segments in 2-D. Let us print the indices:
+
+
+```python
+print(convex_hull_iniesta.vertices)
+```
+
+```
+## [22 25 30 24 11 13 28 38 17 40 12]
+```
+
+```python
+print(convex_hull_iniesta.simplices)
+```
+
+```
+## [[25 22]
+##  [28 38]
+##  [12 22]
+##  [12 40]
+##  [17 38]
+##  [17 40]
+##  [24 11]
+##  [13 11]
+##  [13 28]
+##  [30 25]
+##  [30 24]]
+```
+
+Now we have collected all the useful information and will visualize the convex hull on a football pitch:
+
+
+```python
+pitch = Pitch(pitch_color='black', line_color='white', goal_type='box', 
+              constrained_layout=True, tight_layout=False)
+fig, ax = pitch.draw()
+
+plt.scatter(events_hull_iniesta.location_x, events_hull_iniesta.location_y, color='red')
+```
+
+```python
+for i in convex_hull_iniesta.simplices:
+    plt.plot(points_hull[i, 0], points_hull[i, 1], 'black')
+    plt.fill(points_hull[convex_hull_iniesta.vertices, 0], points_hull[convex_hull_iniesta.vertices, 1], c='white', alpha=0.1)
+```
+
+```python
+plt.title("Convex Hull for Iniesta's field coverage against Eibar")
+```
+
+<img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-3.png" width="672" />
+
 
 **This post is still under construction**

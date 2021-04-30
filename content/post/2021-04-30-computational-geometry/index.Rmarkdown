@@ -141,5 +141,94 @@ events_hull_iniesta = events_hull_Barca[events_hull_Barca['player'] == 'Andrés 
 print(events_hull_iniesta.to_markdown())
 ```
 
+Before computing and visualizing the convex hull, it is a good practice to discard the outliers from the datasets. A common method that researchers use is the [*Inter Quartile Range*](https://en.wikipedia.org/wiki/Interquartile_range). We will find the inter quartile ranges for the columns `location_x` and `location_y` from `events_hull_iniesta` and then compute the upper and lower bounds of the data. Any points lying beyond these bounds, i.e any point lying above the lower bound and any point lying below the upper bound, are decided to be *outliers* and are discarded. We use box plots and whisker plots to visualize the interquartile range for the datapoints:  
+
+```{python results=FALSE}
+e_box = pd.DataFrame(data = events_hull_iniesta, columns = ["location_x", "location_y"])
+boxplot = sns.boxplot(x = "variable", y ="value", data=pd.melt(e_box), order = ["location_x", "location_y"])
+boxplot = sns.stripplot(x = "variable", y = "value", data = pd.melt(e_box), marker="o", color="red", order = ["location_x", "location_y"])
+boxplot.axes.set_title("Boxplot for Iniesta's location conditions")
+plt.show()
+```
+
+We will next compute the quartiles, the inter quartile range and the minimum and maximum values:
+
+```{python}
+Q1 = np.percentile(events_hull_iniesta['location_x'], 25, interpolation='midpoint')
+Q3 = np.percentile(events_hull_iniesta['location_x'], 75, interpolation='midpoint')
+IQR_x = Q3 - Q1
+
+minimum_x = Q1 - 1.5*IQR_x
+maximum_x = Q3 + 1.5*IQR_x
+Q1, Q3, IQR_x, minimum_x, maximum_x
+
+```
+
+```{python}
+Q1 = np.percentile(events_hull_iniesta['location_y'], 25, interpolation='midpoint')
+Q3 = np.percentile(events_hull_iniesta['location_y'], 75, interpolation='midpoint')
+IQR_y = Q3 - Q1
+
+minimum_y = Q1 - 1.5*IQR_y
+maximum_y = Q3 + 1.5*IQR_y
+Q1, Q3, IQR_y, minimum_y, maximum_y
+```
+
+```{python}
+upper = np.where((events_hull_iniesta['location_x'] >= maximum_x) & (events_hull_iniesta['location_y'] >= maximum_y))
+lower = np.where((events_hull_iniesta['location_x'] <= minimum_x) & (events_hull_iniesta['location_y'] <= minimum_y))
+```
+
+Finally, we will drop the outliers if present:
+
+```{python results=FALSE}
+events_hull_iniesta.drop(upper[0], inplace = True)
+events_hull_iniesta.drop(lower[0], inplace = True)
+```
+
+Let us again print the top 10 rows of the `events_hull_iniesta` dataset:
+
+```{python}
+events_hull_iniesta = events_hull_iniesta.reset_index()
+events_hull_iniesta = events_hull_iniesta[['team', 'type', 'player', 'location_x', 'location_y']]
+print(events_hull_iniesta.to_markdown())
+```
+
+First we collect all the points from the two columns as a 2-D matrix. This comes in aid while drawing the convex hull.
+
+```{python}
+points_hull = events_hull_iniesta[['location_x', 'location_y']].values
+print(points_hull)
+```
+
+Now, let us use the `ConvexHull()` function from `scipy.spatial`:
+
+```{python}
+convex_hull_iniesta = ConvexHull(events_hull_iniesta[['location_x', 'location_y']])
+```
+
+This *convex hull* is represented by the *vertices*, i.e the coordinate points that make the vertices of the convex hull and the *simplices*, i.e the stratight line in case of a 2-D plane that connects the *vertices* of the the *convex hull*. The `vertices` attribute consists of the indices of the points in `points_hull` that make up the convex hull, and the `simplices` attribute too consists of the indices of the points in `points_hull`. The `simplices` are a list of 1-D simplices of a particular length, representing line segments in 2-D. Let us print the indices:
+
+```{python}
+print(convex_hull_iniesta.vertices)
+print(convex_hull_iniesta.simplices)
+```
+
+Now we have collected all the useful information and will visualize the convex hull on a football pitch:
+
+```{python results=FALSE}
+pitch = Pitch(pitch_color='black', line_color='white', goal_type='box', 
+              constrained_layout=True, tight_layout=False)
+fig, ax = pitch.draw()
+
+plt.scatter(events_hull_iniesta.location_x, events_hull_iniesta.location_y, color='red')
+
+for i in convex_hull_iniesta.simplices:
+    plt.plot(points_hull[i, 0], points_hull[i, 1], 'black')
+    plt.fill(points_hull[convex_hull_iniesta.vertices, 0], points_hull[convex_hull_iniesta.vertices, 1], c='white', alpha=0.1)
+
+plt.title("Convex Hull for Iniesta's field coverage against Eibar")
+```
+
 
 **This post is still under construction**
