@@ -477,7 +477,7 @@ We also need to import `Delaunay` from `scipy.spatial` to compute the triangulat
 from scipy.spatial import Delaunay
 ```
 
-Next, let us separate the `tracking_filtered` for the teams:
+Next, let us separate the `data_filtered` for the teams:
 
 ```{python}
 tracking_Barca = data_filtered[data_filtered['team'] == 'Barcelona'].reset_index()
@@ -528,8 +528,49 @@ for index, row in loc_Eibar.iterrows():
 plt.show()
 ```
 
-The red nodes indicate locations of `Barcelona`'s players and the blue nodes indiate that of `Eibar`'s. The black lines indicate the direct links between the players from a particular team at a particular moment, forming the *Delaunay triangulations*, also called the *pass triangulations*. In his book **Soccematics**, Dr. Sumpter mentions that these lines have two useful indications: first, they portray the availability of passes among the players from a particular team, and second, they also indicate the *"no man's lines"* for the players from the opposition team, meaning, if an opposition player is on one of these linking lines, then they are at a disadvantage. Beautiful implementation of computational geometry, isn't it?
+The red nodes indicate locations of `Barcelona`'s players and the blue nodes indicate that of `Eibar`'s. The black lines indicate the direct links between the players from a particular team at a particular moment, forming the *Delaunay triangulations*, also called the *pass triangulations*. In his book **Soccematics**, Dr. Sumpter mentions that these lines have two useful indications: first, they portray the availability of passes among the players from a particular team, and second, they also indicate the *"no man's lines"* for the players from the opposition team, meaning, if an opposition player is on one of these linking lines, then they are at a disadvantage. Beautiful implementation of computational geometry, isn't it?
 
-In the last part of this tutorial, we will compute the *Voronoi diagrams* for the players at the same instance on which we have just computed the *Delaunay triangulations*.
+In the last part of this tutorial, we will compute the *Voronoi diagrams* for the players at the same instance on which we have just computed the *Delaunay triangulations*. The *Voronoi diagrams* help us visualize the zones of each player on the pitch at a particular moment of gameplay. Mathematically, *Voronoi diagrams* for a set **`X`** of points, denote the partitions of a 2-D Euclidean space into regions that are close to each of these points. Look at [this](https://en.wikipedia.org/wiki/Voronoi_diagram) wikipedia article to study more on *Voronoi diagrams*. The *Delaunay triangulation* and the *Voronoi diagrams* are inter-related in the way that they are dual to each other, i.e, the circum-centers of of *Delaunay triangles* are the vertices of the *Voronoi diagram* for the set of points **`X`**. Look at the image of a *Voronoi diagram* (taken from [here](https://en.wikipedia.org/wiki/Delaunay_triangulation#:~:text=In%20mathematics%20and%20computational%20geometry%2C%20a%20Delaunay%20triangulation,of%20any%20triangle%20in%20DT%20%28%20P%20%29.)), which is the dual of the *Delaunay triangulation* that is shown above.
+
+![](voronoi.png)
+
+For computing the *Voronoi diagrams*, remember to use the `data_filtered` dataset, because we need the location of all the players on the pitch. To compute and visualize the *Voronoi diagrams*, we need to import `Voronoi` for computing the *Voronoi diagrams* and `voronoi_plot_2d` to plot the diagrams on a pitch.
+
+```{python}
+from scipy.spatial import Voronoi, voronoi_plot_2d
+```
+
+Next we extract the locations as points from `data_filtered` and compute the *Voronoi diagrams*:
+
+```{python}
+data_filtered['y'] = 80 - data_filtered['y']
+points = data_filtered[['x', 'y']].values
+vor = Voronoi(points)
+```
+
+Finally, we visualize the computed diagrams:
+
+```{python results=FALSE}
+pitch = Pitch(pitch_color='grass', stripe=True, line_color='white', view = 'half', figsize=(15,16),
+              constrained_layout=True, tight_layout=False, goal_type='box')
+fig, ax = pitch.draw()
+
+plt.scatter(tracking_Barca.x, 80 - tracking_Barca.y, color='red', s = 1050, edgecolors='black', zorder=2)
+plt.scatter(tracking_Eibar.x, 80 -tracking_Eibar.y, color='blue', edgecolors='black', s = 1050)
+
+pl = voronoi_plot_2d(vor, ax=ax, show_vertices=False, line_width = 8, line_alpha = 0.3)
+
+for index, row in loc_Barca.iterrows():
+    pitch.annotate(jerseys_Barca[loc_Barca['player_name'][row.name]], xy=(row.x, 80 - row.y), c ='black', va = 'center', ha = 'center', size = 15, ax = ax)
+
+for index, row in loc_Eibar.iterrows():
+    pitch.annotate(jerseys_Eibar[loc_Eibar['player_name'][row.name]], xy=(row.x, 80 - row.y), c ='black', va = 'center', ha = 'center', size = 15, ax = ax)
+    
+plt.show()
+```
+
+So, the *Voronoi diagrams* give us the zones of each and every player on the pitch at a particular moment by breaking the pitch into distinct regions belonging to the players indicating the field covergae of each player at that moment. This completes our tutorial on implementational of computational geometric concepts on football event and trackinf data.
+
+Next post, we will learn how to access football statistical and historical data from [**FBREF**](https://fbref.com/en/).
 
 **This post is still under construction**
