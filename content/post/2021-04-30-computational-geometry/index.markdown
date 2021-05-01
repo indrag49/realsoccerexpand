@@ -751,7 +751,7 @@ for idx, p in enumerate(players_Barca):
 ```python
 title = fig.suptitle("Convex Hulls for Barcelona players' field coverage vs Eibar [La Liga 2017-18]", fontsize=33)
 
-for j in range(len(players_Barca)-18, 0):
+for j in range(len(players_Barca) - 18, 0):
     axes[j].remove()
 plt.show()
 ```
@@ -816,7 +816,7 @@ for idx, p in enumerate(players_Eibar):
 ```python
 title = fig.suptitle("Convex Hulls for Eiber players' field coverage vs Barcelona [La Liga 2017-18]", fontsize=33)
 
-for j in range(len(players_Eibar)-18, 0):
+for j in range(len(players_Eibar) - 18, 0):
     axes[j].remove()
 plt.show()
 ```
@@ -825,5 +825,565 @@ plt.show()
 
 So, we have been able to compute and visualize the convex hulls for players from a particular game. Next, we will try to understand how to get tracking data from a particular game using `statsbomb` api. We need tracking data to compute *Delaunay triangulations* and *Voronoi diagrams*.
 
+Now we need to have access to tracking data which means those data that give us information about the coordinates of all the players on a pitch at a particular instance. It is different to an event data where we only track the coordinate of the ball not all the players. We will use the tracking data from the same game that we have been using in this post for computing *Delaunay triangulations* and *Voronoi diagrams*.
+
+Let us remember the match id for the game between *Barcelona* and *Eibar*. It was `9609`. We need to first import useful classes from the `mplsoccer.statsbomb` module:
+
+
+```python
+from mplsoccer.statsbomb import read_event, EVENT_SLUG
+```
+
+Next, we will use the code from [here](https://mplsoccer.readthedocs.io/en/latest/gallery/pitch_plots/plot_voronoi.html#sphx-glr-gallery-pitch-plots-plot-voronoi-py) to extract the tracking data for the match:
+
+
+```python
+event_json = read_event(f'{EVENT_SLUG}/9609.json', related_event_df = False, tactics_lineup_df = False, warn = False)
+event = event_json['event']
+tracking = event_json['shot_freeze_frame']
+```
+
+Let us look at the `event` and `tracking` datasets:
+
+
+```python
+print(event.head(10).to_markdown())
+```
+
+```
+## |    |   match_id | id                                   |   index |   period |   timestamp_minute |   timestamp_second |   timestamp_millisecond |   minute |   second |   type_id | type_name    |   sub_type_id | sub_type_name   |   outcome_id |   outcome_name |   play_pattern_id | play_pattern_name   |   possession_team_id |   possession | possession_team_name   |   team_id | team_name   |   player_id | player_name                    |   position_id | position_name        |   duration |   x |   y |   z |   end_x |   end_y |   end_z |   body_part_id | body_part_name   |   technique_id |   technique_name |   under_pressure |   counterpress |   pass_length |   pass_angle |   pass_recipient_id | pass_recipient_name      |   pass_height_id | pass_height_name   |   pass_assisted_shot_id |   pass_shot_assist |   pass_cross |   pass_switch |   pass_goal_assist |   pass_backheel |   pass_cut_back |   pass_deflected |   bad_behaviour_card_id |   bad_behaviour_card_name |   ball_recovery_recovery_failure |   block_deflection |   dribble_overrun |   foul_committed_advantage |   foul_committed_penalty |   foul_committed_type_id |   foul_committed_type_name |   foul_won_advantage |   foul_won_penalty |   foul_won_defensive |   goalkeeper_position_id |   goalkeeper_position_name |   shot_one_on_one |   shot_statsbomb_xg |   shot_key_pass_id |   shot_redirect |   substitution_replacement_id |   substitution_replacement_name |   tactics_formation |   aerial_won |
+## |---:|-----------:|:-------------------------------------|--------:|---------:|-------------------:|-------------------:|------------------------:|---------:|---------:|----------:|:-------------|--------------:|:----------------|-------------:|---------------:|------------------:|:--------------------|---------------------:|-------------:|:-----------------------|----------:|:------------|------------:|:-------------------------------|--------------:|:---------------------|-----------:|----:|----:|----:|--------:|--------:|--------:|---------------:|:-----------------|---------------:|-----------------:|-----------------:|---------------:|--------------:|-------------:|--------------------:|:-------------------------|-----------------:|:-------------------|------------------------:|-------------------:|-------------:|--------------:|-------------------:|----------------:|----------------:|-----------------:|------------------------:|--------------------------:|---------------------------------:|-------------------:|------------------:|---------------------------:|-------------------------:|-------------------------:|---------------------------:|---------------------:|-------------------:|---------------------:|-------------------------:|---------------------------:|------------------:|--------------------:|-------------------:|----------------:|------------------------------:|--------------------------------:|--------------------:|-------------:|
+## |  0 |       9609 | 2fc157ab-bb2c-48f7-a099-45411bc6d7db |       1 |        1 |                  0 |                  0 |                       0 |        0 |        0 |        35 | Starting XI  |           nan | nan             |          nan |            nan |                 1 | Regular Play        |                  217 |            1 | Barcelona              |       217 | Barcelona   |         nan | nan                            |           nan | nan                  |      0     | nan | nan | nan |     nan |     nan |     nan |            nan | nan              |            nan |              nan |              nan |            nan |      nan      |   nan        |                 nan | nan                      |              nan | nan                |                     nan |                nan |          nan |           nan |                nan |             nan |             nan |              nan |                     nan |                       nan |                              nan |                nan |               nan |                        nan |                      nan |                      nan |                        nan |                  nan |                nan |                  nan |                      nan |                        nan |               nan |                 nan |                nan |             nan |                           nan |                             nan |                4321 |          nan |
+## |  1 |       9609 | 57eb014c-03f7-4f4d-a759-1515ea7d97b3 |       2 |        1 |                  0 |                  0 |                       0 |        0 |        0 |        35 | Starting XI  |           nan | nan             |          nan |            nan |                 1 | Regular Play        |                  217 |            1 | Barcelona              |       322 | Eibar       |         nan | nan                            |           nan | nan                  |      0     | nan | nan | nan |     nan |     nan |     nan |            nan | nan              |            nan |              nan |              nan |            nan |      nan      |   nan        |                 nan | nan                      |              nan | nan                |                     nan |                nan |          nan |           nan |                nan |             nan |             nan |              nan |                     nan |                       nan |                              nan |                nan |               nan |                        nan |                      nan |                      nan |                        nan |                  nan |                nan |                  nan |                      nan |                        nan |               nan |                 nan |                nan |             nan |                           nan |                             nan |                4231 |          nan |
+## |  2 |       9609 | 94e0c664-c1e9-4ee7-881e-d81124f3836a |       3 |        1 |                  0 |                  0 |                       0 |        0 |        0 |        18 | Half Start   |           nan | nan             |          nan |            nan |                 1 | Regular Play        |                  217 |            1 | Barcelona              |       322 | Eibar       |         nan | nan                            |           nan | nan                  |      0     | nan | nan | nan |     nan |     nan |     nan |            nan | nan              |            nan |              nan |              nan |            nan |      nan      |   nan        |                 nan | nan                      |              nan | nan                |                     nan |                nan |          nan |           nan |                nan |             nan |             nan |              nan |                     nan |                       nan |                              nan |                nan |               nan |                        nan |                      nan |                      nan |                        nan |                  nan |                nan |                  nan |                      nan |                        nan |               nan |                 nan |                nan |             nan |                           nan |                             nan |                 nan |          nan |
+## |  3 |       9609 | 55c6967a-18cc-4ff8-a4be-d0e3915fc22d |       4 |        1 |                  0 |                  0 |                       0 |        0 |        0 |        18 | Half Start   |           nan | nan             |          nan |            nan |                 1 | Regular Play        |                  217 |            1 | Barcelona              |       217 | Barcelona   |         nan | nan                            |           nan | nan                  |      0     | nan | nan | nan |     nan |     nan |     nan |            nan | nan              |            nan |              nan |              nan |            nan |      nan      |   nan        |                 nan | nan                      |              nan | nan                |                     nan |                nan |          nan |           nan |                nan |             nan |             nan |              nan |                     nan |                       nan |                              nan |                nan |               nan |                        nan |                      nan |                      nan |                        nan |                  nan |                nan |                  nan |                      nan |                        nan |               nan |                 nan |                nan |             nan |                           nan |                             nan |                 nan |          nan |
+## |  4 |       9609 | 3f6b644f-5ce2-4b89-a912-bfbc05475cbb |       5 |        1 |                  0 |                  0 |                     480 |        0 |        0 |        30 | Pass         |            65 | Kick Off        |          nan |            nan |                 9 | From Kick Off       |                  217 |            2 | Barcelona              |       217 | Barcelona   |        5503 | Lionel Andrés Messi Cuccittini |            23 | Center Forward       |      1.07  |  60 |  40 | nan |      49 |      36 |     nan |             38 | Left Foot        |            nan |              nan |              nan |            nan |       11.7047 |    -2.79282  |                5203 | Sergio Busquets i Burgos |                1 | Ground Pass        |                     nan |                nan |          nan |           nan |                nan |             nan |             nan |              nan |                     nan |                       nan |                              nan |                nan |               nan |                        nan |                      nan |                      nan |                        nan |                  nan |                nan |                  nan |                      nan |                        nan |               nan |                 nan |                nan |             nan |                           nan |                             nan |                 nan |          nan |
+## |  5 |       9609 | b8523951-7a5b-4304-a768-cca7c751a9be |       6 |        1 |                  0 |                  1 |                     550 |        0 |        1 |        42 | Ball Receipt |           nan | nan             |          nan |            nan |                 9 | From Kick Off       |                  217 |            2 | Barcelona              |       217 | Barcelona   |        5203 | Sergio Busquets i Burgos       |            14 | Center Midfield      |    nan     |  49 |  36 | nan |     nan |     nan |     nan |            nan | nan              |            nan |              nan |              nan |            nan |      nan      |   nan        |                 nan | nan                      |              nan | nan                |                     nan |                nan |          nan |           nan |                nan |             nan |             nan |              nan |                     nan |                       nan |                              nan |                nan |               nan |                        nan |                      nan |                      nan |                        nan |                  nan |                nan |                  nan |                      nan |                        nan |               nan |                 nan |                nan |             nan |                           nan |                             nan |                 nan |          nan |
+## |  6 |       9609 | 20a8f549-ada7-4c9d-9aca-5c49c39dd982 |       7 |        1 |                  0 |                  1 |                     550 |        0 |        1 |        43 | Carry        |           nan | nan             |          nan |            nan |                 9 | From Kick Off       |                  217 |            2 | Barcelona              |       217 | Barcelona   |        5203 | Sergio Busquets i Burgos       |            14 | Center Midfield      |      1.702 |  49 |  36 | nan |      46 |      36 |     nan |            nan | nan              |            nan |              nan |              nan |            nan |      nan      |   nan        |                 nan | nan                      |              nan | nan                |                     nan |                nan |          nan |           nan |                nan |             nan |             nan |              nan |                     nan |                       nan |                              nan |                nan |               nan |                        nan |                      nan |                      nan |                        nan |                  nan |                nan |                  nan |                      nan |                        nan |               nan |                 nan |                nan |             nan |                           nan |                             nan |                 nan |          nan |
+## |  7 |       9609 | 8c147c94-859d-446a-9bdf-1d2cd2307007 |       8 |        1 |                  0 |                  3 |                     252 |        0 |        3 |        30 | Pass         |           nan | nan             |          nan |            nan |                 9 | From Kick Off       |                  217 |            2 | Barcelona              |       217 | Barcelona   |        5203 | Sergio Busquets i Burgos       |            14 | Center Midfield      |      0.924 |  46 |  36 | nan |      57 |      28 |     nan |             40 | Right Foot       |            nan |              nan |              nan |            nan |       13.6015 |    -0.628796 |                5216 | Andrés Iniesta Luján     |                1 | Ground Pass        |                     nan |                nan |          nan |           nan |                nan |             nan |             nan |              nan |                     nan |                       nan |                              nan |                nan |               nan |                        nan |                      nan |                      nan |                        nan |                  nan |                nan |                  nan |                      nan |                        nan |               nan |                 nan |                nan |             nan |                           nan |                             nan |                 nan |          nan |
+## |  8 |       9609 | 1e11a8d0-7beb-446c-9352-7f336b1703b5 |       9 |        1 |                  0 |                  4 |                     176 |        0 |        4 |        42 | Ball Receipt |           nan | nan             |          nan |            nan |                 9 | From Kick Off       |                  217 |            2 | Barcelona              |       217 | Barcelona   |        5216 | Andrés Iniesta Luján           |            15 | Left Center Midfield |    nan     |  57 |  28 | nan |     nan |     nan |     nan |            nan | nan              |            nan |              nan |              nan |            nan |      nan      |   nan        |                 nan | nan                      |              nan | nan                |                     nan |                nan |          nan |           nan |                nan |             nan |             nan |              nan |                     nan |                       nan |                              nan |                nan |               nan |                        nan |                      nan |                      nan |                        nan |                  nan |                nan |                  nan |                      nan |                        nan |               nan |                 nan |                nan |             nan |                           nan |                             nan |                 nan |          nan |
+## |  9 |       9609 | 464d8065-f758-4b61-b21f-bcebf05fae2f |      10 |        1 |                  0 |                  4 |                     176 |        0 |        4 |        43 | Carry        |           nan | nan             |          nan |            nan |                 9 | From Kick Off       |                  217 |            2 | Barcelona              |       217 | Barcelona   |        5216 | Andrés Iniesta Luján           |            15 | Left Center Midfield |      0.037 |  57 |  28 | nan |      56 |      28 |     nan |            nan | nan              |            nan |              nan |              nan |            nan |      nan      |   nan        |                 nan | nan                      |              nan | nan                |                     nan |                nan |          nan |           nan |                nan |             nan |             nan |              nan |                     nan |                       nan |                              nan |                nan |               nan |                        nan |                      nan |                      nan |                        nan |                  nan |                nan |                  nan |                      nan |                        nan |               nan |                 nan |                nan |             nan |                           nan |                             nan |                 nan |          nan |
+```
+
+```python
+print(event.tail(10).to_markdown())
+```
+
+```
+## |      |   match_id | id                                   |   index |   period |   timestamp_minute |   timestamp_second |   timestamp_millisecond |   minute |   second |   type_id | type_name    |   sub_type_id |   sub_type_name |   outcome_id | outcome_name   |   play_pattern_id | play_pattern_name   |   possession_team_id |   possession | possession_team_name   |   team_id | team_name   |   player_id | player_name                    |   position_id | position_name        |   duration |   x |   y |   z |   end_x |   end_y |   end_z |   body_part_id | body_part_name   |   technique_id |   technique_name |   under_pressure |   counterpress |   pass_length |   pass_angle |   pass_recipient_id | pass_recipient_name            |   pass_height_id | pass_height_name   |   pass_assisted_shot_id |   pass_shot_assist |   pass_cross |   pass_switch |   pass_goal_assist |   pass_backheel |   pass_cut_back |   pass_deflected |   bad_behaviour_card_id |   bad_behaviour_card_name |   ball_recovery_recovery_failure |   block_deflection |   dribble_overrun |   foul_committed_advantage |   foul_committed_penalty |   foul_committed_type_id |   foul_committed_type_name |   foul_won_advantage |   foul_won_penalty |   foul_won_defensive |   goalkeeper_position_id |   goalkeeper_position_name |   shot_one_on_one |   shot_statsbomb_xg |   shot_key_pass_id |   shot_redirect |   substitution_replacement_id |   substitution_replacement_name |   tactics_formation |   aerial_won |
+## |-----:|-----------:|:-------------------------------------|--------:|---------:|-------------------:|-------------------:|------------------------:|---------:|---------:|----------:|:-------------|--------------:|----------------:|-------------:|:---------------|------------------:|:--------------------|---------------------:|-------------:|:-----------------------|----------:|:------------|------------:|:-------------------------------|--------------:|:---------------------|-----------:|----:|----:|----:|--------:|--------:|--------:|---------------:|:-----------------|---------------:|-----------------:|-----------------:|---------------:|--------------:|-------------:|--------------------:|:-------------------------------|-----------------:|:-------------------|------------------------:|-------------------:|-------------:|--------------:|-------------------:|----------------:|----------------:|-----------------:|------------------------:|--------------------------:|---------------------------------:|-------------------:|------------------:|---------------------------:|-------------------------:|-------------------------:|---------------------------:|---------------------:|-------------------:|---------------------:|-------------------------:|---------------------------:|------------------:|--------------------:|-------------------:|----------------:|------------------------------:|--------------------------------:|--------------------:|-------------:|
+## | 3663 |       9609 | a54f7cea-ad06-4a77-bb69-9948fc59e018 |    3664 |        2 |                 46 |                 53 |                     679 |       91 |       53 |        30 | Pass         |           nan |             nan |          nan | nan            |                 1 | Regular Play        |                  217 |          185 | Barcelona              |       217 | Barcelona   |        6400 | Aleix Vidal Parreu             |            17 | Right Wing           |      0.971 |  40 |  62 | nan |      52 |      55 |     nan |             40 | Right Foot       |            nan |              nan |              nan |            nan |       13.8924 |    -0.528074 |                5503 | Lionel Andrés Messi Cuccittini |                1 | Ground Pass        |                     nan |                nan |          nan |           nan |                nan |             nan |             nan |              nan |                     nan |                       nan |                              nan |                nan |               nan |                        nan |                      nan |                      nan |                        nan |                  nan |                nan |                  nan |                      nan |                        nan |               nan |                 nan |                nan |             nan |                           nan |                             nan |                 nan |          nan |
+## | 3664 |       9609 | c28bdd12-4fc7-4727-8d2f-d48f968b5254 |    3665 |        2 |                 46 |                 54 |                     650 |       91 |       54 |        42 | Ball Receipt |           nan |             nan |          nan | nan            |                 1 | Regular Play        |                  217 |          185 | Barcelona              |       217 | Barcelona   |        5503 | Lionel Andrés Messi Cuccittini |            23 | Center Forward       |    nan     |  52 |  55 | nan |     nan |     nan |     nan |            nan | nan              |            nan |              nan |              nan |            nan |      nan      |   nan        |                 nan | nan                            |              nan | nan                |                     nan |                nan |          nan |           nan |                nan |             nan |             nan |              nan |                     nan |                       nan |                              nan |                nan |               nan |                        nan |                      nan |                      nan |                        nan |                  nan |                nan |                  nan |                      nan |                        nan |               nan |                 nan |                nan |             nan |                           nan |                             nan |                 nan |          nan |
+## | 3665 |       9609 | 57a83e09-611d-406d-9a1f-06d815f8617b |    3666 |        2 |                 46 |                 54 |                     650 |       91 |       54 |        43 | Carry        |           nan |             nan |          nan | nan            |                 1 | Regular Play        |                  217 |          185 | Barcelona              |       217 | Barcelona   |        5503 | Lionel Andrés Messi Cuccittini |            23 | Center Forward       |      4.614 |  52 |  55 | nan |      87 |      29 |     nan |            nan | nan              |            nan |              nan |                1 |            nan |      nan      |   nan        |                 nan | nan                            |              nan | nan                |                     nan |                nan |          nan |           nan |                nan |             nan |             nan |              nan |                     nan |                       nan |                              nan |                nan |               nan |                        nan |                      nan |                      nan |                        nan |                  nan |                nan |                  nan |                      nan |                        nan |               nan |                 nan |                nan |             nan |                           nan |                             nan |                 nan |          nan |
+## | 3666 |       9609 | 6206f189-ee80-41d2-b068-29f29f2f7243 |    3667 |        2 |                 46 |                 55 |                     126 |       91 |       55 |        17 | Pressure     |           nan |             nan |          nan | nan            |                 1 | Regular Play        |                  217 |          185 | Barcelona              |       322 | Eibar       |        6712 | Gonzalo Escalante              |            15 | Left Center Midfield |      3.615 |  72 |  26 | nan |     nan |     nan |     nan |            nan | nan              |            nan |              nan |              nan |            nan |      nan      |   nan        |                 nan | nan                            |              nan | nan                |                     nan |                nan |          nan |           nan |                nan |             nan |             nan |              nan |                     nan |                       nan |                              nan |                nan |               nan |                        nan |                      nan |                      nan |                        nan |                  nan |                nan |                  nan |                      nan |                        nan |               nan |                 nan |                nan |             nan |                           nan |                             nan |                 nan |          nan |
+## | 3667 |       9609 | f324c3f1-2c28-44f9-a0b8-21c68b3300d0 |    3668 |        2 |                 46 |                 59 |                     264 |       91 |       59 |        30 | Pass         |           nan |             nan |          nan | nan            |                 1 | Regular Play        |                  217 |          185 | Barcelona              |       217 | Barcelona   |        5503 | Lionel Andrés Messi Cuccittini |            23 | Center Forward       |      3.154 |  87 |  29 | nan |     117 |      14 |     nan |             38 | Left Foot        |            nan |              nan |              nan |            nan |       33.541  |    -0.463648 |                6609 | Denis Suárez Fernández         |                1 | Ground Pass        |                     nan |                nan |          nan |           nan |                nan |             nan |             nan |              nan |                     nan |                       nan |                              nan |                nan |               nan |                        nan |                      nan |                      nan |                        nan |                  nan |                nan |                  nan |                      nan |                        nan |               nan |                 nan |                nan |             nan |                           nan |                             nan |                 nan |          nan |
+## | 3668 |       9609 | 7727f912-ccc9-44d3-bfbe-22c36e699152 |    3669 |        2 |                 47 |                  2 |                     418 |       92 |        2 |        42 | Ball Receipt |           nan |             nan |          nan | nan            |                 1 | Regular Play        |                  217 |          185 | Barcelona              |       217 | Barcelona   |        6609 | Denis Suárez Fernández         |            21 | Left Wing            |    nan     | 117 |  14 | nan |     nan |     nan |     nan |            nan | nan              |            nan |              nan |              nan |            nan |      nan      |   nan        |                 nan | nan                            |              nan | nan                |                     nan |                nan |          nan |           nan |                nan |             nan |             nan |              nan |                     nan |                       nan |                              nan |                nan |               nan |                        nan |                      nan |                      nan |                        nan |                  nan |                nan |                  nan |                      nan |                        nan |               nan |                 nan |                nan |             nan |                           nan |                             nan |                 nan |          nan |
+## | 3669 |       9609 | 9f82e809-2e1f-4101-aaf8-a359991c5143 |    3670 |        2 |                 47 |                  2 |                     418 |       92 |        2 |        43 | Carry        |           nan |             nan |          nan | nan            |                 1 | Regular Play        |                  217 |          185 | Barcelona              |       217 | Barcelona   |        6609 | Denis Suárez Fernández         |            21 | Left Wing            |      2.248 | 117 |  14 | nan |     116 |      13 |     nan |            nan | nan              |            nan |              nan |              nan |            nan |      nan      |   nan        |                 nan | nan                            |              nan | nan                |                     nan |                nan |          nan |           nan |                nan |             nan |             nan |              nan |                     nan |                       nan |                              nan |                nan |               nan |                        nan |                      nan |                      nan |                        nan |                  nan |                nan |                  nan |                      nan |                        nan |               nan |                 nan |                nan |             nan |                           nan |                             nan |                 nan |          nan |
+## | 3670 |       9609 | 22a34ab3-d961-451a-aed9-8f31cfd5e9cb |    3671 |        2 |                 47 |                  4 |                     666 |       92 |        4 |        30 | Pass         |           nan |             nan |           77 | Unknown        |                 1 | Regular Play        |                  217 |          185 | Barcelona              |       217 | Barcelona   |        6609 | Denis Suárez Fernández         |            21 | Left Wing            |      0.517 | 116 |  13 | nan |     104 |      13 |     nan |             40 | Right Foot       |            nan |              nan |              nan |            nan |       12      |     3.14159  |                 nan | nan                            |                1 | Ground Pass        |                     nan |                nan |          nan |           nan |                nan |             nan |             nan |              nan |                     nan |                       nan |                              nan |                nan |               nan |                        nan |                      nan |                      nan |                        nan |                  nan |                nan |                  nan |                      nan |                        nan |               nan |                 nan |                nan |             nan |                           nan |                             nan |                 nan |          nan |
+## | 3671 |       9609 | efd13f52-219f-44ca-8c7a-18d1aa5829e7 |    3672 |        2 |                 47 |                  5 |                     183 |       92 |        5 |        34 | Half End     |           nan |             nan |          nan | nan            |                 1 | Regular Play        |                  217 |          185 | Barcelona              |       217 | Barcelona   |         nan | nan                            |           nan | nan                  |      0     | nan | nan | nan |     nan |     nan |     nan |            nan | nan              |            nan |              nan |              nan |            nan |      nan      |   nan        |                 nan | nan                            |              nan | nan                |                     nan |                nan |          nan |           nan |                nan |             nan |             nan |              nan |                     nan |                       nan |                              nan |                nan |               nan |                        nan |                      nan |                      nan |                        nan |                  nan |                nan |                  nan |                      nan |                        nan |               nan |                 nan |                nan |             nan |                           nan |                             nan |                 nan |          nan |
+## | 3672 |       9609 | fbb9e4ec-27b5-47d0-af0d-f3cdef18cbd7 |    3673 |        2 |                 47 |                  5 |                     183 |       92 |        5 |        34 | Half End     |           nan |             nan |          nan | nan            |                 1 | Regular Play        |                  217 |          185 | Barcelona              |       322 | Eibar       |         nan | nan                            |           nan | nan                  |      0     | nan | nan | nan |     nan |     nan |     nan |            nan | nan              |            nan |              nan |              nan |            nan |      nan      |   nan        |                 nan | nan                            |              nan | nan                |                     nan |                nan |          nan |           nan |                nan |             nan |             nan |              nan |                     nan |                       nan |                              nan |                nan |               nan |                        nan |                      nan |                      nan |                        nan |                  nan |                nan |                  nan |                      nan |                        nan |               nan |                 nan |                nan |             nan |                           nan |                             nan |                 nan |          nan |
+```
+
+```python
+print(tracking.head(10).to_markdown())
+```
+
+```
+## |    | id                                   |   event_freeze_id | player_teammate   |   player_id | player_name                    |   player_position_id | player_position_name      |     x |    y |   match_id |
+## |---:|:-------------------------------------|------------------:|:------------------|------------:|:-------------------------------|---------------------:|:--------------------------|------:|-----:|-----------:|
+## |  0 | 96b9f6dc-1110-4324-b1e5-0bcad3fc19fc |                 1 | False             |        5203 | Sergio Busquets i Burgos       |                   14 | Center Midfield           |  78.3 | 31.1 |       9609 |
+## |  1 | 8a1f787a-6d25-4d3c-9176-f6ef98f6e76d |                 1 | True              |        6701 | Joan Jordán Moreno             |                   19 | Center Attacking Midfield | 100.6 | 61.2 |       9609 |
+## |  2 | 5824445f-46d1-48db-bc58-e5fa74df6ede |                 1 | False             |        5203 | Sergio Busquets i Burgos       |                   14 | Center Midfield           | 108   | 44.3 |       9609 |
+## |  3 | c3ce55fe-26f8-4e63-b269-ea01f99ff438 |                 1 | True              |        5216 | Andrés Iniesta Luján           |                   15 | Left Center Midfield      | 103.7 | 37.4 |       9609 |
+## |  4 | 3d8e877d-7f5b-4073-a192-ea302d6d0f83 |                 1 | True              |        6712 | Gonzalo Escalante              |                   15 | Left Center Midfield      |  94.7 | 49.3 |       9609 |
+## |  5 | c548cbd5-638f-4d40-8793-1fe238ff1114 |                 1 | False             |        5503 | Lionel Andrés Messi Cuccittini |                   23 | Center Forward            |  87   | 23.8 |       9609 |
+## |  6 | 63b47db1-1681-4749-b6f7-da9748509280 |                 1 | False             |        5203 | Sergio Busquets i Burgos       |                   14 | Center Midfield           |  95.9 | 52.6 |       9609 |
+## |  7 | f4ccfd85-b02a-45b2-8082-207c851c3465 |                 1 | True              |        6609 | Denis Suárez Fernández         |                   21 | Left Wing                 | 102.1 | 27   |       9609 |
+## |  8 | ec1db9ef-3db5-4bc5-a80f-0b4cdbded29e |                 1 | True              |        6609 | Denis Suárez Fernández         |                   21 | Left Wing                 | 119   |  3.1 |       9609 |
+## |  9 | 5edaf6e5-441c-49e6-9229-e6ad2f0e78a0 |                 1 | True              |        6701 | Joan Jordán Moreno             |                   19 | Center Attacking Midfield | 100.7 | 41.5 |       9609 |
+```
+
+```python
+print(tracking.tail(10).to_markdown())
+```
+
+```
+## |     | id                                   |   event_freeze_id | player_teammate   |   player_id | player_name                      |   player_position_id | player_position_name   |     x |    y |   match_id |
+## |----:|:-------------------------------------|------------------:|:------------------|------------:|:---------------------------------|---------------------:|:-----------------------|------:|-----:|-----------:|
+## | 297 | 81613e34-69c2-42de-a5d5-f180ec5d9d92 |                16 | False             |        6698 | Marko Dmitrović                  |                    1 | Goalkeeper             | 118.9 | 41.2 |       9609 |
+## | 298 | cb6d5031-1551-4557-bee5-4ea238a3ac77 |                16 | False             |        6609 | Denis Suárez Fernández           |                   21 | Left Wing              | 100.6 | 53.7 |       9609 |
+## | 299 | 5824445f-46d1-48db-bc58-e5fa74df6ede |                17 | False             |        6609 | Denis Suárez Fernández           |                   21 | Left Wing              | 103.8 | 34.1 |       9609 |
+## | 300 | c548cbd5-638f-4d40-8793-1fe238ff1114 |                17 | True              |        6712 | Gonzalo Escalante                |                   15 | Left Center Midfield   | 107.3 | 41.7 |       9609 |
+## | 301 | 5edaf6e5-441c-49e6-9229-e6ad2f0e78a0 |                17 | False             |        5542 | José Paulo Bezzera Maciel Júnior |                   13 | Right Center Midfield  |  99.9 | 42.5 |       9609 |
+## | 302 | 94f9a7b0-a14b-49be-901f-46ee13531f90 |                17 | False             |        5470 | Ivan Rakitić                     |                   14 | Center Midfield        | 111.3 | 47   |       9609 |
+## | 303 | 81613e34-69c2-42de-a5d5-f180ec5d9d92 |                17 | True              |        6849 | Lucas Digne                      |                    6 | Left Back              |  91.9 | 17.4 |       9609 |
+## | 304 | c548cbd5-638f-4d40-8793-1fe238ff1114 |                18 | False             |        5542 | José Paulo Bezzera Maciel Júnior |                   13 | Right Center Midfield  | 107.5 | 42.4 |       9609 |
+## | 305 | 5edaf6e5-441c-49e6-9229-e6ad2f0e78a0 |                18 | False             |        5213 | Gerard Piqué Bernabéu            |                    3 | Right Center Back      |  99.9 | 44.1 |       9609 |
+## | 306 | 81613e34-69c2-42de-a5d5-f180ec5d9d92 |                18 | False             |        5687 | Takashi Inui                     |                   21 | Left Wing              | 100.4 | 21.2 |       9609 |
+```
+
+Looking at the two datasets `event` and `tracking`, we understand that, the former represents the event data and the later represents the tracking data. Let us look into the columns of the `tracking` dataset:
+
+
+```python
+print(tracking.columns)
+```
+
+```
+## Index(['id', 'event_freeze_id', 'player_teammate', 'player_id', 'player_name',
+##        'player_position_id', 'player_position_name', 'x', 'y', 'match_id'],
+##       dtype='object')
+```
+
+If we look closely into the `tracking` dataset, we understand that the column `id` represents an unique id for a shot freeze frame, i.e, it gives the unique id for the moment when a particular player was taking a shot along with the information about locations of the other players. Looking at the `player_name` column, we need to add a column `team` to the `tracking` dataset, giving us information about which team the shot taker belongs to.
+
+
+```python
+tracking['team'] = 0
+for i in range(len(tracking)):
+    if tracking['player_name'][i] in players_Barca:
+        tracking['team'][i] = 'Barcelona'
+    else:
+        tracking['team'][i] = 'Eibar'
+```
+
+
+```python
+print(tracking.head(10).to_markdown())  
+```
+
+```
+## |    | id                                   |   event_freeze_id | player_teammate   |   player_id | player_name                    |   player_position_id | player_position_name      |     x |    y |   match_id | team      |
+## |---:|:-------------------------------------|------------------:|:------------------|------------:|:-------------------------------|---------------------:|:--------------------------|------:|-----:|-----------:|:----------|
+## |  0 | 96b9f6dc-1110-4324-b1e5-0bcad3fc19fc |                 1 | False             |        5203 | Sergio Busquets i Burgos       |                   14 | Center Midfield           |  78.3 | 31.1 |       9609 | Barcelona |
+## |  1 | 8a1f787a-6d25-4d3c-9176-f6ef98f6e76d |                 1 | True              |        6701 | Joan Jordán Moreno             |                   19 | Center Attacking Midfield | 100.6 | 61.2 |       9609 | Eibar     |
+## |  2 | 5824445f-46d1-48db-bc58-e5fa74df6ede |                 1 | False             |        5203 | Sergio Busquets i Burgos       |                   14 | Center Midfield           | 108   | 44.3 |       9609 | Barcelona |
+## |  3 | c3ce55fe-26f8-4e63-b269-ea01f99ff438 |                 1 | True              |        5216 | Andrés Iniesta Luján           |                   15 | Left Center Midfield      | 103.7 | 37.4 |       9609 | Barcelona |
+## |  4 | 3d8e877d-7f5b-4073-a192-ea302d6d0f83 |                 1 | True              |        6712 | Gonzalo Escalante              |                   15 | Left Center Midfield      |  94.7 | 49.3 |       9609 | Eibar     |
+## |  5 | c548cbd5-638f-4d40-8793-1fe238ff1114 |                 1 | False             |        5503 | Lionel Andrés Messi Cuccittini |                   23 | Center Forward            |  87   | 23.8 |       9609 | Barcelona |
+## |  6 | 63b47db1-1681-4749-b6f7-da9748509280 |                 1 | False             |        5203 | Sergio Busquets i Burgos       |                   14 | Center Midfield           |  95.9 | 52.6 |       9609 | Barcelona |
+## |  7 | f4ccfd85-b02a-45b2-8082-207c851c3465 |                 1 | True              |        6609 | Denis Suárez Fernández         |                   21 | Left Wing                 | 102.1 | 27   |       9609 | Barcelona |
+## |  8 | ec1db9ef-3db5-4bc5-a80f-0b4cdbded29e |                 1 | True              |        6609 | Denis Suárez Fernández         |                   21 | Left Wing                 | 119   |  3.1 |       9609 | Barcelona |
+## |  9 | 5edaf6e5-441c-49e6-9229-e6ad2f0e78a0 |                 1 | True              |        6701 | Joan Jordán Moreno             |                   19 | Center Attacking Midfield | 100.7 | 41.5 |       9609 | Eibar     |
+```
+
+Now, we will only extract the relevant columns:
+
+
+```python
+tracking = tracking[['id', 'player_name', 'x', 'y', 'team']]
+print(tracking.head(10).to_markdown())
+```
+
+```
+## |    | id                                   | player_name                    |     x |    y | team      |
+## |---:|:-------------------------------------|:-------------------------------|------:|-----:|:----------|
+## |  0 | 96b9f6dc-1110-4324-b1e5-0bcad3fc19fc | Sergio Busquets i Burgos       |  78.3 | 31.1 | Barcelona |
+## |  1 | 8a1f787a-6d25-4d3c-9176-f6ef98f6e76d | Joan Jordán Moreno             | 100.6 | 61.2 | Eibar     |
+## |  2 | 5824445f-46d1-48db-bc58-e5fa74df6ede | Sergio Busquets i Burgos       | 108   | 44.3 | Barcelona |
+## |  3 | c3ce55fe-26f8-4e63-b269-ea01f99ff438 | Andrés Iniesta Luján           | 103.7 | 37.4 | Barcelona |
+## |  4 | 3d8e877d-7f5b-4073-a192-ea302d6d0f83 | Gonzalo Escalante              |  94.7 | 49.3 | Eibar     |
+## |  5 | c548cbd5-638f-4d40-8793-1fe238ff1114 | Lionel Andrés Messi Cuccittini |  87   | 23.8 | Barcelona |
+## |  6 | 63b47db1-1681-4749-b6f7-da9748509280 | Sergio Busquets i Burgos       |  95.9 | 52.6 | Barcelona |
+## |  7 | f4ccfd85-b02a-45b2-8082-207c851c3465 | Denis Suárez Fernández         | 102.1 | 27   | Barcelona |
+## |  8 | ec1db9ef-3db5-4bc5-a80f-0b4cdbded29e | Denis Suárez Fernández         | 119   |  3.1 | Barcelona |
+## |  9 | 5edaf6e5-441c-49e6-9229-e6ad2f0e78a0 | Joan Jordán Moreno             | 100.7 | 41.5 | Eibar     |
+```
+
+Now, let us try collecting the jersey numbers of the players from both the teams. We will use a different and easier approach from the one we have done [here](https://realsoccerexpand.netlify.app/post/pass-network-analysis/). To get the player information, use the following command, py passing the match id:
+
+
+```python
+player_info = sb.lineups(match_id = 9609)
+```
+
+```
+## credentials were not supplied. open data access only
+```
+
+```python
+print(player_info)
+```
+
+```
+## {'Barcelona':     player_id                       player_name  ... jersey_number      country
+## 0        3726            Gerard Deulofeu Lázaro  ...            16        Spain
+## 1        5203          Sergio Busquets i Burgos  ...             5        Spain
+## 2        5211                  Jordi Alba Ramos  ...            18        Spain
+## 3        5213             Gerard Piqué Bernabéu  ...             3        Spain
+## 4        5216              Andrés Iniesta Luján  ...             8        Spain
+## 5        5246          Luis Alberto Suárez Díaz  ...             9      Uruguay
+## 6        5470                      Ivan Rakitić  ...             4      Croatia
+## 7        5503    Lionel Andrés Messi Cuccittini  ...            10    Argentina
+## 8        5506       Javier Alejandro Mascherano  ...            14    Argentina
+## 9        5542  José Paulo Bezzera Maciel Júnior  ...            15       Brazil
+## 10       6332                  Thomas Vermaelen  ...            25      Belgium
+## 11       6374              Nélson Cabral Semedo  ...             2     Portugal
+## 12       6379            Sergi Roberto Carnicer  ...            20        Spain
+## 13       6400                Aleix Vidal Parreu  ...            22        Spain
+## 14       6609            Denis Suárez Fernández  ...             6        Spain
+## 15       6849                       Lucas Digne  ...            19       France
+## 16       8652                  Jasper Cillessen  ...            13  Netherlands
+## 17      20055             Marc-André ter Stegen  ...             1      Germany
+## 
+## [18 rows x 5 columns], 'Eibar':     player_id                        player_name  ... jersey_number    country
+## 0        5687                       Takashi Inui  ...             8      Japan
+## 1        6698                    Marko Dmitrović  ...            25     Serbia
+## 2        6699               Ander Capa Rodríguez  ...             7      Spain
+## 3        6700             Sergio Enrich Ametller  ...             9      Spain
+## 4        6701                 Joan Jordán Moreno  ...            24      Spain
+## 5        6702             David Rodríguez Lombán  ...            22      Spain
+## 6        6703         Christian Rivera Hernández  ...             6      Spain
+## 7        6705             José Ángel Valdés Díaz  ...            15      Spain
+## 8        6707   Charles Días Barbosa de Oliveira  ...            19     Brazil
+## 9        6708  Paulo André Rodrigues de Oliveira  ...            12   Portugal
+## 10       6709              Anaitz Arbilla Zabala  ...            18      Spain
+## 11       6710                 Rubén Peña Jiménez  ...            11      Spain
+## 12       6712                  Gonzalo Escalante  ...             5  Argentina
+## 13       6775             Daniel García Carrillo  ...            14      Spain
+## 14       6776                   David Juncà Reñé  ...            23      Spain
+## 15       6924            Alejandro Gálvez Jimena  ...             3      Spain
+## 16       7900          Tiago Manuel Dias Correia  ...            10   Portugal
+## 17      10763               Asier Riesgo Unamuno  ...            13      Spain
+## 
+## [18 rows x 5 columns]}
+```
+
+We see that `player_info` has information about both the teams. Let us fetch for `Barcelona` first:
+
+
+```python
+info_Barca = player_info['Barcelona']
+print(info_Barca.to_markdown())
+```
+
+```
+## |    |   player_id | player_name                      | player_nickname       |   jersey_number | country     |
+## |---:|------------:|:---------------------------------|:----------------------|----------------:|:------------|
+## |  0 |        3726 | Gerard Deulofeu Lázaro           | Gerard Deulofeu       |              16 | Spain       |
+## |  1 |        5203 | Sergio Busquets i Burgos         | Sergio Busquets       |               5 | Spain       |
+## |  2 |        5211 | Jordi Alba Ramos                 | Jordi Alba            |              18 | Spain       |
+## |  3 |        5213 | Gerard Piqué Bernabéu            | Gerard Piqué          |               3 | Spain       |
+## |  4 |        5216 | Andrés Iniesta Luján             | Andrés Iniesta        |               8 | Spain       |
+## |  5 |        5246 | Luis Alberto Suárez Díaz         | Luis Suárez           |               9 | Uruguay     |
+## |  6 |        5470 | Ivan Rakitić                     |                       |               4 | Croatia     |
+## |  7 |        5503 | Lionel Andrés Messi Cuccittini   | Lionel Messi          |              10 | Argentina   |
+## |  8 |        5506 | Javier Alejandro Mascherano      | Javier Mascherano     |              14 | Argentina   |
+## |  9 |        5542 | José Paulo Bezzera Maciel Júnior | Paulinho              |              15 | Brazil      |
+## | 10 |        6332 | Thomas Vermaelen                 |                       |              25 | Belgium     |
+## | 11 |        6374 | Nélson Cabral Semedo             | Nélson Semedo         |               2 | Portugal    |
+## | 12 |        6379 | Sergi Roberto Carnicer           | Sergi Roberto         |              20 | Spain       |
+## | 13 |        6400 | Aleix Vidal Parreu               | Aleix Vidal           |              22 | Spain       |
+## | 14 |        6609 | Denis Suárez Fernández           | Denis Suárez          |               6 | Spain       |
+## | 15 |        6849 | Lucas Digne                      |                       |              19 | France      |
+## | 16 |        8652 | Jasper Cillessen                 |                       |              13 | Netherlands |
+## | 17 |       20055 | Marc-André ter Stegen            | Marc-André ter Stegen |               1 | Germany     |
+```
+
+Let us only consider the `player_name` and `jersey_number` columns and build a dictionary:
+
+
+```python
+info_Barca = info_Barca[['player_name', 'jersey_number']]
+jerseys_Barca = {}
+
+for i in range(len(info_Barca)):
+    jerseys_Barca[info_Barca.player_name[i]] = str(info_Barca.jersey_number[i])
+print(jerseys_Barca)
+```
+
+```
+## {'Gerard Deulofeu Lázaro': '16', 'Sergio Busquets i Burgos': '5', 'Jordi Alba Ramos': '18', 'Gerard Piqué Bernabéu': '3', 'Andrés Iniesta Luján': '8', 'Luis Alberto Suárez Díaz': '9', 'Ivan Rakitić': '4', 'Lionel Andrés Messi Cuccittini': '10', 'Javier Alejandro Mascherano': '14', 'José Paulo Bezzera Maciel Júnior': '15', 'Thomas Vermaelen': '25', 'Nélson Cabral Semedo': '2', 'Sergi Roberto Carnicer': '20', 'Aleix Vidal Parreu': '22', 'Denis Suárez Fernández': '6', 'Lucas Digne': '19', 'Jasper Cillessen': '13', 'Marc-André ter Stegen': '1'}
+```
+
+Let us perform the same operations on `Eibar`:
+
+
+```python
+info_Eibar= player_info['Eibar']
+print(info_Eibar.to_markdown())
+```
+
+```
+## |    |   player_id | player_name                       | player_nickname   |   jersey_number | country   |
+## |---:|------------:|:----------------------------------|:------------------|----------------:|:----------|
+## |  0 |        5687 | Takashi Inui                      |                   |               8 | Japan     |
+## |  1 |        6698 | Marko Dmitrović                   |                   |              25 | Serbia    |
+## |  2 |        6699 | Ander Capa Rodríguez              | Ander Capa        |               7 | Spain     |
+## |  3 |        6700 | Sergio Enrich Ametller            | Sergi Enrich      |               9 | Spain     |
+## |  4 |        6701 | Joan Jordán Moreno                | Joan Jordán       |              24 | Spain     |
+## |  5 |        6702 | David Rodríguez Lombán            | David Lombán      |              22 | Spain     |
+## |  6 |        6703 | Christian Rivera Hernández        | Christian Rivera  |               6 | Spain     |
+## |  7 |        6705 | José Ángel Valdés Díaz            | Cote              |              15 | Spain     |
+## |  8 |        6707 | Charles Días Barbosa de Oliveira  | Charles           |              19 | Brazil    |
+## |  9 |        6708 | Paulo André Rodrigues de Oliveira | Paulo Oliveira    |              12 | Portugal  |
+## | 10 |        6709 | Anaitz Arbilla Zabala             | Anaitz Arbilla    |              18 | Spain     |
+## | 11 |        6710 | Rubén Peña Jiménez                | Rubén Peña        |              11 | Spain     |
+## | 12 |        6712 | Gonzalo Escalante                 |                   |               5 | Argentina |
+## | 13 |        6775 | Daniel García Carrillo            | Dani García       |              14 | Spain     |
+## | 14 |        6776 | David Juncà Reñé                  | David Juncà       |              23 | Spain     |
+## | 15 |        6924 | Alejandro Gálvez Jimena           | Alejandro Gálvez  |               3 | Spain     |
+## | 16 |        7900 | Tiago Manuel Dias Correia         | Bebé              |              10 | Portugal  |
+## | 17 |       10763 | Asier Riesgo Unamuno              | Asier Riesgo      |              13 | Spain     |
+```
+
+```python
+info_Eibar = info_Eibar[['player_name', 'jersey_number']]
+jerseys_Eibar = {}
+
+for i in range(len(info_Eibar)):
+    jerseys_Eibar[info_Eibar.player_name[i]] = str(info_Eibar.jersey_number[i])
+print(jerseys_Eibar)
+```
+
+```
+## {'Takashi Inui': '8', 'Marko Dmitrović': '25', 'Ander Capa Rodríguez': '7', 'Sergio Enrich Ametller': '9', 'Joan Jordán Moreno': '24', 'David Rodríguez Lombán': '22', 'Christian Rivera Hernández': '6', 'José Ángel Valdés Díaz': '15', 'Charles Días Barbosa de Oliveira': '19', 'Paulo André Rodrigues de Oliveira': '12', 'Anaitz Arbilla Zabala': '18', 'Rubén Peña Jiménez': '11', 'Gonzalo Escalante': '5', 'Daniel García Carrillo': '14', 'David Juncà Reñé': '23', 'Alejandro Gálvez Jimena': '3', 'Tiago Manuel Dias Correia': '10', 'Asier Riesgo Unamuno': '13'}
+```
+
+Now let us select a particular `id` from the `tracking` dataset, representing an instance when a particular shot was taken. We will filter `tracking` by a `id` value which will give us the information of the locations of the players on the pitch at that moment. We can view the unique `id` values:
+
+
+```python
+print(tracking.id.unique())
+```
+
+```
+## ['96b9f6dc-1110-4324-b1e5-0bcad3fc19fc'
+##  '8a1f787a-6d25-4d3c-9176-f6ef98f6e76d'
+##  '5824445f-46d1-48db-bc58-e5fa74df6ede'
+##  'c3ce55fe-26f8-4e63-b269-ea01f99ff438'
+##  '3d8e877d-7f5b-4073-a192-ea302d6d0f83'
+##  'c548cbd5-638f-4d40-8793-1fe238ff1114'
+##  '63b47db1-1681-4749-b6f7-da9748509280'
+##  'f4ccfd85-b02a-45b2-8082-207c851c3465'
+##  'ec1db9ef-3db5-4bc5-a80f-0b4cdbded29e'
+##  '5edaf6e5-441c-49e6-9229-e6ad2f0e78a0'
+##  '9dd385a8-05be-4c8a-af1a-909b9680c861'
+##  '083f5ff5-10ed-4a80-8e33-da20d60d3050'
+##  '6fedebfb-1dcc-4433-b4c3-4014776c0c31'
+##  'bfc236db-10d8-45cc-b558-f46e0bb79150'
+##  'cce4b5bd-1621-4e3c-b6e5-c4b372ef43bf'
+##  'b04ab23d-f5db-4f7b-8185-24f6e85c027d'
+##  'deb8da4c-d3b8-4890-8a2f-53d3665a2436'
+##  '94f9a7b0-a14b-49be-901f-46ee13531f90'
+##  '81613e34-69c2-42de-a5d5-f180ec5d9d92'
+##  '8d160e73-12d8-46b4-a862-0ab0cda437d5'
+##  '21c8df3d-7144-4248-86b2-dbd566f589fa'
+##  'cb6d5031-1551-4557-bee5-4ea238a3ac77'
+##  'dffb74af-f4de-4576-995b-8918ab485a18'
+##  '412d1446-58bc-4e5f-9843-157591657f2e'
+##  '55010d43-f0df-48cc-a6de-ffa30d31dbd1']
+```
+
+Let us filter the dataset now:
+
+
+```python
+shot_id = 'c3ce55fe-26f8-4e63-b269-ea01f99ff438' # select a particular value from the id column
+#shot_id = 'ec1db9ef-3db5-4bc5-a80f-0b4cdbded29e'
+tracking_filtered = tracking[tracking['id'] == shot_id] # filter by the shot_id
+event_filtered = event[event['id'] == shot_id]
+print(tracking_filtered.to_markdown())
+```
+
+```
+## |     | id                                   | player_name                       |     x |    y | team      |
+## |----:|:-------------------------------------|:----------------------------------|------:|-----:|:----------|
+## |   3 | c3ce55fe-26f8-4e63-b269-ea01f99ff438 | Andrés Iniesta Luján              | 103.7 | 37.4 | Barcelona |
+## |  28 | c3ce55fe-26f8-4e63-b269-ea01f99ff438 | José Paulo Bezzera Maciel Júnior  | 103.1 | 23.5 | Barcelona |
+## |  53 | c3ce55fe-26f8-4e63-b269-ea01f99ff438 | Gonzalo Escalante                 | 102.9 | 32.4 | Eibar     |
+## |  78 | c3ce55fe-26f8-4e63-b269-ea01f99ff438 | Ander Capa Rodríguez              |  98.8 | 42   | Eibar     |
+## | 103 | c3ce55fe-26f8-4e63-b269-ea01f99ff438 | Paulo André Rodrigues de Oliveira | 102.6 | 41.2 | Eibar     |
+## | 128 | c3ce55fe-26f8-4e63-b269-ea01f99ff438 | Daniel García Carrillo            |  98.6 | 44.6 | Eibar     |
+## | 153 | c3ce55fe-26f8-4e63-b269-ea01f99ff438 | Takashi Inui                      |  93.5 | 56.2 | Eibar     |
+## | 177 | c3ce55fe-26f8-4e63-b269-ea01f99ff438 | Denis Suárez Fernández            | 103.7 | 48.5 | Barcelona |
+## | 199 | c3ce55fe-26f8-4e63-b269-ea01f99ff438 | David Juncà Reñé                  | 103.8 | 51.4 | Eibar     |
+## | 221 | c3ce55fe-26f8-4e63-b269-ea01f99ff438 | Alejandro Gálvez Jimena           | 102.7 | 44.5 | Eibar     |
+## | 242 | c3ce55fe-26f8-4e63-b269-ea01f99ff438 | Marko Dmitrović                   | 118.4 | 39.7 | Eibar     |
+## | 257 | c3ce55fe-26f8-4e63-b269-ea01f99ff438 | Gerard Deulofeu Lázaro            | 103.8 | 56.4 | Barcelona |
+```
+
+```python
+event_filtered = event_filtered[['id', 'player_name', 'x', 'y', 'team_name']]
+event_filtered = event_filtered.rename(columns = {'team_name':'team'})
+print(event_filtered.to_markdown())
+```
+
+```
+## |      | id                                   | player_name                    |   x |    y | team      |
+## |-----:|:-------------------------------------|:-------------------------------|----:|-----:|:----------|
+## | 1094 | c3ce55fe-26f8-4e63-b269-ea01f99ff438 | Lionel Andrés Messi Cuccittini |  97 | 45.4 | Barcelona |
+```
+
+```python
+data_filtered = pd.concat([event_filtered, tracking_filtered])
+print(data_filtered.to_markdown())
+```
+
+```
+## |      | id                                   | player_name                       |     x |    y | team      |
+## |-----:|:-------------------------------------|:----------------------------------|------:|-----:|:----------|
+## | 1094 | c3ce55fe-26f8-4e63-b269-ea01f99ff438 | Lionel Andrés Messi Cuccittini    |  97   | 45.4 | Barcelona |
+## |    3 | c3ce55fe-26f8-4e63-b269-ea01f99ff438 | Andrés Iniesta Luján              | 103.7 | 37.4 | Barcelona |
+## |   28 | c3ce55fe-26f8-4e63-b269-ea01f99ff438 | José Paulo Bezzera Maciel Júnior  | 103.1 | 23.5 | Barcelona |
+## |   53 | c3ce55fe-26f8-4e63-b269-ea01f99ff438 | Gonzalo Escalante                 | 102.9 | 32.4 | Eibar     |
+## |   78 | c3ce55fe-26f8-4e63-b269-ea01f99ff438 | Ander Capa Rodríguez              |  98.8 | 42   | Eibar     |
+## |  103 | c3ce55fe-26f8-4e63-b269-ea01f99ff438 | Paulo André Rodrigues de Oliveira | 102.6 | 41.2 | Eibar     |
+## |  128 | c3ce55fe-26f8-4e63-b269-ea01f99ff438 | Daniel García Carrillo            |  98.6 | 44.6 | Eibar     |
+## |  153 | c3ce55fe-26f8-4e63-b269-ea01f99ff438 | Takashi Inui                      |  93.5 | 56.2 | Eibar     |
+## |  177 | c3ce55fe-26f8-4e63-b269-ea01f99ff438 | Denis Suárez Fernández            | 103.7 | 48.5 | Barcelona |
+## |  199 | c3ce55fe-26f8-4e63-b269-ea01f99ff438 | David Juncà Reñé                  | 103.8 | 51.4 | Eibar     |
+## |  221 | c3ce55fe-26f8-4e63-b269-ea01f99ff438 | Alejandro Gálvez Jimena           | 102.7 | 44.5 | Eibar     |
+## |  242 | c3ce55fe-26f8-4e63-b269-ea01f99ff438 | Marko Dmitrović                   | 118.4 | 39.7 | Eibar     |
+## |  257 | c3ce55fe-26f8-4e63-b269-ea01f99ff438 | Gerard Deulofeu Lázaro            | 103.8 | 56.4 | Barcelona |
+```
+
+So, we notice that, `tracking_filtered` is a tracking data from the instance when `Messi` was taking a shot. We will compute the *Delaunay triangulations* from `Barcelona`'s players' locations to get an idea about the possible links created among the teammates by the placement of the players from `Barcelona`. 
+
+[This](https://en.wikipedia.org/wiki/Delaunay_triangulation#:~:text=In%20mathematics%20and%20computational%20geometry%2C%20a%20Delaunay%20triangulation,of%20any%20triangle%20in%20DT%20%28%20P%20%29.)
+wikipedia article  states that for a set **`X`** consisting of points on a 2-D Euclidean surface, a *Delaunay triangulation* is a type of geometric triangulation such that no points in **`X`** lies inside the circum-circle of any triangle in the triangulation. A representation of the *Delaunay triangle* from the same wikipedia article:
+
+![](delaunay.png)
+
+We also need to import `Delaunay` from `scipy.spatial` to compute the triangulation:
+
+
+```python
+from scipy.spatial import Delaunay
+```
+
+Next, let us separate the `tracking_filtered` for the teams:
+
+
+```python
+tracking_Barca = data_filtered[data_filtered['team'] == 'Barcelona'].reset_index()
+tracking_Eibar = data_filtered[data_filtered['team'] == 'Eibar'].reset_index()
+print(tracking_Barca.to_markdown())
+```
+
+```
+## |    |   index | id                                   | player_name                      |     x |    y | team      |
+## |---:|--------:|:-------------------------------------|:---------------------------------|------:|-----:|:----------|
+## |  0 |    1094 | c3ce55fe-26f8-4e63-b269-ea01f99ff438 | Lionel Andrés Messi Cuccittini   |  97   | 45.4 | Barcelona |
+## |  1 |       3 | c3ce55fe-26f8-4e63-b269-ea01f99ff438 | Andrés Iniesta Luján             | 103.7 | 37.4 | Barcelona |
+## |  2 |      28 | c3ce55fe-26f8-4e63-b269-ea01f99ff438 | José Paulo Bezzera Maciel Júnior | 103.1 | 23.5 | Barcelona |
+## |  3 |     177 | c3ce55fe-26f8-4e63-b269-ea01f99ff438 | Denis Suárez Fernández           | 103.7 | 48.5 | Barcelona |
+## |  4 |     257 | c3ce55fe-26f8-4e63-b269-ea01f99ff438 | Gerard Deulofeu Lázaro           | 103.8 | 56.4 | Barcelona |
+```
+
+```python
+print(tracking_Eibar.to_markdown())
+```
+
+```
+## |    |   index | id                                   | player_name                       |     x |    y | team   |
+## |---:|--------:|:-------------------------------------|:----------------------------------|------:|-----:|:-------|
+## |  0 |      53 | c3ce55fe-26f8-4e63-b269-ea01f99ff438 | Gonzalo Escalante                 | 102.9 | 32.4 | Eibar  |
+## |  1 |      78 | c3ce55fe-26f8-4e63-b269-ea01f99ff438 | Ander Capa Rodríguez              |  98.8 | 42   | Eibar  |
+## |  2 |     103 | c3ce55fe-26f8-4e63-b269-ea01f99ff438 | Paulo André Rodrigues de Oliveira | 102.6 | 41.2 | Eibar  |
+## |  3 |     128 | c3ce55fe-26f8-4e63-b269-ea01f99ff438 | Daniel García Carrillo            |  98.6 | 44.6 | Eibar  |
+## |  4 |     153 | c3ce55fe-26f8-4e63-b269-ea01f99ff438 | Takashi Inui                      |  93.5 | 56.2 | Eibar  |
+## |  5 |     199 | c3ce55fe-26f8-4e63-b269-ea01f99ff438 | David Juncà Reñé                  | 103.8 | 51.4 | Eibar  |
+## |  6 |     221 | c3ce55fe-26f8-4e63-b269-ea01f99ff438 | Alejandro Gálvez Jimena           | 102.7 | 44.5 | Eibar  |
+## |  7 |     242 | c3ce55fe-26f8-4e63-b269-ea01f99ff438 | Marko Dmitrović                   | 118.4 | 39.7 | Eibar  |
+```
+
+Now, we are going to build the *Delaunay triangulations* for `Barcelona`'s attack at the particular instance. Similar to the one we did for *Convex hulls*, we will first convert the locations of the players into a 2-D matrix:
+
+
+```python
+points_Barca = tracking_Barca[['x', 'y']].values
+print(points_Barca)
+```
+
+```
+## [[ 97.   45.4]
+##  [103.7  37.4]
+##  [103.1  23.5]
+##  [103.7  48.5]
+##  [103.8  56.4]]
+```
+
+Then, we compute the triangulations:
+
+
+```python
+del_Barca = Delaunay(tracking_Barca[['x', 'y']])
+```
+
+We will create two more datasets for aiding us with annotating the jersey number of the players on their respective nodes while visualizing the players on the pitch
+
+
+```python
+loc_Barca = tracking_Barca[['player_name','x', 'y']].reset_index()
+loc_Eibar = tracking_Eibar[['player_name','x', 'y']].reset_index()
+print(loc_Barca.to_markdown())
+```
+
+```
+## |    |   index | player_name                      |     x |    y |
+## |---:|--------:|:---------------------------------|------:|-----:|
+## |  0 |       0 | Lionel Andrés Messi Cuccittini   |  97   | 45.4 |
+## |  1 |       1 | Andrés Iniesta Luján             | 103.7 | 37.4 |
+## |  2 |       2 | José Paulo Bezzera Maciel Júnior | 103.1 | 23.5 |
+## |  3 |       3 | Denis Suárez Fernández           | 103.7 | 48.5 |
+## |  4 |       4 | Gerard Deulofeu Lázaro           | 103.8 | 56.4 |
+```
+
+```python
+print(loc_Eibar.to_markdown())
+```
+
+```
+## |    |   index | player_name                       |     x |    y |
+## |---:|--------:|:----------------------------------|------:|-----:|
+## |  0 |       0 | Gonzalo Escalante                 | 102.9 | 32.4 |
+## |  1 |       1 | Ander Capa Rodríguez              |  98.8 | 42   |
+## |  2 |       2 | Paulo André Rodrigues de Oliveira | 102.6 | 41.2 |
+## |  3 |       3 | Daniel García Carrillo            |  98.6 | 44.6 |
+## |  4 |       4 | Takashi Inui                      |  93.5 | 56.2 |
+## |  5 |       5 | David Juncà Reñé                  | 103.8 | 51.4 |
+## |  6 |       6 | Alejandro Gálvez Jimena           | 102.7 | 44.5 |
+## |  7 |       7 | Marko Dmitrović                   | 118.4 | 39.7 |
+```
+
+Finally, we visualize the triangulations and the players' positions at that instance on the pitch:
+
+
+```python
+pitch = Pitch(pitch_color='grass', stripe=True, line_color='white', view = 'half', figsize=(15,16),
+              constrained_layout=True, tight_layout=False, goal_type='box')
+fig, ax = pitch.draw()
+
+plt.scatter(tracking_Barca.x, tracking_Barca.y, color='red', s = 850, edgecolors='black', zorder=2)
+```
+
+```python
+plt.scatter(tracking_Eibar.x, tracking_Eibar.y, color='blue', edgecolors='black', s = 850)
+```
+
+```python
+plt.triplot(points_Barca[:, 0], points_Barca[:, 1], del_Barca.simplices.copy(), 'k-', lw = 4)
+```
+
+```python
+for index, row in loc_Barca.iterrows():
+    pitch.annotate(jerseys_Barca[loc_Barca['player_name'][row.name]], xy=(row.x, row.y), c ='black', va = 'center', ha = 'center', size = 15, ax = ax)
+```
+
+```python
+for index, row in loc_Eibar.iterrows():
+    pitch.annotate(jerseys_Eibar[loc_Eibar['player_name'][row.name]], xy=(row.x, row.y), c ='black', va = 'center', ha = 'center', size = 15, ax = ax)
+```
+
+```python
+plt.show()
+```
+
+<img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-2-9.png" width="1440" />
+
+The red nodes indicate locations of `Barcelona`'s players and the blue nodes indiate that of `Eibar`'s. The black lines indicate the direct links between the players from a particular team at a particular moment, forming the *Delaunay triangulations*, also called the *pass triangulations*. In his book **Soccematics**, Dr. Sumpter mentions that these lines have two useful indications: first, they portray the availability of passes among the players from a particular team, and second, they also indicate the *"no man's lines"* for the players from the opposition team, meaning, if an opposition player is on one of these linking lines, then they are at a disadvantage. Beautiful implementation of computational geometry, isn't it?
+
+In the last part of this tutorial, we will compute the *Voronoi diagrams* for the players at the same instance on which we have just computed the *Delaunay triangulations*.
 
 **This post is still under construction**

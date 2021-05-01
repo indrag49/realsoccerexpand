@@ -283,7 +283,7 @@ for idx, p in enumerate(players_Barca):
             
 title = fig.suptitle("Convex Hulls for Barcelona players' field coverage vs Eibar [La Liga 2017-18]", fontsize=33)
 
-for j in range(len(players_Barca)-18, 0):
+for j in range(len(players_Barca) - 18, 0):
     axes[j].remove()
 plt.show()
 ```
@@ -342,12 +342,194 @@ for idx, p in enumerate(players_Eibar):
             
 title = fig.suptitle("Convex Hulls for Eiber players' field coverage vs Barcelona [La Liga 2017-18]", fontsize=33)
 
-for j in range(len(players_Eibar)-18, 0):
+for j in range(len(players_Eibar) - 18, 0):
     axes[j].remove()
 plt.show()
 ```
 
 So, we have been able to compute and visualize the convex hulls for players from a particular game. Next, we will try to understand how to get tracking data from a particular game using `statsbomb` api. We need tracking data to compute *Delaunay triangulations* and *Voronoi diagrams*.
 
+Now we need to have access to tracking data which means those data that give us information about the coordinates of all the players on a pitch at a particular instance. It is different to an event data where we only track the coordinate of the ball not all the players. We will use the tracking data from the same game that we have been using in this post for computing *Delaunay triangulations* and *Voronoi diagrams*.
+
+Let us remember the match id for the game between *Barcelona* and *Eibar*. It was `9609`. We need to first import useful classes from the `mplsoccer.statsbomb` module:
+
+```{python}
+from mplsoccer.statsbomb import read_event, EVENT_SLUG
+```
+
+Next, we will use the code from [here](https://mplsoccer.readthedocs.io/en/latest/gallery/pitch_plots/plot_voronoi.html#sphx-glr-gallery-pitch-plots-plot-voronoi-py) to extract the tracking data for the match:
+
+```{python}
+event_json = read_event(f'{EVENT_SLUG}/9609.json', related_event_df = False, tactics_lineup_df = False, warn = False)
+event = event_json['event']
+tracking = event_json['shot_freeze_frame']
+```
+
+Let us look at the `event` and `tracking` datasets:
+
+```{python}
+print(event.head(10).to_markdown())
+print(event.tail(10).to_markdown())
+print(tracking.head(10).to_markdown())
+print(tracking.tail(10).to_markdown())
+```
+
+Looking at the two datasets `event` and `tracking`, we understand that, the former represents the event data and the later represents the tracking data. Let us look into the columns of the `tracking` dataset:
+
+```{python}
+print(tracking.columns)
+```
+
+If we look closely into the `tracking` dataset, we understand that the column `id` represents an unique id for a shot freeze frame, i.e, it gives the unique id for the moment when a particular player was taking a shot along with the information about locations of the other players. Looking at the `player_name` column, we need to add a column `team` to the `tracking` dataset, giving us information about which team the shot taker belongs to.
+
+```{python results = FALSE}
+tracking['team'] = 0
+for i in range(len(tracking)):
+    if tracking['player_name'][i] in players_Barca:
+        tracking['team'][i] = 'Barcelona'
+    else:
+        tracking['team'][i] = 'Eibar'
+```
+
+```{python}
+print(tracking.head(10).to_markdown())  
+```
+
+Now, we will only extract the relevant columns:
+
+```{python}
+tracking = tracking[['id', 'player_name', 'x', 'y', 'team']]
+print(tracking.head(10).to_markdown())
+```
+
+Now, let us try collecting the jersey numbers of the players from both the teams. We will use a different and easier approach from the one we have done [here](https://realsoccerexpand.netlify.app/post/pass-network-analysis/). To get the player information, use the following command, py passing the match id:
+
+```{python}
+player_info = sb.lineups(match_id = 9609)
+print(player_info)
+```
+
+We see that `player_info` has information about both the teams. Let us fetch for `Barcelona` first:
+
+```{python}
+info_Barca = player_info['Barcelona']
+print(info_Barca.to_markdown())
+```
+
+Let us only consider the `player_name` and `jersey_number` columns and build a dictionary:
+
+```{python}
+info_Barca = info_Barca[['player_name', 'jersey_number']]
+jerseys_Barca = {}
+
+for i in range(len(info_Barca)):
+    jerseys_Barca[info_Barca.player_name[i]] = str(info_Barca.jersey_number[i])
+print(jerseys_Barca)
+```
+
+Let us perform the same operations on `Eibar`:
+
+```{python}
+info_Eibar= player_info['Eibar']
+print(info_Eibar.to_markdown())
+
+info_Eibar = info_Eibar[['player_name', 'jersey_number']]
+jerseys_Eibar = {}
+
+for i in range(len(info_Eibar)):
+    jerseys_Eibar[info_Eibar.player_name[i]] = str(info_Eibar.jersey_number[i])
+print(jerseys_Eibar)
+```
+
+Now let us select a particular `id` from the `tracking` dataset, representing an instance when a particular shot was taken. We will filter `tracking` by a `id` value which will give us the information of the locations of the players on the pitch at that moment. We can view the unique `id` values:
+
+```{python}
+print(tracking.id.unique())
+```
+
+Let us filter the dataset now:
+
+```{python}
+shot_id = 'c3ce55fe-26f8-4e63-b269-ea01f99ff438' # select a particular value from the id column
+#shot_id = 'ec1db9ef-3db5-4bc5-a80f-0b4cdbded29e'
+tracking_filtered = tracking[tracking['id'] == shot_id] # filter by the shot_id
+event_filtered = event[event['id'] == shot_id]
+print(tracking_filtered.to_markdown())
+
+event_filtered = event_filtered[['id', 'player_name', 'x', 'y', 'team_name']]
+event_filtered = event_filtered.rename(columns = {'team_name':'team'})
+print(event_filtered.to_markdown())
+
+data_filtered = pd.concat([event_filtered, tracking_filtered])
+print(data_filtered.to_markdown())
+```
+
+So, we notice that, `tracking_filtered` is a tracking data from the instance when `Messi` was taking a shot. We will compute the *Delaunay triangulations* from `Barcelona`'s players' locations to get an idea about the possible links created among the teammates by the placement of the players from `Barcelona`. 
+
+[This](https://en.wikipedia.org/wiki/Delaunay_triangulation#:~:text=In%20mathematics%20and%20computational%20geometry%2C%20a%20Delaunay%20triangulation,of%20any%20triangle%20in%20DT%20%28%20P%20%29.)
+wikipedia article  states that for a set **`X`** consisting of points on a 2-D Euclidean surface, a *Delaunay triangulation* is a type of geometric triangulation such that no points in **`X`** lies inside the circum-circle of any triangle in the triangulation. A representation of the *Delaunay triangle* from the same wikipedia article:
+
+![](delaunay.png)
+
+We also need to import `Delaunay` from `scipy.spatial` to compute the triangulation:
+
+```{python}
+from scipy.spatial import Delaunay
+```
+
+Next, let us separate the `tracking_filtered` for the teams:
+
+```{python}
+tracking_Barca = data_filtered[data_filtered['team'] == 'Barcelona'].reset_index()
+tracking_Eibar = data_filtered[data_filtered['team'] == 'Eibar'].reset_index()
+print(tracking_Barca.to_markdown())
+print(tracking_Eibar.to_markdown())
+```
+
+Now, we are going to build the *Delaunay triangulations* for `Barcelona`'s attack at the particular instance. Similar to the one we did for *Convex hulls*, we will first convert the locations of the players into a 2-D matrix:
+
+```{python}
+points_Barca = tracking_Barca[['x', 'y']].values
+print(points_Barca)
+```
+
+Then, we compute the triangulations:
+
+```{python}
+del_Barca = Delaunay(tracking_Barca[['x', 'y']])
+```
+
+We will create two more datasets for aiding us with annotating the jersey number of the players on their respective nodes while visualizing the players on the pitch
+
+```{python}
+loc_Barca = tracking_Barca[['player_name','x', 'y']].reset_index()
+loc_Eibar = tracking_Eibar[['player_name','x', 'y']].reset_index()
+print(loc_Barca.to_markdown())
+print(loc_Eibar.to_markdown())
+```
+
+Finally, we visualize the triangulations and the players' positions at that instance on the pitch:
+
+```{python results=FALSE}
+pitch = Pitch(pitch_color='grass', stripe=True, line_color='white', view = 'half', figsize=(15,16),
+              constrained_layout=True, tight_layout=False, goal_type='box')
+fig, ax = pitch.draw()
+
+plt.scatter(tracking_Barca.x, tracking_Barca.y, color='red', s = 850, edgecolors='black', zorder=2)
+plt.scatter(tracking_Eibar.x, tracking_Eibar.y, color='blue', edgecolors='black', s = 850)
+
+plt.triplot(points_Barca[:, 0], points_Barca[:, 1], del_Barca.simplices.copy(), 'k-', lw = 4)
+
+for index, row in loc_Barca.iterrows():
+    pitch.annotate(jerseys_Barca[loc_Barca['player_name'][row.name]], xy=(row.x, row.y), c ='black', va = 'center', ha = 'center', size = 15, ax = ax)
+
+for index, row in loc_Eibar.iterrows():
+    pitch.annotate(jerseys_Eibar[loc_Eibar['player_name'][row.name]], xy=(row.x, row.y), c ='black', va = 'center', ha = 'center', size = 15, ax = ax)
+plt.show()
+```
+
+The red nodes indicate locations of `Barcelona`'s players and the blue nodes indiate that of `Eibar`'s. The black lines indicate the direct links between the players from a particular team at a particular moment, forming the *Delaunay triangulations*, also called the *pass triangulations*. In his book **Soccematics**, Dr. Sumpter mentions that these lines have two useful indications: first, they portray the availability of passes among the players from a particular team, and second, they also indicate the *"no man's lines"* for the players from the opposition team, meaning, if an opposition player is on one of these linking lines, then they are at a disadvantage. Beautiful implementation of computational geometry, isn't it?
+
+In the last part of this tutorial, we will compute the *Voronoi diagrams* for the players at the same instance on which we have just computed the *Delaunay triangulations*.
 
 **This post is still under construction**
