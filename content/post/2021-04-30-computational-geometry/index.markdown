@@ -1441,5 +1441,3 @@ plt.show()
 So, the *Voronoi diagrams* give us the zones of each and every player on the pitch at a particular moment by breaking the pitch into distinct regions belonging to the players indicating the field covergae of each player at that moment. This completes our tutorial on implementational of computational geometric concepts on football event and trackinf data.
 
 Next post, we will learn how to access football statistical and historical data from [**FBREF**](https://fbref.com/en/).
-
-**This post is still under construction**
