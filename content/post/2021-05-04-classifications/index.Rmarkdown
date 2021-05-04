@@ -1,0 +1,225 @@
+---
+title: Statistical Analysis to Classify the Pass Outcomes
+author: Indranil Ghosh
+date: '2021-05-04'
+slug: classifications
+categories: ["Python", "Classification", "Statistical Learning", "scikit-learn"]
+tags: ["statsbomb api", "scikit-learn", "pass outcomes"]
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2021-05-04T18:35:05+05:30'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+---
+
+In this post, we will learn how to use statistical learning to build models for classifying pass outcomes. *Classification* is the operation of labeling a set of data into different classes, for example whether a pass from a player will be a successful or an unsuccessful pass depending on a set of particular features. The pass outcome is the dependent class variable and the features are the independent variables. Classification tasks can be either *binary* or *multiclass*.
+
+We will again use the *statsbomb* open data to collect information about different kind of passes and use various classification algorithms from statistical learning literature to classify these pass outcomes. First, we will import the relevant packages:
+
+```{python}
+from statsbombpy import sb # statsbomb api
+import matplotlib.pyplot as plt # matplotlib for plotting
+import seaborn as sns # seaborn for plotting useful statistical graphs
+import numpy as np # numerical python package
+import pandas as pd # pandas for manipulating and analysing data
+```
+
+Let us now look into the different competitions available:
+
+```{python}
+comp = sb.competitions()
+print(comp.to_markdown())
+```
+
+Our aim is to get access to all of `Barcelona`'s available pass event data in `La Liga` stretching from `2004/05` season to `2019/20` season. We will filter `comp` by setting `competition_name` to `La Liga`.
+
+```{python}
+comp = comp[comp["competition_name"] == "La Liga"]
+print(comp.to_markdown())
+```
+
+We see that the `competion_id` is `11` for all the rows. So, now, we need to collect all the values from `season_id`. Let us get the values:
+
+```{python}
+season_ids = comp.season_id.unique()
+print(season_ids)
+```
+
+Now that we have all the values of `La Liga`'s `season_id` and that we know the `competition_id`, we can now get all the required pass event data. Let us get the event data from the last three seasons:
+
+```{python eval = FALSE}
+ev = {}
+i = 0
+for si in season_ids[:3]:
+    mat = sb.matches(competition_id = 11, season_id = si)
+    match_ids = mat.match_id.unique()
+    for mi in match_ids:
+        events = sb.events(match_id = mi)
+        ev[i] = events
+        i+=1
+L = list(ev.values())
+events = pd.concat(L)
+```
+
+Note that the above chunk will take quite an amount of time to complete the process of collecting the data. The reader should take some break in the meantime and go grab a cup of coffee/tea! It is recommended to store this dataset as a *.csv* file for later use. Now let us filter the dataset by discarding unnecessary columns and picking up those which are relevant to pass events:
+
+```{python eval=FALSE}
+E_pass = events[['type', 'pass_angle', 'pass_height', 'pass_length', 'pass_outcome', 'team']]
+```
+
+```{python echo=FALSE}
+E_pass = pd.read_csv("dataset.csv")
+```
+
+```{python}
+print(E_pass.head(10).to_markdown())
+print(len(E_pass))
+```
+
+Firstly we will only keep those rows where, `type` is set to `'Pass'` and `team` is set to `'Barcelona'`:
+
+```{python}
+E_pass = E_pass[(E_pass['type'] == 'Pass') & (E_pass['team'] == 'Barcelona')]
+print(E_pass.head(10).to_markdown())
+print(len(E_pass))
+```
+
+Note that, we have reduced the size of the dataset from `402627` to `72069`. We see that `pass_height` in `E_pass` is a categorical column and we need to engineer this feature to give it numerical values. Let us check the the unique types in `pass_height`:
+
+```{python}
+print(E_pass.pass_height.unique())
+```
+
+Intuition tells us that `'Ground Pass'` leads to more successful passes, `'Low Pass'` leads to lesser successful passes and the `'High Pass'` leads to the least successful passes. We can use a look up table to assign them some numerical values. Let us create a `dict` object to do so:
+
+```{python}
+pass_height_types = {'Ground Pass': 3, 'High Pass': 2, 'Low Pass': 1}
+```
+
+We will replace the entries of the `pass_height` column with the above numerical values from the dictionary:
+
+```{python}
+E_pass_new = E_pass.replace({"pass_height": pass_height_types})
+print(E_pass_new.head(10).to_markdown())
+```
+
+First, we will study [**logistic regression**](https://en.wikipedia.org/wiki/Logistic_regression#:~:text=Logistic%20regression%20is%20a%20statistical%20model%20that%20in,logistic%20model%20%28a%20form%20of%20binary%20regression%20%29.) for building a binary classifier model. So our `pass_outcome` column should be such that it gives two values: `0` for unsuccessful passes or `1` for successful passes. Let us now look into the unique entries of the `pass_outcome` column:
+
+```{python}
+print(E_pass_new.pass_outcome.unique())
+```
+
+We know that in statsbomb data a `pass_outcome` having a `nan` value actually means a successful pass. So we will replace the `nan` values in this column with `1` and all other values with `0`.
+
+```{python}
+pass_outcome_types = {'Incomplete':0, 'Out':0, 'Unknown':0, 'Injury Clearance':0, 'Pass Offside':0}
+E_pass_new = E_pass_new.replace({"pass_outcome": pass_outcome_types})
+E_pass_new = E_pass_new.fillna({'pass_outcome':1})
+print(E_pass_new.head(10).to_markdown())
+print(E_pass_new.pass_outcome.unique())
+```
+
+Now that we have manipulated our data, it is time to start building the model. For doing that, we need to use the [`scikit-learn`](https://scikit-learn.org/stable/index.html) package that is used for predictive statistical learning with Python. the user should `pip` install the package to begin with. As we are going to use *logistic regression* to build our model, we need to call the `LogisticRegression` class from `scikit-learn`:
+
+```{python}
+from sklearn.linear_model import LogisticRegression
+```
+
+In addition to this, we need to split our dataset into a training dataset that aids in training our classifier and a testing dataset that is used to test the accuracy of our model. So we need to call the `train_test_split` class from `scikit-learn`.
+
+```{python}
+from sklearn.model_selection import train_test_split
+```
+
+Finally, we need to calculate the evaluation metrics of our model. So we need to import the `metrics` class too:
+
+```{python}
+from sklearn import metrics
+```
+
+As `pass_outcome` is the column for dependent variable and the rest are the columns for the independent variables, we have to divide the dataset into dependent and independent variables in the following way:
+
+```{python}
+x = E_pass_new[['pass_angle', 'pass_height', 'pass_length']] 
+y = E_pass_new['pass_outcome']
+print(x.head(10).to_markdown())
+print(y.head(10).to_markdown())
+```
+
+Here `y` is the outcome and `x` is the set of columns representing the features. Now we split the whole dataset into training and test datasets:
+
+```{python}
+x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.4, random_state = 0)
+```
+
+Here, the argument `train_size=0.4` states that 40% of our data will be used as training data, and the argument `random_state=0` ensures that the randomly selected rows that make up the training datasets are always the same every time the function is called on our original dataset.
+
+Let us look into the training and test datasets:
+
+```{python}
+print(x_train.head(10).to_markdown())
+print(x_test.head(10).to_markdown())
+print(y_train.head(10).to_markdown())
+print(x_test.head(10).to_markdown())
+```
+
+Now, we will create an instance of the *logistic regression* model:
+
+```{python}
+lr = LogisticRegression()
+```
+
+Next, we will train our model on the training dataset:
+
+```{python}
+lr.fit(x_train, y_train)
+```
+
+Once the training is done, we will predict the outcomes of the passes on the test data:
+
+```{python}
+y_predicted = lr.predict(x_test)
+```
+
+Yes, we have generated our predicted outcomes. To check the accuracy of our model, we use the `metrics.accuracy_score()` function:
+
+```{python}
+accuracy = metrics.accuracy_score(y_test, y_predicted)
+accuracy
+```
+
+We see that our classification model has around 87.47% accuracy. Not bad! Next, we need a way to compare `y_test` and `y_predicted`. This is usually done by visualizing the *confusion matrix* or the *error matrix* in the following way:
+
+```{python}
+error_matrix = metrics.confusion_matrix(y_test, y_predicted,labels = [0, 1])
+sns.heatmap(error_matrix, annot=True, cmap = 'Blues_r', linewidths = 3, linecolor = 'red')
+```
+
+Now, from this *confusion matrix* we can calculate the *true negatives*, *false positives*, *false negatives* and *true positives*:
+
+```{python}
+TN, FP, FN, TP = error_matrix.ravel()
+print(TN, FP, FN, TP)
+```
+
+So, there are 20 *true negatives*, 5392 *false positives*, 25 *false negatives* and *37805* true positives to be precise. We can also confirm this by plotting a histogram to show the difference between the predicted value and the true value:
+
+```{python}
+sns.displot((y_test - y_predicted), bins = 50, color = 'red')
+```
+
+We can finally calculate the *mean absolute error*:
+
+```{python}
+mae = metrics.mean_absolute_error(y_test, y_predicted)
+mae
+```
+
+So, our model prediction is off by the value (`mae`). Next, we will study how to perform multi-label classification on the same dataset by using another statistical learning algorithm called the *Naive Bayes* algorithm.
+
+**This post is still under construction**
