@@ -220,6 +220,103 @@ mae = metrics.mean_absolute_error(y_test, y_predicted)
 mae
 ```
 
-So, our model prediction is off by the value (`mae`). Next, we will study how to perform multi-label classification on the same dataset by using another statistical learning algorithm called the *Naive Bayes* algorithm.
+So, our model prediction is off by the value given by `mae`. Next, we will study how to perform multi-label classification on the same dataset by using another statistical learning algorithm called the *Naive Bayes* algorithm.
 
+First let us clean `E_pass` dataset a little more by discarding those `pass_outcomes` which are either `'Unknown'` or `'Injury Clearance'`.
+
+```{python}
+E_pass = E_pass[E_pass['pass_outcome'].isin(['Unknown', 'Injury Clearance']) == False]
+print(E_pass.pass_outcome.unique())
+```
+
+As we are going to work with multi-label classification, let us modify the `pass_outcome_type` look up table:
+
+```{python}
+pass_outcome_types = {'Incomplete':0, 'Out':-1, 'Pass Offside':-2}
+```
+
+We will now alter `E_pass` by changing the `pass_outcome` column based on the new look up table:
+
+```{python}
+E_pass_new = E_pass.replace({"pass_height": pass_height_types})
+E_pass_new = E_pass_new.replace({"pass_outcome": pass_outcome_types})
+E_pass_new = E_pass_new.fillna({'pass_outcome':1})
+print(E_pass_new.head(10).to_markdown())
+```
+
+We are going to apply [*Naive Bayes algorithm*](https://en.wikipedia.org/wiki/Naive_Bayes_classifier) to build our multi-label classification model. *Naive Bayes algorithms* are a set of simple probabilistic algorithms built upon [*Bayes' theorem*](https://en.wikipedia.org/wiki/Bayes%27_theorem), assuming that all the features are independent of each other. As this assumption is naive, these methods are therefore called *Naive Bayes methods*. First we need to call the `GaussianNB` class from `scikit-learn`:
+
+```{python}
+from sklearn.naive_bayes import GaussianNB
+```
+
+We will next divide our dataset into dependent and independent variables:
+
+```{python}
+x = E_pass_new[['pass_angle', 'pass_height', 'pass_length']] 
+y = E_pass_new['pass_outcome']
+print(x.head(10).to_markdown())
+print(y.head(10).to_markdown())
+```
+
+Now, we split the whole dataset into training and test datasets:
+
+```{python}
+x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.4, random_state = 0)
+print(x_train.head(10).to_markdown())
+print(x_test.head(10).to_markdown())
+print(y_train.head(10).to_markdown())
+print(y_test.head(10).to_markdown())
+```
+
+Then, we will create an instance of the *Naive Bayes* model:
+
+```{python}
+nb = GaussianNB()
+```
+
+Next, we will train our model on the training dataset:
+
+```{python}
+nb.fit(x_train, y_train)
+```
+
+Once the training is done, we will predict the outcomes of the passes on the test data:
+
+```{python}
+y_predicted = nb.predict(x_test)
+```
+
+After we predict the outcomes, we test the accuracy of our model:
+
+```{python}
+accuracy = metrics.accuracy_score(y_test, y_predicted)
+accuracy
+```
+
+Our model has an accuracy of about 84.3%. We then compute and visualize the *error matrix* and calculate the values of *true negatives*, *false positives*, *false negatives* and *true positives*:
+
+```{python}
+error_matrix = metrics.confusion_matrix(y_test, y_predicted,labels = [-2, -1, 0, 1])
+sns.heatmap(error_matrix, annot=True, cmap = 'Blues_r', linewidths = 3, linecolor = 'red')
+plt.show()
+error_matrix.ravel()
+```
+
+```{python}
+error_matrix = pd.crosstab(y_test, y_predicted, rownames=['Original'], colnames=['Predicted'])
+sns.heatmap(error_matrix, annot=True, cmap = 'Blues_r', linewidths = 3, linecolor = 'red')
+plt.show()
+````
+
+Finally let us visualize the difference histogram and compute the *mean absolute error*
+
+```{python}
+sns.displot((y_test - y_predicted), bins = 50, color = 'blue')
+```
+
+```{python}
+mae = metrics.mean_absolute_error(y_test, y_predicted)
+mae
+```
 **This post is still under construction**

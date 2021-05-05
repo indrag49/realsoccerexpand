@@ -530,6 +530,278 @@ mae
 ## 0.12527172656213867
 ```
 
-So, our model prediction is off by the value (`mae`). Next, we will study how to perform multi-label classification on the same dataset by using another statistical learning algorithm called the *Naive Bayes* algorithm.
+So, our model prediction is off by the value given by `mae`. Next, we will study how to perform multi-label classification on the same dataset by using another statistical learning algorithm called the *Naive Bayes* algorithm.
 
+First let us clean `E_pass` dataset a little more by discarding those `pass_outcomes` which are either `'Unknown'` or `'Injury Clearance'`.
+
+
+```python
+E_pass = E_pass[E_pass['pass_outcome'].isin(['Unknown', 'Injury Clearance']) == False]
+print(E_pass.pass_outcome.unique())
+```
+
+```
+## [nan 'Incomplete' 'Out' 'Pass Offside']
+```
+
+As we are going to work with multi-label classification, let us modify the `pass_outcome_type` look up table:
+
+
+```python
+pass_outcome_types = {'Incomplete':0, 'Out':-1, 'Pass Offside':-2}
+```
+
+We will now alter `E_pass` by changing the `pass_outcome` column based on the new look up table:
+
+
+```python
+E_pass_new = E_pass.replace({"pass_height": pass_height_types})
+E_pass_new = E_pass_new.replace({"pass_outcome": pass_outcome_types})
+E_pass_new = E_pass_new.fillna({'pass_outcome':1})
+print(E_pass_new.head(10).to_markdown())
+```
+
+```
+## |    |   Unnamed: 0 | type   |   pass_angle |   pass_height |   pass_length |   pass_outcome | team      |
+## |---:|-------------:|:-------|-------------:|--------------:|--------------:|---------------:|:----------|
+## |  6 |            6 | Pass   |     3.09995  |             3 |      16.8146  |              1 | Barcelona |
+## |  7 |            7 | Pass   |    -2.25894  |             3 |      11.6516  |              1 | Barcelona |
+## |  8 |            8 | Pass   |     1.71269  |             3 |       7.77817 |              1 | Barcelona |
+## |  9 |            9 | Pass   |    -1.51327  |             3 |      19.1316  |              1 | Barcelona |
+## | 10 |           10 | Pass   |     1.27468  |             3 |       6.16847 |              1 | Barcelona |
+## | 11 |           11 | Pass   |     2.50258  |             3 |      22.3002  |              1 | Barcelona |
+## | 12 |           12 | Pass   |     1.31242  |             3 |      14.4807  |              1 | Barcelona |
+## | 13 |           13 | Pass   |    -2.30539  |             3 |      20.8866  |              1 | Barcelona |
+## | 14 |           14 | Pass   |    -0.447427 |             2 |      38.5996  |              1 | Barcelona |
+## | 15 |           15 | Pass   |    -2.16891  |             1 |      24.6854  |              1 | Barcelona |
+```
+
+We are going to apply [*Naive Bayes algorithm*](https://en.wikipedia.org/wiki/Naive_Bayes_classifier) to build our multi-label classification model. *Naive Bayes algorithms* are a set of simple probabilistic algorithms built upon [*Bayes' theorem*](https://en.wikipedia.org/wiki/Bayes%27_theorem), assuming that all the features are independent of each other. As this assumption is naive, these methods are therefore called *Naive Bayes methods*. First we need to call the `GaussianNB` class from `scikit-learn`:
+
+
+```python
+from sklearn.naive_bayes import GaussianNB
+```
+
+We will next divide our dataset into dependent and independent variables:
+
+
+```python
+x = E_pass_new[['pass_angle', 'pass_height', 'pass_length']] 
+y = E_pass_new['pass_outcome']
+print(x.head(10).to_markdown())
+```
+
+```
+## |    |   pass_angle |   pass_height |   pass_length |
+## |---:|-------------:|--------------:|--------------:|
+## |  6 |     3.09995  |             3 |      16.8146  |
+## |  7 |    -2.25894  |             3 |      11.6516  |
+## |  8 |     1.71269  |             3 |       7.77817 |
+## |  9 |    -1.51327  |             3 |      19.1316  |
+## | 10 |     1.27468  |             3 |       6.16847 |
+## | 11 |     2.50258  |             3 |      22.3002  |
+## | 12 |     1.31242  |             3 |      14.4807  |
+## | 13 |    -2.30539  |             3 |      20.8866  |
+## | 14 |    -0.447427 |             2 |      38.5996  |
+## | 15 |    -2.16891  |             1 |      24.6854  |
+```
+
+```python
+print(y.head(10).to_markdown())
+```
+
+```
+## |    |   pass_outcome |
+## |---:|---------------:|
+## |  6 |              1 |
+## |  7 |              1 |
+## |  8 |              1 |
+## |  9 |              1 |
+## | 10 |              1 |
+## | 11 |              1 |
+## | 12 |              1 |
+## | 13 |              1 |
+## | 14 |              1 |
+## | 15 |              1 |
+```
+
+Now, we split the whole dataset into training and test datasets:
+
+
+```python
+x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=0.4, random_state = 0)
+print(x_train.head(10).to_markdown())
+```
+
+```
+## |        |   pass_angle |   pass_height |   pass_length |
+## |-------:|-------------:|--------------:|--------------:|
+## |  24742 |    -0.214967 |             3 |      23.4395  |
+## | 150862 |    -0.432408 |             3 |      14.3178  |
+## | 341342 |    -0.124355 |             2 |       8.06226 |
+## | 106600 |     2.14671  |             3 |       9.18096 |
+## | 209720 |     1.71269  |             3 |       7.07107 |
+## | 177450 |     1.15257  |             3 |      19.6977  |
+## | 205081 |     0.291457 |             2 |      10.4403  |
+## | 287988 |     1.3734   |             3 |       5.09902 |
+## | 318663 |    -1.87668  |             3 |      19.9249  |
+## | 283670 |    -1.3633   |             3 |      19.4165  |
+```
+
+```python
+print(x_test.head(10).to_markdown())
+```
+
+```
+## |        |   pass_angle |   pass_height |   pass_length |
+## |-------:|-------------:|--------------:|--------------:|
+## |  84315 |    -2.10613  |             3 |      16.8585  |
+## | 237632 |    -0.927295 |             1 |       5       |
+## |  76289 |    -0.268841 |             3 |      10.1651  |
+## |  15998 |    -2.80159  |             1 |      15.5926  |
+## | 364198 |     2.14213  |             3 |      16.6433  |
+## | 129666 |    -3.04192  |             3 |      10.0499  |
+## | 329616 |     2.70175  |             3 |      18.7883  |
+## | 133871 |    -1.73595  |             3 |      12.1655  |
+## |  75295 |    -0.54172  |             1 |      13.1883  |
+## | 229777 |     2.35619  |             1 |       4.24264 |
+```
+
+```python
+print(y_train.head(10).to_markdown())
+```
+
+```
+## |        |   pass_outcome |
+## |-------:|---------------:|
+## |  24742 |              1 |
+## | 150862 |              1 |
+## | 341342 |              1 |
+## | 106600 |              1 |
+## | 209720 |              1 |
+## | 177450 |              1 |
+## | 205081 |              0 |
+## | 287988 |              0 |
+## | 318663 |              1 |
+## | 283670 |              1 |
+```
+
+```python
+print(y_test.head(10).to_markdown())
+```
+
+```
+## |        |   pass_outcome |
+## |-------:|---------------:|
+## |  84315 |              1 |
+## | 237632 |              1 |
+## |  76289 |              1 |
+## |  15998 |              1 |
+## | 364198 |              1 |
+## | 129666 |              1 |
+## | 329616 |              1 |
+## | 133871 |              1 |
+## |  75295 |              1 |
+## | 229777 |              1 |
+```
+
+Then, we will create an instance of the *Naive Bayes* model:
+
+
+```python
+nb = GaussianNB()
+```
+
+Next, we will train our model on the training dataset:
+
+
+```python
+nb.fit(x_train, y_train)
+```
+
+```
+## GaussianNB()
+```
+
+Once the training is done, we will predict the outcomes of the passes on the test data:
+
+
+```python
+y_predicted = nb.predict(x_test)
+```
+
+After we predict the outcomes, we test the accuracy of our model:
+
+
+```python
+accuracy = metrics.accuracy_score(y_test, y_predicted)
+accuracy
+```
+
+```
+## 0.8430598453356866
+```
+
+Our model has an accuracy of about 84.3%. We then compute and visualize the *error matrix* and calculate the values of *true negatives*, *false positives*, *false negatives* and *true positives*:
+
+
+```python
+error_matrix = metrics.confusion_matrix(y_test, y_predicted,labels = [-2, -1, 0, 1])
+sns.heatmap(error_matrix, annot=True, cmap = 'Blues_r', linewidths = 3, linecolor = 'red')
+```
+
+```
+## <AxesSubplot:>
+```
+
+```python
+plt.show()
+```
+
+<img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-1-5.png" width="480" />
+
+```python
+error_matrix.ravel()
+```
+
+```
+## array([    0,     1,    37,   108,     0,    31,   144,   211,     0,
+##           91,  1114,  3467,     0,    92,  2607, 35158], dtype=int64)
+```
+
+
+```python
+error_matrix = pd.crosstab(y_test, y_predicted, rownames=['Original'], colnames=['Predicted'])
+sns.heatmap(error_matrix, annot=True, cmap = 'Blues_r', linewidths = 3, linecolor = 'red')
+```
+
+```
+## <AxesSubplot:xlabel='Predicted', ylabel='Original'>
+```
+
+```python
+plt.show()
+```
+
+<img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-1-7.png" width="480" />
+
+Finally let us visualize the difference histogram and compute the *mean absolute error*
+
+
+```python
+sns.displot((y_test - y_predicted), bins = 50, color = 'blue')
+```
+
+<img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-41-9.png" width="244" />
+
+
+```python
+mae = metrics.mean_absolute_error(y_test, y_predicted)
+mae
+```
+
+```
+## 0.16985207031885
+```
 **This post is still under construction**
