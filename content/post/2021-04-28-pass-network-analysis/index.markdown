@@ -93,7 +93,7 @@ print(comp.to_markdown())
 ## | 36 |               72 |          30 | International            | Women's World Cup       | female               | 2019          | 2020-07-29T05:00           | 2020-07-29T05:00           |
 ```
 
-Let us use the first row from `comp` where the `competition_id` is `16` and `season_id` is `4`. We see that it holds the event data from *UEFA Champions League* ⚽ for the 2017-18 season. Let us now extract out the matches using the above information.
+Let us use the first row from `comp` where the `competition_id` is `16` and `season_id` is `1`. We see that it holds the event data from *UEFA Champions League* ⚽ for the 2017-18 season. Let us now extract out the matches using the above information.
 
 
 ```python
@@ -480,7 +480,7 @@ print(events_pn_Liv.head(10).to_markdown())
 ## | 39 |        2 |        7 | Liverpool | Pass   | [53.2, 0.1]  | [50.0, 4.0]         | nan            | Andrew Robertson                    |
 ```
 
-Let us now very carefully observe the datasets. Suppose from the `events_rn_Real` dataset, we are focusing on the second and the third row (index `1` and `2`). `Luka Modrić` makes the pass at around `0`th `minute` and `10`th `second` (Second row) and `Daniel Carvajal Ramos ` receives the pass at around `0`th `minute` and `11`th `second` (third row). So in both the datasets we need to add two extra columns named as `pass_maker` and `pass_receiver`, where `pass_maker` column would be similar to `player` column and the `pass_receiver` column would be the `player` column whose index would be shifted by one place in the negative direction. This can be achieved by the `shift()` function provided by `pandas`. We will perform this operation on both `events_pn_Real` and `events_pn_Liv`.
+Let us now very carefully observe the datasets. Suppose from the `events_pn_Real` dataset, we are focusing on the second and the third row (index `1` and `2`). `Luka Modrić` makes the pass at around `0`th `minute` and `10`th `second` (Second row) and `Daniel Carvajal Ramos ` receives the pass at around `0`th `minute` and `11`th `second` (third row). So in both the datasets we need to add two extra columns named as `pass_maker` and `pass_receiver`, where `pass_maker` column would be similar to `player` column and the `pass_receiver` column would be the `player` column whose index would be shifted by one place in the negative direction. This can be achieved by the `shift()` function provided by `pandas`. We will perform this operation on both `events_pn_Real` and `events_pn_Liv`.
 
 
 ```python
@@ -2107,7 +2107,7 @@ print(cc_Real)
 ```
 
 ```
-## 0.182334851979709
+## 0.18233485197970903
 ```
 
 for `Liverpool`:

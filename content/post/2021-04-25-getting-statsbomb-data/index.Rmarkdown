@@ -23,7 +23,7 @@ This is the first of all the blog posts that are to be published further. In thi
 pip install statsbombpy
 ```
 
-The open data from **Statsbomb** can be accessed without any need of authetication from the user but it is always advised to go through the *Terms & Conditions* section stated at their documentation page. 
+The open data from **Statsbomb** can be accessed without any need of authentication from the user but it is always advised to go through the *Terms & Conditions* section stated at their documentation page. 
 
 Now we will go step by step to understand how to extract the relevant data. Before that, we need to import the `statsbombpy` package.
 
@@ -76,6 +76,7 @@ events = sb.events(match_id=303470)
 eh = events.head() # shows the first few rows
 print(eh.to_markdown())
 ```
+
 We see that we were able to get access to all the events from the **Real Madrid vs. Barcelona** match. There are `88` columns in `events`. You can jot down the column names to get a clearer overview of what kinds of events to expect from the match.
 
 ```{python}
