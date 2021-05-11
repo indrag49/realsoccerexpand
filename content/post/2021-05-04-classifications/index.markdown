@@ -804,4 +804,5 @@ mae
 ```
 ## 0.16985207031885
 ```
-**This post is still under construction**
+
+This completes our post on classifying different pass outcomes using two statistical learning algorithms, one for binary classification and the other for multi-label classification.

@@ -319,4 +319,5 @@ sns.displot((y_test - y_predicted), bins = 50, color = 'blue')
 mae = metrics.mean_absolute_error(y_test, y_predicted)
 mae
 ```
-**This post is still under construction**
+
+This completes our post on classifying different pass outcomes using two statistical learning algorithms, one for binary classification and the other for multi-label classification.

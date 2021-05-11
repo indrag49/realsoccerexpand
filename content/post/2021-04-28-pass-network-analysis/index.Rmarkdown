@@ -47,7 +47,7 @@ comp = sb.competitions()
 print(comp.to_markdown())
 ```
 
-Let us use the first row from `comp` where the `competition_id` is `16` and `season_id` is `4`. We see that it holds the event data from *UEFA Champions League* ⚽ for the 2017-18 season. Let us now extract out the matches using the above information.
+Let us use the first row from `comp` where the `competition_id` is `16` and `season_id` is `1`. We see that it holds the event data from *UEFA Champions League* ⚽ for the 2017-18 season. Let us now extract out the matches using the above information.
 
 ```{python results=FALSE}
 mat = sb.matches(competition_id = 16, season_id = 1)
@@ -190,7 +190,7 @@ print(events_pn_Real.head(10).to_markdown())
 print(events_pn_Liv.head(10).to_markdown())
 ```
 
-Let us now very carefully observe the datasets. Suppose from the `events_rn_Real` dataset, we are focusing on the second and the third row (index `1` and `2`). `Luka Modrić` makes the pass at around `0`th `minute` and `10`th `second` (Second row) and `Daniel Carvajal Ramos ` receives the pass at around `0`th `minute` and `11`th `second` (third row). So in both the datasets we need to add two extra columns named as `pass_maker` and `pass_receiver`, where `pass_maker` column would be similar to `player` column and the `pass_receiver` column would be the `player` column whose index would be shifted by one place in the negative direction. This can be achieved by the `shift()` function provided by `pandas`. We will perform this operation on both `events_pn_Real` and `events_pn_Liv`.
+Let us now very carefully observe the datasets. Suppose from the `events_pn_Real` dataset, we are focusing on the second and the third row (index `1` and `2`). `Luka Modrić` makes the pass at around `0`th `minute` and `10`th `second` (Second row) and `Daniel Carvajal Ramos ` receives the pass at around `0`th `minute` and `11`th `second` (third row). So in both the datasets we need to add two extra columns named as `pass_maker` and `pass_receiver`, where `pass_maker` column would be similar to `player` column and the `pass_receiver` column would be the `player` column whose index would be shifted by one place in the negative direction. This can be achieved by the `shift()` function provided by `pandas`. We will perform this operation on both `events_pn_Real` and `events_pn_Liv`.
 
 ```{python warnings=FALSE}
 events_pn_Real['pass_maker'] = events_pn_Real['player']
@@ -221,7 +221,7 @@ print(events_pn_Real.head(10).to_markdown())
 print(events_pn_Liv.head(10).to_markdown())
 ```
 
-So it seems we have been able to logically clean and modify the datasets. Now we are only focused on building the pass netwrok among the players who were in the starting 11 from both the teams. So we will discard out the rows which consist of pass events that took place after the first substitution for either of the teams. Let us find the `minute` and `second` of the first substitution for both `Real Madrid` and `Liverpool`.
+So it seems we have been able to logically clean and modify the datasets. Now we are only focused on building the pass network among the players who were in the starting 11 from both the teams. So we will discard out the rows which consist of pass events that took place after the first substitution for either of the teams. Let us find the `minute` and `second` of the first substitution for both `Real Madrid` and `Liverpool`.
 
 So let us filter the datasets `events_Real` and `events_Liv` by setting the `type` to be `Substitution`. This will give us the information of when the first substitution had taken place for the teams.
 
